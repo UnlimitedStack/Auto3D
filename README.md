@@ -1,4 +1,4 @@
 Auto3D
 ======
 
-Initial checkin
+A MediaPortal plugin for automatic switching TV / Beamer and GUI into 3D-Mode
