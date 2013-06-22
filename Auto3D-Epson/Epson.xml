@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Device>
+  <Commands>
+    <CommandItem>
+      <Command>Delay</Command>
+      <Delay>500</Delay>
+    </CommandItem>
+    <CommandItem>
+      <Command>3DDisplayOn</Command>
+      <Delay>5000</Delay>
+    </CommandItem>
+    <CommandItem>
+      <Command>3DDisplayOff</Command>
+      <Delay>5000</Delay>
+    </CommandItem>
+    <CommandItem>
+      <Command>3DFormatAuto</Command>
+      <Delay>5000</Delay>
+    </CommandItem>
+    <CommandItem>
+      <Command>3DFormat2D</Command>
+      <Delay>5000</Delay>
+    </CommandItem>
+    <CommandItem>
+      <Command>3DFormatSBS</Command>
+      <Delay>5000</Delay>
+    </CommandItem>
+    <CommandItem>
+      <Command>3DFormatTAB</Command>
+      <Delay>5000</Delay>
+    </CommandItem>
+    <CommandItem>
+      <Command>2D3DConversionOn</Command>
+      <Delay>5000</Delay>
+    </CommandItem>
+    <CommandItem>
+      <Command>2D3DConversionOff</Command>
+      <Delay>5000</Delay>
+    </CommandItem>
+  </Commands>  
+  <Models>
+    <Model>
+      <ModelName>Epson Beamer A (3D mode off)</ModelName>
+      <CompatibleModels>
+        <Name>EH-TW8000/W</Name>
+        <Name>PL Home Cinema 5010/e</Name>
+        <Name>EH-TW9000/W</Name>
+        <Name>PL Pro Cinema 6010</Name>  
+      </CompatibleModels>
+      <CommandLists>
+        <Commands2D3DSBS>
+          <Command>3DFormatSBS</Command>
+          <Command>3DDisplayOn</Command>
+        </Commands2D3DSBS>
+        <Commands3DSBS2D>
+          <Command>3DFormatAuto</Command>
+          <Command>3DDisplayOff</Command>
+        </Commands3DSBS2D>
+        <Commands2D3DTAB>
+          <Command>3DFormatTAB</Command>
+          <Command>3DDisplayOn</Command>
+        </Commands2D3DTAB>
+        <Commands3DTAB2D>
+          <Command>3DFormatAuto</Command>
+          <Command>3DDisplayOff</Command>
+        </Commands3DTAB2D>
+        <Commands2D3D>
+          <Command>2D3DConversionOn</Command>
+        </Commands2D3D>
+        <Commands3D2D>
+          <Command>2D3DConversionOff</Command>
+        </Commands3D2D>
+      </CommandLists>
+    </Model>        
+	    <Model>
+      <ModelName>Epson Beamer A (3D mode on)</ModelName>
+      <CompatibleModels>
+        <Name>EH-TW8000/W</Name>
+        <Name>PL Home Cinema 5010/e</Name>
+        <Name>EH-TW9000/W</Name>
+        <Name>PL Pro Cinema 6010</Name>  
+      </CompatibleModels>
+      <CommandLists>
+        <Commands2D3DSBS>
+          <Command>3DFormatSBS</Command>
+        </Commands2D3DSBS>
+        <Commands3DSBS2D>
+          <Command>3DFormatAuto</Command>
+        </Commands3DSBS2D>
+        <Commands2D3DTAB>
+          <Command>3DFormatTAB</Command>
+        </Commands2D3DTAB>
+        <Commands3DTAB2D>
+          <Command>3DFormatAuto</Command>
+        </Commands3DTAB2D>
+        <Commands2D3D>
+          <Command>2D3DConversionOn</Command>
+        </Commands2D3D>
+        <Commands3D2D>
+          <Command>2D3DConversionOff</Command>
+        </Commands3D2D>
+      </CommandLists>
+    </Model>        
+  </Models>
+</Device>
+

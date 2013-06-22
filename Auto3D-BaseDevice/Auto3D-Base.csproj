@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6B4550E5-A499-4037-98B7-DEA95949C6B2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MediaPortal.ProcessPlugins.Auto3D.Devices</RootNamespace>
+    <AssemblyName>Auto3D-BaseDevice</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\MediaPortal.Application\bin\Release\plugins\process\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UPnP, Version=1.0.4561.18411, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\UPnP.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Auto3DBaseDevice.cs" />
+    <Compile Include="Auto3DDeviceModel.cs" />
+    <Compile Include="Auto3DHelpers.cs" />
+    <Compile Include="Auto3DSequenceManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Auto3DSequenceManager.Designer.cs">
+      <DependentUpon>Auto3DSequenceManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Auto3DTimings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Auto3DTimings.Designer.cs">
+      <DependentUpon>Auto3DTimings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Auto3DUPnPBaseDevice.cs" />
+    <Compile Include="IAuto3DKeypad.cs" />
+    <Compile Include="RemoteCommand.cs" />
+    <Compile Include="IAuto3DUPnPSetup.cs" />
+    <Compile Include="IAuto3DSequenceManager.cs" />
+    <Compile Include="IAuto3DSetup.cs" />
+    <Compile Include="IAuto3D.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RemoteCommandSequences.cs" />
+    <Compile Include="UPnP.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Auto3DSequenceManager.resx">
+      <DependentUpon>Auto3DSequenceManager.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Auto3DTimings.resx">
+      <DependentUpon>Auto3DTimings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Remote.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Auto3d-Icon2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Cut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Delay.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Test.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\MediaPortal-1-master\Common-MP-TVE3\Common.Utils\Common.Utils.csproj">
+      <Project>{f6eda1f3-3dcd-43f4-8a90-e32da70c8227}</Project>
+      <Name>Common.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\MediaPortal-1-master\mediaportal\Core\Core.csproj">
+      <Project>{02fffc1f-2555-4b99-8b01-3432d0673855}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\MediaPortal-1-master\mediaportal\Dialogs\Dialogs.csproj">
+      <Project>{396c5208-5d46-4a11-92c1-fd0f2f42d7dd}</Project>
+      <Name>Dialogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\MediaPortal-1-master\mediaportal\Utils\Utils.csproj">
+      <Project>{6da0e4df-6230-4642-98b5-e690bb6942bb}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+  <xs:complexType name="compatiblemodelstype">
+    <xs:sequence>
+      <xs:element name="Name" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="commandtype">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  
+  <xs:complexType name="commanditemtype">
+    <xs:sequence>
+      <xs:element name="Command" type="commandtype"/>
+      <xs:element name="Delay" type="xs:integer"/>            
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="commandstype">
+    <xs:sequence>
+      <xs:element name="CommandItem" type="commanditemtype" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="commandlisttype">
+    <xs:sequence>
+      <xs:element name="Command" type="commandtype" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="commandliststype">
+    <xs:sequence>
+      <xs:element name="Commands2D3DSBS" type="commandlisttype"/>
+      <xs:element name="Commands3DSBS2D" type="commandlisttype"/>
+      <xs:element name="Commands2D3DTAB" type="commandlisttype"/>
+      <xs:element name="Commands3DTAB2D" type="commandlisttype"/>
+      <xs:element name="Commands2D3D" type="commandlisttype"/>
+      <xs:element name="Commands3D2D" type="commandlisttype"/>
+    </xs:sequence>
+  </xs:complexType>
+
+
+  <xs:complexType name="modeltype">
+    <xs:sequence>
+      <xs:element name="ModelName" type="xs:string"/>
+      <xs:element name="CompatibleModels" type="compatiblemodelstype"/>
+      <xs:element name="CommandLists" type="commandliststype">
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Modelstype">
+    <xs:sequence>
+      <xs:element name="Model" type="modeltype" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="devicetype">
+    <xs:sequence>
+      <xs:element name="Commands" type="commandstype"/>
+      <xs:element name="Models" type="Modelstype"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:element name="Device" type="devicetype">
+    
+    <xs:key name="keyCommand">
+      <xs:selector xpath="Commands/CommandItem"/>
+      <xs:field xpath="Command"/>
+    </xs:key>
+
+    <xs:keyref name="keyrefCommand" refer="keyCommand">
+      <xs:selector xpath="Models/Model/CommandList"/>
+      <xs:field xpath="Command"/>
+    </xs:keyref>
+    
+  </xs:element>
+  
+</xs:schema>
+
+
+
