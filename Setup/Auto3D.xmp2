@@ -210,6 +210,30 @@
           </Items>
         </Files>
       </GroupItem>
+      <GroupItem Name="LG">
+        <ParentGroup />
+        <DisplayName>LG</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>LG</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\Auto3D-LG\bin\Release\Auto3D-LG.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a6284051-3ca9-4740-9fc6-eaacc23d049e}-Auto3D-LG.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\Process\Auto3D\Auto3D-LG.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\Auto3D-LG\bin\Release\LG.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{433b4b67-1b3b-4f11-92bb-c423c0998e9e}-LG.xml</ZipFileName>
+              <DestinationFilename>%Config%\Auto3D\LG.xml</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
     </Items>
   </Groups>
   <Sections>
@@ -352,8 +376,8 @@ Click Next to continue or Cancel to exit Setup.</Value>
     <Version>
       <Major>1</Major>
       <Minor>0</Minor>
-      <Build>3</Build>
-      <Revision>0</Revision>
+      <Build>4</Build>
+      <Revision>12</Revision>
     </Version>
     <ExtensionDescription />
     <VersionDescription />
@@ -543,11 +567,25 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <ZipFileName>Installer{CopyFile}\{694e4278-156d-4a86-8362-cdf908409b27}-VIErA.cfg</ZipFileName>
         <DestinationFilename>%Config%\Auto3D\Panasonic.xml</DestinationFilename>
       </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\Auto3D-LG\bin\Release\Auto3D-LG.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a6284051-3ca9-4740-9fc6-eaacc23d049e}-Auto3D-LG.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\Process\Auto3D\Auto3D-LG.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\Auto3D-LG\bin\Release\LG.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{433b4b67-1b3b-4f11-92bb-c423c0998e9e}-LG.xml</ZipFileName>
+        <DestinationFilename>%Config%\Auto3D\LG.xml</DestinationFilename>
+      </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="true" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\Auto3D\Auto3d-Icon2.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{acb880e2-bc86-4b71-bd40-d6c5a4c4683a}-Auto3d-Icon2.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{8e675177-cb54-46d5-be6c-c65779e7ea13}-Auto3d-Icon2.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>

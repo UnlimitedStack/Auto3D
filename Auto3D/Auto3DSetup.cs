@@ -116,6 +116,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
                 checkBox3DSubTitles.Checked = reader.GetValueAsBool("Auto3DPlugin", "3DSubtitles", true);
                 trackBarDepth3D.Value = reader.GetValueAsInt("Auto3DPlugin", "SubtitleDepth", 0);
+
+                checkBoxSupressSwitchBackTo2D.Checked = reader.GetValueAsBool("Auto3DPlugin", "SupressSwitchBackTo2D", false);
             }
 
             foreach (IAuto3D item in comboBoxModel.Items)
@@ -143,8 +145,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D
                 writer.SetValue("Auto3DPlugin", "3DMenuKey", textBoxMenuHotkey.Text);
 
                 writer.SetValueAsBool("Auto3DPlugin", "EventGhostEvents", checkBoxEventGhost.Checked);
+                
+                writer.SetValueAsBool("Auto3DPlugin", "SupressSwitchBackTo2D", checkBoxSupressSwitchBackTo2D.Checked);
+
                 writer.SetValueAsBool("Auto3DPlugin", "3DSubtitles", checkBox3DSubTitles.Checked);
-                writer.SetValue("Auto3DPlugin", "SubtitleDepth", trackBarDepth3D.Value);                
+                writer.SetValue("Auto3DPlugin", "SubtitleDepth", trackBarDepth3D.Value);      
             }
 
             foreach (IAuto3D item in comboBoxModel.Items)

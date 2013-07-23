@@ -58,13 +58,14 @@
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.buttonCommandTimings = new System.Windows.Forms.Button();
             this.buttonDelay = new System.Windows.Forms.Button();
             this.buttonListDown = new System.Windows.Forms.Button();
             this.buttonListUp = new System.Windows.Forms.Button();
             this.buttonDELETE = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.checkBoxSendOnAdd = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -73,8 +74,8 @@
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxDeviceName
@@ -354,7 +355,7 @@
             // 
             this.buttonOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonOK.ForeColor = System.Drawing.Color.Black;
-            this.buttonOK.Location = new System.Drawing.Point(611, 13);
+            this.buttonOK.Location = new System.Drawing.Point(611, 17);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(73, 26);
             this.buttonOK.TabIndex = 67;
@@ -366,7 +367,7 @@
             // 
             this.buttonCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCancel.ForeColor = System.Drawing.Color.Black;
-            this.buttonCancel.Location = new System.Drawing.Point(690, 13);
+            this.buttonCancel.Location = new System.Drawing.Point(690, 17);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(73, 26);
             this.buttonCancel.TabIndex = 72;
@@ -385,13 +386,24 @@
             this.panel1.Size = new System.Drawing.Size(777, 77);
             this.panel1.TabIndex = 73;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
+            this.pictureBox1.Location = new System.Drawing.Point(16, 7);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(67, 63);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.panel2.Controls.Add(this.buttonCommandTimings);
             this.panel2.Controls.Add(this.buttonCancel);
             this.panel2.Controls.Add(this.buttonOK);
-            this.panel2.Location = new System.Drawing.Point(0, 407);
+            this.panel2.Location = new System.Drawing.Point(0, 413);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(777, 59);
             this.panel2.TabIndex = 74;
@@ -400,7 +412,7 @@
             // 
             this.buttonCommandTimings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCommandTimings.ForeColor = System.Drawing.Color.Black;
-            this.buttonCommandTimings.Location = new System.Drawing.Point(14, 13);
+            this.buttonCommandTimings.Location = new System.Drawing.Point(14, 17);
             this.buttonCommandTimings.Name = "buttonCommandTimings";
             this.buttonCommandTimings.Size = new System.Drawing.Size(121, 26);
             this.buttonCommandTimings.TabIndex = 73;
@@ -456,16 +468,15 @@
             this.buttonDELETE.UseVisualStyleBackColor = true;
             this.buttonDELETE.Click += new System.EventHandler(this.buttonDELETE_Click);
             // 
-            // pictureBox1
+            // checkBoxSendOnAdd
             // 
-            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(16, 7);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(67, 63);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.checkBoxSendOnAdd.AutoSize = true;
+            this.checkBoxSendOnAdd.Location = new System.Drawing.Point(21, 390);
+            this.checkBoxSendOnAdd.Name = "checkBoxSendOnAdd";
+            this.checkBoxSendOnAdd.Size = new System.Drawing.Size(163, 17);
+            this.checkBoxSendOnAdd.TabIndex = 76;
+            this.checkBoxSendOnAdd.Text = "Send command on add to list";
+            this.checkBoxSendOnAdd.UseVisualStyleBackColor = true;
             // 
             // Auto3DSequenceManager
             // 
@@ -473,7 +484,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.ClientSize = new System.Drawing.Size(777, 458);
+            this.ClientSize = new System.Drawing.Size(777, 469);
+            this.Controls.Add(this.checkBoxSendOnAdd);
             this.Controls.Add(this.buttonDelay);
             this.Controls.Add(this.buttonListDown);
             this.Controls.Add(this.buttonListUp);
@@ -504,8 +516,8 @@
             this.tabPage6.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -548,5 +560,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button buttonCommandTimings;
         private System.Windows.Forms.Button buttonDelay;
+        private System.Windows.Forms.CheckBox checkBoxSendOnAdd;
     }
 }

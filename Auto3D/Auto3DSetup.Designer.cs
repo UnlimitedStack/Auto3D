@@ -70,7 +70,11 @@
             this.checkBoxVideo = new System.Windows.Forms.CheckBox();
             this.checkBoxTV = new System.Windows.Forms.CheckBox();
             this.tabPagesSubTitles = new System.Windows.Forms.TabPage();
+            this.checkBox3DSubTitles = new System.Windows.Forms.CheckBox();
             this.tabPageOptions = new System.Windows.Forms.TabPage();
+            this.label9 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.checkBoxSupressSwitchBackTo2D = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tabPageInfo = new System.Windows.Forms.TabPage();
@@ -78,7 +82,6 @@
             this.buttonConfig = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.linkLabelAuto3D = new System.Windows.Forms.LinkLabel();
-            this.checkBox3DSubTitles = new System.Windows.Forms.CheckBox();
             this.panel3D.SuspendLayout();
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarDepth3D)).BeginInit();
@@ -530,9 +533,22 @@
             this.tabPagesSubTitles.TabIndex = 1;
             this.tabPagesSubTitles.Text = "3D Subtitles";
             // 
+            // checkBox3DSubTitles
+            // 
+            this.checkBox3DSubTitles.AutoSize = true;
+            this.checkBox3DSubTitles.Location = new System.Drawing.Point(18, 21);
+            this.checkBox3DSubTitles.Name = "checkBox3DSubTitles";
+            this.checkBox3DSubTitles.Size = new System.Drawing.Size(83, 17);
+            this.checkBox3DSubTitles.TabIndex = 74;
+            this.checkBox3DSubTitles.Text = "3D Subtitles";
+            this.checkBox3DSubTitles.UseVisualStyleBackColor = true;
+            // 
             // tabPageOptions
             // 
             this.tabPageOptions.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageOptions.Controls.Add(this.label9);
+            this.tabPageOptions.Controls.Add(this.panel3);
+            this.tabPageOptions.Controls.Add(this.checkBoxSupressSwitchBackTo2D);
             this.tabPageOptions.Controls.Add(this.label5);
             this.tabPageOptions.Controls.Add(this.panel1);
             this.tabPageOptions.Controls.Add(this.checkBoxEventGhost);
@@ -541,6 +557,36 @@
             this.tabPageOptions.Size = new System.Drawing.Size(367, 411);
             this.tabPageOptions.TabIndex = 2;
             this.tabPageOptions.Text = "Options";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.label9.ForeColor = System.Drawing.Color.Black;
+            this.label9.Location = new System.Drawing.Point(14, 83);
+            this.label9.Margin = new System.Windows.Forms.Padding(0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(48, 13);
+            this.label9.TabIndex = 68;
+            this.label9.Text = "Common";
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel3.Location = new System.Drawing.Point(14, 80);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(338, 21);
+            this.panel3.TabIndex = 69;
+            // 
+            // checkBoxPermanant3D
+            // 
+            this.checkBoxSupressSwitchBackTo2D.AutoSize = true;
+            this.checkBoxSupressSwitchBackTo2D.Location = new System.Drawing.Point(17, 114);
+            this.checkBoxSupressSwitchBackTo2D.Name = "checkBoxPermanant3D";
+            this.checkBoxSupressSwitchBackTo2D.Size = new System.Drawing.Size(278, 17);
+            this.checkBoxSupressSwitchBackTo2D.TabIndex = 67;
+            this.checkBoxSupressSwitchBackTo2D.Text = "Prevent switching back to 2D Mode after Movie ends";
+            this.checkBoxSupressSwitchBackTo2D.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
@@ -607,16 +653,6 @@
             this.linkLabelAuto3D.TabStop = true;
             this.linkLabelAuto3D.Text = "Auto3D Forum discussion";
             this.linkLabelAuto3D.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelAuto3D_LinkClicked);
-            // 
-            // checkBox3DSubTitles
-            // 
-            this.checkBox3DSubTitles.AutoSize = true;
-            this.checkBox3DSubTitles.Location = new System.Drawing.Point(18, 21);
-            this.checkBox3DSubTitles.Name = "checkBox3DSubTitles";
-            this.checkBox3DSubTitles.Size = new System.Drawing.Size(83, 17);
-            this.checkBox3DSubTitles.TabIndex = 74;
-            this.checkBox3DSubTitles.Text = "3D Subtitles";
-            this.checkBox3DSubTitles.UseVisualStyleBackColor = true;
             // 
             // Auto3DSetup
             // 
@@ -710,5 +746,8 @@
         private System.Windows.Forms.CheckBox checkBoxVideo;
         private System.Windows.Forms.CheckBox checkBoxTV;
         private System.Windows.Forms.CheckBox checkBox3DSubTitles;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.CheckBox checkBoxSupressSwitchBackTo2D;
     }
 }

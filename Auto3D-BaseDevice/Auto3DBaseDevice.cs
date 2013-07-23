@@ -253,6 +253,10 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             }
         }
 
+        public virtual void BeforeSequence()
+        {
+        }
+
         public bool SwitchFormat(VideoFormat fmtOld, VideoFormat fmtNew)
         {
             Log.Info("Auto3D: Begin SwitchToFormat");
@@ -323,6 +327,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
         private bool SendCommandList(List<String> list)
         {
+            BeforeSequence();
+
             foreach (String command in list)
             {
                 Log.Info("Auto3D: Send Command " + command);

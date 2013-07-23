@@ -31,9 +31,14 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             get { return "Sony TV"; }
         }
 
-        public override String ServiceName
+        public override String UPnPServiceName
         {
             get { return "urn:schemas-sony-com:service:IRCC:1"; }
+        }
+
+        public override String UPnPManufacturer
+        {
+            get { return ""; } // name is not necessary for service recognition
         }
    
         public String UDN
@@ -63,8 +68,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         {
             using (Settings writer = new MPSettings())
             {
-                writer.SetValue("Auto3DPlugin", "SonyAddress", UDN);                
                 writer.SetValue("Auto3DPlugin", "SonyModel", SelectedDeviceModel.Name);
+                writer.SetValue("Auto3DPlugin", "SonyAddress", UDN);
             }
         }
 

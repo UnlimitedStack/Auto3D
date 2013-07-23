@@ -59,11 +59,14 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
         public void ServiceRemoved(Auto3DUPnPService service)
         {
-            foreach (Auto3DUPnPService srv in comboBoxTV.Items)
+            for (int i = 0; i < comboBoxTV.Items.Count; i++)
             {
+                Auto3DUPnPService srv = (Auto3DUPnPService)comboBoxTV.Items[i];
+
                 if (srv.IP == service.IP)
                 {
-                    comboBoxTV.Items.Remove(srv);
+                    comboBoxTV.Items.RemoveAt(i);
+                    break;
                 }
             }
         }

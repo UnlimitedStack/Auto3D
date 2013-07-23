@@ -31,10 +31,15 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             get { return "Panasonic TV"; }
         }
 
-        public override String ServiceName
+        public override String UPnPServiceName
         {
             get { return ":p00NetworkControl";  }
         }
+
+        public override String UPnPManufacturer
+        {
+            get { return ""; } // name is not necessary for service recognition
+        } 
 
         public String UDN
         {

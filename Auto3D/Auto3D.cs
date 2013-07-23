@@ -14,6 +14,7 @@ using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 using System.IO;
 using System.Reflection;
+using Microsoft.Win32;
 
 namespace MediaPortal.ProcessPlugins.Auto3D
 {
@@ -44,6 +45,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         bool bMenuHotKeyCtrl = true;
         bool bMenuHotKeyAlt = false;
         Keys _menuHotKey = Keys.D;
+
+        bool bSuppressSwitchBackTo2D = false;
 
         Thread _workerThread = null;
 
@@ -177,7 +180,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
             g_Player.PlayBackEnded += OnVideoEnded;
             g_Player.PlayBackStopped += OnVideoStopped;
             g_Player.PlayBackStarted += OnVideoStarted;
-            g_Player.TVChannelChanged += OnTVChannelChanged;             
+            g_Player.TVChannelChanged += OnTVChannelChanged;
 
             using (Settings reader = new MPSettings())
             {
@@ -233,6 +236,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
                 GUIGraphicsContext.Render3DSubtitle = reader.GetValueAsBool("Auto3DPlugin", "3DSubtitles", true);
                 GUIGraphicsContext.Render3DSubtitleDistance = -reader.GetValueAsInt("Auto3DPlugin", "SubtitleDepth", 0);
+
+                bSuppressSwitchBackTo2D = reader.GetValueAsBool("Auto3DPlugin", "SupressSwitchBackTo2D", false);
             }
         }
 
@@ -245,7 +250,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
                 if (e.KeyValue == (int)_menuHotKey)
                 {
                     Log.Info("Auto3D: Manual Mode via Hotkey");
-                    ManualSelect3DFormat(VideoFormat.Fmt2D);
+                    ManualSelect3DFormat(VideoFormat.Fmt2D);                    
                 }
             }
         }
@@ -254,8 +259,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         {
             _run = false;
             _activeDevice.Stop();
-
-            GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.None;
+            
+            if (!bSuppressSwitchBackTo2D)
+                GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.None;
         }
       
         private void RunAnalyzeVideo()
@@ -438,11 +444,10 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         private void RunSwitchBack()
         {
             Log.Info("Auto3D: Switch TV back to Normal Mode");
-
-            if (_activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt2D))
+            if (!bSuppressSwitchBackTo2D && _activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt2D))
             {
                 _currentMode = VideoFormat.Fmt2D;
-                GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.None;
+                GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.None;              
             }
         }
 

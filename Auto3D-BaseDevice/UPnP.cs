@@ -34,8 +34,15 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         {
             get 
             {
-                String ip = _service.ParentDevice.RemoteEndPoint.ToString();
-                return ip.Substring(0, ip.LastIndexOf(':'));
+                return _service.ParentDevice.RemoteEndPoint.Address.ToString();
+            }
+        }
+
+        public String Port
+        {
+            get
+            {
+                return _service.ParentDevice.RemoteEndPoint.Port.ToString();
             }
         }
 
@@ -75,7 +82,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public interface IAuto3DUPnPServiceCallBack
     {
-        String ServiceName { get; }  
+        String UPnPServiceName { get; }
+        String UPnPManufacturer { get; }
         void ServiceAdded(Auto3DUPnPService service);
         void ServiceRemoved(Auto3DUPnPService service);        
     }
@@ -88,7 +96,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         static List<ServiceCallBack> _serviceCallbacks = new List<ServiceCallBack>();
 
         public static void Init()
-        {            
+        {           
             _uPnPSmartControlPoint.OnAddedDevice += _uPnPSmartControlPoint_OnAddedDevice;
             _uPnPSmartControlPoint.OnRemovedDevice += _uPnPSmartControlPoint_OnRemovedDevice;            
         }
@@ -107,19 +115,29 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         static void _uPnPSmartControlPoint_OnAddedDevice(UPnPSmartControlPoint sender, UPnPDevice device)
         {
             _devices.Add(device);
-            
+
             foreach (UPnPService service in device.Services)
             {
                 foreach (ServiceCallBack scb in _serviceCallbacks)
                 {
-                    if (((scb.Callback.ServiceName == service.ServiceURN) ||
-                        (service.ServiceURN.Contains(scb.Callback.ServiceName))) && !scb.ClientNotified)
+                    System.Diagnostics.Debug.WriteLine(service.ParentDevice.Manufacturer + " - " + service.ServiceURN);
+
+                    bool bNameCheck = true;
+
+                    if (scb.Callback.UPnPManufacturer != "")
                     {
+                        bNameCheck = service.ParentDevice.Manufacturer.StartsWith(scb.Callback.UPnPManufacturer);
+                    }
+
+                    if (((scb.Callback.UPnPServiceName == service.ServiceURN) || (service.ServiceURN.Contains(scb.Callback.UPnPServiceName))) && bNameCheck && !scb.ClientNotified)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Invoke: " + service.ParentDevice.Manufacturer + " - " + service.ServiceURN);
+
                         // call back on GUI thread
 
-                        Auto3DHelpers.GetMainForm().Invoke((System.Windows.Forms.MethodInvoker)delegate 
+                        Auto3DHelpers.GetMainForm().Invoke((System.Windows.Forms.MethodInvoker)delegate
                         {
-                            scb.Callback.ServiceAdded(new Auto3DUPnPService(service));                            
+                            scb.Callback.ServiceAdded(new Auto3DUPnPService(service));
                         });
 
                         scb.ClientNotified = true;
@@ -136,10 +154,17 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             {
                 foreach (ServiceCallBack scb in _serviceCallbacks)
                 {
-                    // call back on GUI thread
+                    bool bNameCheck = true;
 
-                    if (scb.Callback.ServiceName == service.ServiceURN)
+                    if (scb.Callback.UPnPManufacturer != "")
                     {
+                        bNameCheck = service.ParentDevice.Manufacturer.StartsWith(scb.Callback.UPnPManufacturer);
+                    }
+
+                    if (((scb.Callback.UPnPServiceName == service.ServiceURN) || (service.ServiceURN.Contains(scb.Callback.UPnPServiceName))) && bNameCheck)
+                    {
+                        // call back on GUI thread
+
                         Auto3DHelpers.GetMainForm().Invoke((System.Windows.Forms.MethodInvoker)delegate
                         {
                             scb.Callback.ServiceRemoved(new Auto3DUPnPService(service));

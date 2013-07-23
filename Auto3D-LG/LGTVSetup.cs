@@ -14,20 +14,18 @@ using MediaPortal.GUI.Library;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
-    public partial class SonyTVSetup : UserControl, IAuto3DUPnPSetup
+    public partial class LGTVSetup : UserControl, IAuto3DUPnPSetup
     {
-        SonyTV _device;
+        LGTV _device;
 
-        public SonyTVSetup(IAuto3D device)
+        public LGTVSetup(IAuto3D device)
         {
             InitializeComponent();
 
-            if (!(device is SonyTV))
-                throw new Exception("Auto3D: Device is no SonyTV");
+            if (!(device is LGTV))
+                throw new Exception("Auto3D: Device is no LGTV");
 
-            _device = (SonyTV)device;
-
-            buttonRegister.Enabled = false;
+            _device = (LGTV)device;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -43,13 +41,17 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             {
                 if (item.UniqueDeviceName == _device.UDN)
                 {
+                    Log.Info("Auto3D: LG service selected -> " + service.UniqueDeviceName);
                     comboBoxTV.SelectedItem = item;
                     break;
                 }
             }
 
             if (comboBoxTV.SelectedIndex == -1)
+            {
+                Log.Info("Auto3D: LG service selected as default -> " + service.UniqueDeviceName);
                 comboBoxTV.SelectedItem = service;
+            }
 
             listBoxCompatibleModels.Items.Clear();
 
@@ -95,28 +97,69 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             {
                 listBoxCompatibleModels.Items.Add("- " + model);
             }
+
+            textBoxPairingKey.Text = _device.PairingKey;
         }
 
         public void SaveSettings()
         {
+            _device.PairingKey = textBoxPairingKey.Text;
             _device.SaveSettings();
-        }
-     
-        private void comboBoxTV_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            buttonRegister.Enabled = true;
-            _device.UDN = ((Auto3DUPnPService)comboBoxTV.SelectedItem).UniqueDeviceName;
         }
 
         private void comboBoxModel_SelectedIndexChanged(object sender, EventArgs e)
         {
             _device.SelectedDeviceModel = (Auto3DDeviceModel)comboBoxModel.SelectedItem;
+
+            if (comboBoxModel.SelectedIndex == 0)
+                UDAPnP.Protocol = UDAPnP.LGProtocol.LG2011;
+            else
+                UDAPnP.Protocol = UDAPnP.LGProtocol.LG2012x;
+
+            _device.SaveSettings();
+            _device.ConnectAndPair();
         }
 
-        private void buttonRegister_Click(object sender, EventArgs e)
+        private void comboBoxTV_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Auto3DUPnPService service = (Auto3DUPnPService)comboBoxTV.SelectedItem;
-            _device.RegisterClient(service.IP + ":80");     
+            buttonShowKey.Enabled = true;
+
+            // as we do not send our commands via the Intel UPnP library we have to
+            // store the IP for our own calls from the device
+
+            _device.IPAddress = ((Auto3DUPnPService)comboBoxTV.SelectedItem).IP;
+            _device.UDN = ((Auto3DUPnPService)comboBoxTV.SelectedItem).UniqueDeviceName;
+        }
+
+        private void buttonShowKey_Click(object sender, EventArgs e)
+        {
+            if (!UDAPnP.Connected)
+            {
+                if (!UDAPnP.UpdateServiceInformation(_device.IPAddress))
+                {
+                    MessageBox.Show("Connection to LG TV failed!");
+                    return;
+                }
+            }
+
+            UDAPnP.RequestPairingKey();
+        }
+
+        private void buttonSendKey_Click(object sender, EventArgs e)
+        {
+            if (!UDAPnP.Connected)
+            {
+                if (!UDAPnP.UpdateServiceInformation(_device.IPAddress))
+                {
+                    MessageBox.Show("Connection to LG TV failed!");
+                    return;
+                }
+            }
+
+            if (UDAPnP.RequestPairing(textBoxPairingKey.Text))
+            {
+                SaveSettings();
+            }    
         }
     }
 }

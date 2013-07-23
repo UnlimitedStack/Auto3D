@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1D9CC439-ED4A-44BA-9ADB-8C40C4B254A7}</ProjectGuid>
+    <ProjectGuid>{F80F074B-D32C-41BA-896A-B9BFA1B2D511}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MediaPortal.ProcessPlugins.Auto3D.Devices</RootNamespace>
-    <AssemblyName>Auto3D-Sony</AssemblyName>
+    <AssemblyName>Auto3D-LG</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -47,62 +50,77 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="SonyRemoteKeypad.cs">
+    <Compile Include="LGRemoteKeypad.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SonyRemoteKeypad.Designer.cs">
-      <DependentUpon>SonyRemoteKeypad.cs</DependentUpon>
+    <Compile Include="LGRemoteKeypad.Designer.cs">
+      <DependentUpon>LGRemoteKeypad.cs</DependentUpon>
     </Compile>
-    <Compile Include="SonyTV.cs" />
-    <Compile Include="SonyTVSetup.cs">
+    <Compile Include="LGTV.cs" />
+    <Compile Include="LGTVSetup.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SonyTVSetup.Designer.cs">
-      <DependentUpon>SonyTVSetup.cs</DependentUpon>
+    <Compile Include="LGTVSetup.Designer.cs">
+      <DependentUpon>LGTVSetup.cs</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="UDAPnP.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SonyRemoteKeypad.resx">
-      <DependentUpon>SonyRemoteKeypad.cs</DependentUpon>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="LGRemoteKeypad.resx">
+      <DependentUpon>LGRemoteKeypad.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SonyTVSetup.resx">
-      <DependentUpon>SonyTVSetup.cs</DependentUpon>
+    <EmbeddedResource Include="LGTVSetup.resx">
+      <DependentUpon>LGTVSetup.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SonyTV.png" />
+    <Content Include="LG.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="LGTV.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\MediaPortal-1-master\Common-MP-TVE3\Common.Utils\Common.Utils.csproj">
+    <ProjectReference Include="..\..\..\Common-MP-TVE3\Common.Utils\Common.Utils.csproj">
       <Project>{f6eda1f3-3dcd-43f4-8a90-e32da70c8227}</Project>
       <Name>Common.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\MediaPortal-1-master\mediaportal\Core\Core.csproj">
+    <ProjectReference Include="..\..\Core\Core.csproj">
       <Project>{02fffc1f-2555-4b99-8b01-3432d0673855}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\MediaPortal-1-master\mediaportal\Utils\Utils.csproj">
+    <ProjectReference Include="..\..\Utils\Utils.csproj">
       <Project>{6da0e4df-6230-4642-98b5-e690bb6942bb}</Project>
       <Name>Utils</Name>
     </ProjectReference>
@@ -110,12 +128,6 @@
       <Project>{6b4550e5-a499-4037-98b7-dea95949c6b2}</Project>
       <Name>Auto3D-Base</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Sony.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using MediaPortal.GUI.Library;
 using System.Threading;
+using MediaPortal.Profile;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
@@ -23,6 +24,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         public Auto3DSequenceManager()
         {
             InitializeComponent();
+
+            using (Settings reader = new MPSettings())
+            {
+                checkBoxSendOnAdd.Checked = reader.GetValueAsBool("Auto3DPluginSequenceManager", "SendCommandOnAdd", true);
+            }
         }
 
         public static IAuto3DSequenceManager SequenceManager
@@ -172,7 +178,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             try
             {
                 _lbList[tabControl.SelectedIndex].Items.Insert(_lbList[tabControl.SelectedIndex].SelectedIndex, cmd);
-                _device.SendCommand(cmd);
+
+                if (checkBoxSendOnAdd.Checked)
+                    _device.SendCommand(cmd);
             }
             catch (Exception ex)
             {
@@ -240,15 +248,19 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
             for (int i = 0; i < _lbList[tabControl.SelectedIndex].Items.Count - 1; i++)
             {
+                _lbList[tabControl.SelectedIndex].SelectedIndex = i;
+                _lbList[tabControl.SelectedIndex].Refresh();
+
                 String cmd = _lbList[tabControl.SelectedIndex].Items[i].ToString();
 
                 if (!_device.SendCommand(cmd))
                     break;
 
                 Thread.Sleep(_device.GetRemoteCommandFromString(cmd).Delay);
-
-                _lbList[tabControl.SelectedIndex].SelectedIndex = i;
             }
+
+            _lbList[tabControl.SelectedIndex].SelectedIndex = 0;
+            _lbList[tabControl.SelectedIndex].Refresh();
 
             buttonTest.Enabled = true;
         }
@@ -256,6 +268,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         private void buttonOK_Click(object sender, EventArgs e)
         {
             InternalSave();
+            
+            using (Settings writer = new MPSettings())
+            {
+                writer.SetValue("Auto3DPluginSequenceManager", "SendCommandOnAdd", checkBoxSendOnAdd.Checked);
+            }
+            
             Close();
         }
 
@@ -289,6 +307,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
                 InternalCheckForDifference(_device.SelectedDeviceModel.RemoteCommandSequences.Commands3DTAB2D, listBox3DTAB2D);
                 InternalCheckForDifference(_device.SelectedDeviceModel.RemoteCommandSequences.Commands2D3D, listBox2D3D);
                 InternalCheckForDifference(_device.SelectedDeviceModel.RemoteCommandSequences.Commands3D2D, listBox3D2D);
+                
                 if (_device.Modified && (MessageBox.Show("Save modified settings ?", "Save TV Settings", MessageBoxButtons.YesNo) == DialogResult.Yes))
                 {
                     InternalListBoxToCommandset(_device.SelectedDeviceModel.RemoteCommandSequences.Commands2D3DSBS, listBox2D3DSBS);

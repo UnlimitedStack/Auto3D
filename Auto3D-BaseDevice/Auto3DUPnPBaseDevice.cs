@@ -19,7 +19,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         Auto3DUPnPService _uPnPService = null;
 
         public Auto3DUPnPBaseDevice() : base()
-        {
+        {            
         }
 
         public Auto3DUPnPService UPnPService
@@ -27,7 +27,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             get { return _uPnPService; }
         }
 
-        public abstract String ServiceName
+        public abstract String UPnPServiceName
+        {
+            get;
+        }
+
+        public abstract String UPnPManufacturer
         {
             get;
         }
