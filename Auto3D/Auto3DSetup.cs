@@ -42,6 +42,19 @@ namespace MediaPortal.ProcessPlugins.Auto3D
             textBoxMenuHotkey.KeyDown += textBoxMenuHotkey_KeyDown;
 
             LoadSettings();
+
+            MediaPortal.Hardware.Remote.Click += new MediaPortal.Hardware.RemoteEventHandler(OnRemoteClick);
+        }
+
+        private void OnRemoteClick(object sender, MediaPortal.Hardware.RemoteEventArgs e)
+        {
+            textBoxMenuHotkey.Text = "MCE " + e.Button.ToString();
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            MediaPortal.Hardware.Remote.Click -= new MediaPortal.Hardware.RemoteEventHandler(OnRemoteClick);
         }
 
         void textBoxMenuHotkey_KeyDown(object sender, KeyEventArgs e)

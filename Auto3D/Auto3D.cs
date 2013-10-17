@@ -43,12 +43,17 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         bool bMenuHotKeyShift = false;
         bool bMenuHotKeyCtrl = true;
-        bool bMenuHotKeyAlt = false;
+        bool bMenuHotKeyAlt = false;        
         Keys _menuHotKey = Keys.D;
+
+        bool bMenuMCERemote = false;
+        String mceRemoteKey;
 
         bool bSuppressSwitchBackTo2D = false;
 
         Thread _workerThread = null;
+
+        GUIDialogMenu _dlgMenu = null;
 
         public List<IAuto3D> Devices
         {
@@ -188,17 +193,26 @@ namespace MediaPortal.ProcessPlugins.Auto3D
                 b3DMenuOnKey = reader.GetValueAsBool("Auto3DPlugin", "3DMenuOnKey", false);
                 String menuHotKey = reader.GetValueAsString("Auto3DPlugin", "3DMenuKey", "CTRL + D");
 
-                bMenuHotKeyShift = menuHotKey.Contains("SHIFT");
-                bMenuHotKeyCtrl = menuHotKey.Contains("CTRL");
-                bMenuHotKeyAlt = menuHotKey.Contains("ALT");
-
-                if (menuHotKey.Contains("+"))
+                if (menuHotKey.StartsWith("MCE"))
                 {
-                    int pos = menuHotKey.LastIndexOf('+');
-                    menuHotKey = menuHotKey.Substring(pos + 1).Trim();
+                    bMenuMCERemote = true;
+                    mceRemoteKey = menuHotKey.Substring(4);
+                    MediaPortal.Hardware.Remote.Click += new MediaPortal.Hardware.RemoteEventHandler(OnRemoteClick);
                 }
+                else
+                {
+                    bMenuHotKeyShift = menuHotKey.Contains("SHIFT");
+                    bMenuHotKeyCtrl = menuHotKey.Contains("CTRL");
+                    bMenuHotKeyAlt = menuHotKey.Contains("ALT");
 
-                _menuHotKey = (Keys)Enum.Parse(typeof(Keys), menuHotKey, true);
+                    if (menuHotKey.Contains("+"))
+                    {
+                        int pos = menuHotKey.LastIndexOf('+');
+                        menuHotKey = menuHotKey.Substring(pos + 1).Trim();
+                    }
+
+                    _menuHotKey = (Keys)Enum.Parse(typeof(Keys), menuHotKey, true);
+                }
                 
                 bCheckNameSimple = reader.GetValueAsBool("Auto3DPlugin", "CheckNameSimple", true);
                 bCheckNameFull = reader.GetValueAsBool("Auto3DPlugin", "CheckNameFull", true);
@@ -243,14 +257,30 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         void form_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
+            if (bMenuMCERemote) // ignore keyboard commands
+                return;
+
             if (bMenuHotKeyCtrl == ((Control.ModifierKeys & Keys.Control) == Keys.Control) &&
                 bMenuHotKeyShift == ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) &&
                 bMenuHotKeyAlt == ((Control.ModifierKeys & Keys.Alt) == Keys.Alt))
             {
-                if (e.KeyValue == (int)_menuHotKey)
+                if (_dlgMenu == null && e.KeyValue == (int)_menuHotKey)
                 {
                     Log.Info("Auto3D: Manual Mode via Hotkey");
                     ManualSelect3DFormat(VideoFormat.Fmt2D);                    
+                }
+            }
+        }
+
+        private void OnRemoteClick(object sender, MediaPortal.Hardware.RemoteEventArgs e)
+        {
+            if (e.Button.ToString().ToUpper() == mceRemoteKey)
+            {
+                if (_dlgMenu == null)
+                    ManualSelectThread();
+                else
+                {
+                    _dlgMenu.PageDestroy();
                 }
             }
         }
@@ -259,6 +289,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         {
             _run = false;
             _activeDevice.Stop();
+
+            if (bMenuMCERemote)
+                MediaPortal.Hardware.Remote.Click -= new MediaPortal.Hardware.RemoteEventHandler(OnRemoteClick);
             
             if (!bSuppressSwitchBackTo2D)
                 GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.None;
@@ -460,6 +493,21 @@ namespace MediaPortal.ProcessPlugins.Auto3D
             _workerThread.Start();
         }
 
+        private void RunManualSwitch()
+        {
+            Log.Info("Auto3D: Manual Mode via Remote");
+            ManualSelect3DFormat(VideoFormat.Fmt2D);   
+        }
+
+        private void ManualSelectThread()
+        {
+            Thread thread = new Thread(new ThreadStart(RunManualSwitch));
+            thread.IsBackground = true;
+            thread.Name = "Auto3D manual select thread";
+            thread.Priority = ThreadPriority.AboveNormal;
+            thread.Start();
+        }
+
         private void RunVideoEnded(object stateInfo)
         {
             g_Player.MediaType type = (g_Player.MediaType)stateInfo;
@@ -614,36 +662,36 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         public void ManualSelect3DFormat(VideoFormat preSelected)
         {
-            GUIDialogMenu dlgMenu = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+            _dlgMenu = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
 
-            if (dlgMenu != null)
+            if (_dlgMenu != null)
             {
-                dlgMenu.Reset();
-                dlgMenu.SetHeading("Select 2D/3D Format for TV");
+                _dlgMenu.Reset();
+                _dlgMenu.SetHeading("Select 2D/3D Format for TV");
 
                 if (preSelected == VideoFormat.Fmt2D)
-                    dlgMenu.Add("2D");
+                    _dlgMenu.Add("2D");
 
                 if (preSelected == VideoFormat.Fmt2D || preSelected == VideoFormat.Fmt3DSBS)
                 {
-                    dlgMenu.Add("3D Side by Side");
-                    dlgMenu.Add("3D SBS -> 2D via MediaPortal");
+                    _dlgMenu.Add("3D Side by Side");
+                    _dlgMenu.Add("3D SBS -> 2D via MediaPortal");
                 }
 
                 if (preSelected == VideoFormat.Fmt2D || preSelected == VideoFormat.Fmt3DTAB)
                 {
-                    dlgMenu.Add("3D Top and Bottom");
-                    dlgMenu.Add("3D TAB -> 2D via MediaPortal");
+                    _dlgMenu.Add("3D Top and Bottom");
+                    _dlgMenu.Add("3D TAB -> 2D via MediaPortal");
                 }
 
                 if (_activeDevice.IsDefined(VideoFormat.Fmt2D3D))
-                    dlgMenu.Add("2D -> 3D via TV");
+                    _dlgMenu.Add("2D -> 3D via TV");
 
-                dlgMenu.DoModal((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
+                _dlgMenu.DoModal((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
 
-                Log.Info("Auto3D: Manually selected " + dlgMenu.SelectedLabelText);
+                Log.Info("Auto3D: Manually selected " + _dlgMenu.SelectedLabelText);
 
-                switch (dlgMenu.SelectedLabelText)
+                switch (_dlgMenu.SelectedLabelText)
                 {
                     case "2D":
 
@@ -687,6 +735,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D
                         _currentMode = VideoFormat.Fmt2D;
                         break;
                 }
+
+                _dlgMenu = null;
             }
         }
 

@@ -10,8 +10,8 @@ using MediaPortal.Common.Utils;
 [assembly: AssemblyTitle("ProcessPlugins")]
 [assembly: AssemblyDescription("")]
 
-[assembly: AssemblyVersion("1.3.0.99")]
-[assembly: AssemblyFileVersion("1.3.0.99")]
+[assembly: AssemblyVersion("1.4.0.0")]
+[assembly: AssemblyFileVersion("1.4.0.0")]
 //[assembly: CompatibleVersion("1.2.100.0", "1.1.6.27644")]
 [assembly: CompatibleVersion("1.4.0.0", "1.1.6.27644")]
 [assembly: UsesSubsystem("MP.Config")]

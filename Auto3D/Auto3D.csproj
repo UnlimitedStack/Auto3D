@@ -107,6 +107,10 @@
       <Project>{6da0e4df-6230-4642-98b5-e690bb6942bb}</Project>
       <Name>Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\RemotePlugins\RemotePlugins.csproj">
+      <Project>{0a234721-1f13-4df8-9b1e-64d9e3111203}</Project>
+      <Name>RemotePlugins</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Auto3D-BaseDevice\Auto3D-Base.csproj">
       <Project>{6b4550e5-a499-4037-98b7-dea95949c6b2}</Project>
       <Name>Auto3D-Base</Name>

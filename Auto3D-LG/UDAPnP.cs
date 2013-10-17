@@ -66,6 +66,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
                 {
                     String deviceDescriptionURL = "http://" + scanIP + ":6767/udap/api/data?target=netrcu.xml";
 
+                    Log.Info("Auto3D: LG device description = " + deviceDescriptionURL);
+
                     HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(deviceDescriptionURL);
                     myReq.Timeout = 3000;
                     myReq.UserAgent = "UDAP/2.0";
