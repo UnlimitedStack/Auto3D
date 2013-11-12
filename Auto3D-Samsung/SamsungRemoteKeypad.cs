@@ -9,11 +9,11 @@ using System.Windows.Forms;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
-    public partial class SamsungRemoteKeypad : UserControl
+  public partial class SamsungRemoteKeypad : UserControl
+  {
+    public SamsungRemoteKeypad()
     {
-        public SamsungRemoteKeypad()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+  }
 }

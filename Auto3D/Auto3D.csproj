@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MediaPortal.ProcessPlugins.Auto3D</RootNamespace>
     <AssemblyName>Auto3D</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -57,6 +57,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="RemotePlugins">
+      <HintPath>..\..\MediaPortal.Application\bin\Debug\RemotePlugins.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -91,25 +94,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\MediaPortal-1-master\Common-MP-TVE3\Common.Utils\Common.Utils.csproj">
+    <ProjectReference Include="..\..\..\Common-MP-TVE3\Common.Utils\Common.Utils.csproj">
       <Project>{f6eda1f3-3dcd-43f4-8a90-e32da70c8227}</Project>
       <Name>Common.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\MediaPortal-1-master\mediaportal\Core\Core.csproj">
+    <ProjectReference Include="..\..\Core\Core.csproj">
       <Project>{02fffc1f-2555-4b99-8b01-3432d0673855}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\MediaPortal-1-master\mediaportal\Dialogs\Dialogs.csproj">
+    <ProjectReference Include="..\..\Dialogs\Dialogs.csproj">
       <Project>{396c5208-5d46-4a11-92c1-fd0f2f42d7dd}</Project>
       <Name>Dialogs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\MediaPortal-1-master\mediaportal\Utils\Utils.csproj">
+    <ProjectReference Include="..\..\Utils\Utils.csproj">
       <Project>{6da0e4df-6230-4642-98b5-e690bb6942bb}</Project>
       <Name>Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\RemotePlugins\RemotePlugins.csproj">
-      <Project>{0a234721-1f13-4df8-9b1e-64d9e3111203}</Project>
-      <Name>RemotePlugins</Name>
     </ProjectReference>
     <ProjectReference Include="..\Auto3D-BaseDevice\Auto3D-Base.csproj">
       <Project>{6b4550e5-a499-4037-98b7-dea95949c6b2}</Project>

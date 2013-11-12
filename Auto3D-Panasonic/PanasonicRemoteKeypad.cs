@@ -9,11 +9,11 @@ using System.Windows.Forms;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
-    public partial class PanasonicRemoteKeypad : UserControl
+  public partial class PanasonicRemoteKeypad : UserControl
+  {
+    public PanasonicRemoteKeypad()
     {
-        public PanasonicRemoteKeypad()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+  }
 }

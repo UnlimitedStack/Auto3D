@@ -7,8 +7,8 @@ using System.Windows.Forms;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
-    public interface IAuto3DSequenceManager
-    {
-        void AddCommand(String command);
-    }
+  public interface IAuto3DSequenceManager
+  {
+    void AddCommand(String command);
+  }
 }

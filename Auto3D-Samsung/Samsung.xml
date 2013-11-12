@@ -5,7 +5,7 @@
       <Command>Delay</Command>
       <Delay>500</Delay>
     </CommandItem>
-    <CommandItem>      
+    <CommandItem>
       <Command>REMOCON_MENU</Command>
       <Delay>800</Delay>
     </CommandItem>
@@ -41,7 +41,7 @@
       <Command>REMOCON_DOWN</Command>
       <Delay>300</Delay>
     </CommandItem>
-  </Commands>  
+  </Commands>
   <Models>
     <Model>
       <ModelName>SmartTV</ModelName>
@@ -50,13 +50,13 @@
       </CompatibleModels>
       <CommandLists>
         <Commands2D3DSBS>
-		  <Command>REMOCON_3D</Command>
-		  <Command>REMOCON_ENTER</Command>
+          <Command>REMOCON_3D</Command>
+          <Command>REMOCON_ENTER</Command>
         </Commands2D3DSBS>
         <Commands3DSBS2D>
         </Commands3DSBS2D>
         <Commands2D3DTAB>
-		  <Command>REMOCON_3D</Command>
+          <Command>REMOCON_3D</Command>
           <Command>REMOCON_ENTER</Command>
         </Commands2D3DTAB>
         <Commands3DTAB2D>
@@ -66,7 +66,7 @@
         <Commands3D2D>
         </Commands3D2D>
       </CommandLists>
-    </Model>        
+    </Model>
   </Models>
 </Device>
 

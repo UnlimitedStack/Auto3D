@@ -9,11 +9,11 @@ using System.Windows.Forms;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
-    public partial class SonyRemoteKeypad : UserControl
+  public partial class SonyRemoteKeypad : UserControl
+  {
+    public SonyRemoteKeypad()
     {
-        public SonyRemoteKeypad()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+  }
 }
