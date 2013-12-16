@@ -8,11 +8,11 @@ using System.Windows.Forms;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
-    public partial class LGRemoteKeypad : UserControl
+  public partial class LGRemoteKeypad : UserControl
+  {
+    public LGRemoteKeypad()
     {
-        public LGRemoteKeypad()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+  }
 }

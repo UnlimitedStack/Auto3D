@@ -9,11 +9,11 @@ using System.Windows.Forms;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
-    public partial class EpsonRemoteKeypad : UserControl
+  public partial class EpsonRemoteKeypad : UserControl
+  {
+    public EpsonRemoteKeypad()
     {
-        public EpsonRemoteKeypad()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+  }
 }

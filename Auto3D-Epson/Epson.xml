@@ -37,7 +37,7 @@
       <Command>2D3DConversionOff</Command>
       <Delay>5000</Delay>
     </CommandItem>
-  </Commands>  
+  </Commands>
   <Models>
     <Model>
       <ModelName>Epson Beamer A (3D mode off)</ModelName>
@@ -45,7 +45,7 @@
         <Name>EH-TW8000/W</Name>
         <Name>PL Home Cinema 5010/e</Name>
         <Name>EH-TW9000/W</Name>
-        <Name>PL Pro Cinema 6010</Name>  
+        <Name>PL Pro Cinema 6010</Name>
       </CompatibleModels>
       <CommandLists>
         <Commands2D3DSBS>
@@ -71,14 +71,14 @@
           <Command>2D3DConversionOff</Command>
         </Commands3D2D>
       </CommandLists>
-    </Model>        
-	    <Model>
+    </Model>
+    <Model>
       <ModelName>Epson Beamer A (3D mode on)</ModelName>
       <CompatibleModels>
         <Name>EH-TW8000/W</Name>
         <Name>PL Home Cinema 5010/e</Name>
         <Name>EH-TW9000/W</Name>
-        <Name>PL Pro Cinema 6010</Name>  
+        <Name>PL Pro Cinema 6010</Name>
       </CompatibleModels>
       <CommandLists>
         <Commands2D3DSBS>
@@ -100,7 +100,7 @@
           <Command>2D3DConversionOff</Command>
         </Commands3D2D>
       </CommandLists>
-    </Model>        
+    </Model>
   </Models>
 </Device>
 

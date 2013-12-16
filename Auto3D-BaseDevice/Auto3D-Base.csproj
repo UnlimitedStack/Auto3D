@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MediaPortal.ProcessPlugins.Auto3D.Devices</RootNamespace>
     <AssemblyName>Auto3D-BaseDevice</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -58,10 +58,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UPnP, Version=1.0.4561.18411, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\UPnP.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auto3DBaseDevice.cs" />
@@ -80,20 +76,24 @@
       <DependentUpon>Auto3DTimings.cs</DependentUpon>
     </Compile>
     <Compile Include="Auto3DUPnPBaseDevice.cs" />
-    <Compile Include="IAuto3DKeypad.cs" />
-    <Compile Include="RemoteCommand.cs" />
-    <Compile Include="IAuto3DUPnPSetup.cs" />
-    <Compile Include="IAuto3DSequenceManager.cs" />
-    <Compile Include="IAuto3DSetup.cs" />
-    <Compile Include="IAuto3D.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Interfaces\IAuto3DKeypad.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RemoteCommand.cs" />
+    <Compile Include="Interfaces\IAuto3DUPnPSetup.cs" />
+    <Compile Include="Interfaces\IAuto3DSequenceManager.cs" />
+    <Compile Include="Interfaces\IAuto3DSetup.cs" />
+    <Compile Include="Interfaces\IAuto3D.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteCommandSequences.cs" />
-    <Compile Include="UPnP.cs" />
+    <Compile Include="UPnP\Auto3DUPnP.cs" />
+    <Compile Include="UPnP\Auto3DUPnPCore.cs" />
+    <Compile Include="UPnP\ServiceEventArgs.cs" />
+    <Compile Include="UPnP\UPnPDevice.cs" />
+    <Compile Include="UPnP\UPnPService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Auto3DSequenceManager.resx">
@@ -108,25 +108,25 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Remote.png" />
+    <EmbeddedResource Include="Resources\Remote.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Auto3d-Icon2.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Cut.png" />
+    <None Include="Resources\Cut.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Up.png" />
+    <None Include="Resources\Up.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Down.png" />
+    <None Include="Resources\Down.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Delay.png" />
+    <None Include="Resources\Delay.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Test.png" />
+    <None Include="Resources\Test.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\MediaPortal-1-master\Common-MP-TVE3\Common.Utils\Common.Utils.csproj">
@@ -146,6 +146,7 @@
       <Name>Utils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

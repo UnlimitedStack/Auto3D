@@ -33,12 +33,12 @@
       <Command>CursorDown</Command>
       <Delay>400</Delay>
     </CommandItem>
-  </Commands>  
+  </Commands>
   <Models>
     <Model>
       <ModelName>Sony Bravia</ModelName>
       <CompatibleModels>
-          <Name>BRAVIA HX-Series</Name>  
+        <Name>BRAVIA HX-Series</Name>
       </CompatibleModels>
       <CommandLists>
         <Commands2D3DSBS>
@@ -78,7 +78,7 @@
         <Commands3D2D>
         </Commands3D2D>
       </CommandLists>
-    </Model>        
+    </Model>
   </Models>
 </Device>
 

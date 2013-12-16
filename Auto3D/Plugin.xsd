@@ -10,11 +10,11 @@
   <xs:simpleType name="commandtype">
     <xs:restriction base="xs:token"/>
   </xs:simpleType>
-  
+
   <xs:complexType name="commanditemtype">
     <xs:sequence>
       <xs:element name="Command" type="commandtype"/>
-      <xs:element name="Delay" type="xs:integer"/>            
+      <xs:element name="Delay" type="xs:integer"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -63,9 +63,9 @@
       <xs:element name="Models" type="Modelstype"/>
     </xs:sequence>
   </xs:complexType>
-  
+
   <xs:element name="Device" type="devicetype">
-    
+
     <xs:key name="keyCommand">
       <xs:selector xpath="Commands/CommandItem"/>
       <xs:field xpath="Command"/>
@@ -75,9 +75,9 @@
       <xs:selector xpath="Models/Model/CommandList"/>
       <xs:field xpath="Command"/>
     </xs:keyref>
-    
+
   </xs:element>
-  
+
 </xs:schema>
 
 

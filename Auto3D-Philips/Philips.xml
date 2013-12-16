@@ -45,7 +45,7 @@
       <Command>3D</Command>
       <Delay>800</Delay>
     </CommandItem>
-  </Commands>  
+  </Commands>
   <Models>
     <Model>
       <ModelName>Philips xxPFLxxxxx</ModelName>
