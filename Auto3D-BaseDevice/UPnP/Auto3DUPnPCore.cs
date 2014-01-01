@@ -62,7 +62,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.UPnP
       UpnpMulticastV6EndPoint2 = new IPEndPoint(UpnpMulticastV6Addr2, 1900);
 
       _timer = new System.Timers.Timer();
-      _timer.Interval = 5000; 
+      _timer.Interval = 15000; 
       _timer.AutoReset = false;
       _timer.Elapsed += _timer_Elapsed;
     }

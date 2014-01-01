@@ -51,6 +51,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     String mceRemoteKey;
 
     bool bSuppressSwitchBackTo2D = false;
+    bool bConvert3DTo2D = false;
 
     Thread _workerThread = null;
 
@@ -100,7 +101,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       }
 
       // start UPnP
-
       Auto3DUPnP.StartSSDP();
     }
 
@@ -256,6 +256,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         GUIGraphicsContext.Render3DSubtitleDistance = -reader.GetValueAsInt("Auto3DPlugin", "SubtitleDepth", 0);
 
         bSuppressSwitchBackTo2D = reader.GetValueAsBool("Auto3DPlugin", "SupressSwitchBackTo2D", false);
+        bConvert3DTo2D = reader.GetValueAsBool("Auto3DPlugin", "Convert3DTo2D", false);
       }
     }
 
@@ -291,6 +292,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
     public void Stop()
     {
+      // start UPnP
+      Auto3DUPnP.StopSSDP();
+
       _run = false;
       _activeDevice.Stop();
 
@@ -417,22 +421,42 @@ namespace MediaPortal.ProcessPlugins.Auto3D
               else
                 Log.Info("Auto3D: Video Analysis Finished: Switch TV to SBS 3D");
 
-              if (_activeDevice.SwitchFormat(_currentMode, videoFormat))
+              if (bConvert3DTo2D)
               {
                 switch (videoFormat)
                 {
                   case VideoFormat.Fmt3DSBS:
 
-                    GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.SideBySide;
+                    GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.SideBySideTo2D;
                     break;
 
                   case VideoFormat.Fmt3DTAB:
 
-                    GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.TopAndBottom;
+                    GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.TopAndBottomTo2D;
                     break;
                 }
 
                 _currentMode = videoFormat;
+              }
+              else
+              {
+                if (_activeDevice.SwitchFormat(_currentMode, videoFormat))
+                {
+                  switch (videoFormat)
+                  {
+                    case VideoFormat.Fmt3DSBS:
+
+                      GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.SideBySide;
+                      break;
+
+                    case VideoFormat.Fmt3DTAB:
+
+                      GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.TopAndBottom;
+                      break;
+                  }
+
+                  _currentMode = videoFormat;
+                }
               }
             }
             else
@@ -689,13 +713,13 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         }
 
-        /*if (_currentMode == VideoFormat.Fmt3DSBS || _currentMode == VideoFormat.Fmt3DTAB)
+        if (_currentMode == VideoFormat.Fmt3DSBS || _currentMode == VideoFormat.Fmt3DTAB)
         {
-          if (GUIGraphicsContext.Switch3DSides)
+          if (!GUIGraphicsContext.Switch3DSides)
             _dlgMenu.Add("3D Reverse Mode");
           else
             _dlgMenu.Add("3D Normal Mode");
-        }*/
+        }
 
         if (_activeDevice.IsDefined(VideoFormat.Fmt2D3D))
           _dlgMenu.Add("2D -> 3D via TV");
@@ -748,7 +772,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
             _currentMode = VideoFormat.Fmt2D;
             break;
 
-          /*case "3D Reverse Mode":
+          case "3D Reverse Mode":
 
             GUIGraphicsContext.Switch3DSides = true;
             break;
@@ -756,7 +780,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
           case "3D Normal Mode":
 
             GUIGraphicsContext.Switch3DSides = false;
-            break;*/
+            break;
         }
 
         _dlgMenu = null;

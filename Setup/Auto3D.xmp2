@@ -24,13 +24,6 @@
               <ZipFileName>Installer{CopyFile}\{2d959cfe-41aa-4139-b664-dc9da61a433b}-Auto3D-BaseDevice.dll</ZipFileName>
               <DestinationFilename>%Plugins%\Process\Auto3D-BaseDevice.dll</DestinationFilename>
             </FileItem>
-            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
-              <Param1 />
-              <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\Auto3D-BaseDevice\UPnP.dll</LocalFileName>
-              <ZipFileName>Installer{CopyFile}\{f3c410a9-dea0-4e81-a82f-a5d4c68f6892}-UPnP.dll</ZipFileName>
-              <DestinationFilename>%Plugins%\Process\UPnP.dll</DestinationFilename>
-            </FileItem>
           </Items>
         </Files>
       </GroupItem>
@@ -364,24 +357,7 @@ Click Next to continue or Cancel to exit Setup.</Value>
     </Items>
   </Dependencies>
   <PluginDependencies>
-    <Items>
-      <PluginDependencyItem AssemblyName="Auto3D.dll">
-        <CompatibleVersion>
-          <Items>
-            <CompatibleVersionItem>
-              <MinRequiredVersion>1.1.6.27644</MinRequiredVersion>
-              <DesignedForVersion>1.4.0.0</DesignedForVersion>
-            </CompatibleVersionItem>
-          </Items>
-        </CompatibleVersion>
-        <SubSystemsUsed>
-          <Items>
-            <SubSystemItem Name="MP.Config" />
-            <SubSystemItem Name="MP.SkinEngine" />
-          </Items>
-        </SubSystemsUsed>
-      </PluginDependencyItem>
-    </Items>
+    <Items />
   </PluginDependencies>
   <GeneralInfo>
     <Name>Auto3D</Name>
@@ -393,12 +369,12 @@ Click Next to continue or Cancel to exit Setup.</Value>
     <Version>
       <Major>1</Major>
       <Minor>0</Minor>
-      <Build>5</Build>
-      <Revision>1</Revision>
+      <Build>6</Build>
+      <Revision>3</Revision>
     </Version>
     <ExtensionDescription />
     <VersionDescription />
-    <DevelopmentStatus>Alpha</DevelopmentStatus>
+    <DevelopmentStatus>Beta</DevelopmentStatus>
     <OnlineLocation />
     <ReleaseDate>2012-12-05T21:05:58</ReleaseDate>
     <Tags />
@@ -450,13 +426,6 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <LocalFileName>..\Auto3D-BaseDevice\bin\Release\Auto3D-BaseDevice.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{2d959cfe-41aa-4139-b664-dc9da61a433b}-Auto3D-BaseDevice.dll</ZipFileName>
         <DestinationFilename>%Plugins%\Process\Auto3D-BaseDevice.dll</DestinationFilename>
-      </FileItem>
-      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
-        <Param1 />
-        <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\Auto3D-BaseDevice\UPnP.dll</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{f3c410a9-dea0-4e81-a82f-a5d4c68f6892}-UPnP.dll</ZipFileName>
-        <DestinationFilename>%Plugins%\Process\UPnP.dll</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />

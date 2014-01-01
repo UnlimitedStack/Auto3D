@@ -131,6 +131,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         trackBarDepth3D.Value = reader.GetValueAsInt("Auto3DPlugin", "SubtitleDepth", 0);
 
         checkBoxSupressSwitchBackTo2D.Checked = reader.GetValueAsBool("Auto3DPlugin", "SupressSwitchBackTo2D", false);
+        checkBoxConvert3Dto2D.Checked = reader.GetValueAsBool("Auto3DPlugin", "Convert3DTo2D", false);
       }
 
       foreach (IAuto3D item in comboBoxModel.Items)
@@ -160,6 +161,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         writer.SetValueAsBool("Auto3DPlugin", "EventGhostEvents", checkBoxEventGhost.Checked);
 
         writer.SetValueAsBool("Auto3DPlugin", "SupressSwitchBackTo2D", checkBoxSupressSwitchBackTo2D.Checked);
+        writer.SetValueAsBool("Auto3DPlugin", "Convert3DTo2D", checkBoxConvert3Dto2D.Checked);
 
         writer.SetValueAsBool("Auto3DPlugin", "3DSubtitles", checkBox3DSubTitles.Checked);
         writer.SetValue("Auto3DPlugin", "SubtitleDepth", trackBarDepth3D.Value);
@@ -236,7 +238,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     {
       linkLabelAuto3D.LinkVisited = true;
       System.Diagnostics.Process.Start("http://forum.team-mediaportal.com/threads/auto3d-plugin-for-mediaportal-1-2-3-and-1-3-0-final.116708/");
-
     }
   }
 }
