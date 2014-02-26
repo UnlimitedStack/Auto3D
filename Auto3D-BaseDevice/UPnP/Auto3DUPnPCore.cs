@@ -111,6 +111,14 @@ namespace MediaPortal.ProcessPlugins.Auto3D.UPnP
       _sessions.Clear();
     }
 
+    public bool Running
+    {
+      get
+      {
+        return _timer.Enabled;
+      }
+    }
+
     void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
       _timer.Stop();
@@ -235,12 +243,13 @@ namespace MediaPortal.ProcessPlugins.Auto3D.UPnP
               String splitString = packetLine.Substring(pos, 9);
 
               String[] location = packetLine.Split(new String[] { splitString }, StringSplitOptions.RemoveEmptyEntries);
+              String webAddr = location[0].Trim();
 
               try
               {
                 using (WebClient webClient = new WebClient())
                 {
-                  ParseSSDPResponse(new Uri(location[0]), webClient.DownloadString(location[0]));
+                  ParseSSDPResponse(new Uri(webAddr), webClient.DownloadString(webAddr));
                 }
               }
               catch (WebException ex)

@@ -27,8 +27,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         throw new Exception("Auto3D: Device is no SonyTV");
 
       _device = (SonyTV)device;
-
-      buttonRegister.Enabled = false;
     }
 
     protected override void OnLoad(EventArgs e)
@@ -56,7 +54,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
       foreach (String model in _device.SelectedDeviceModel.CompatibleModels)
       {
-        listBoxCompatibleModels.Items.Add("- " + model);
+        listBoxCompatibleModels.Items.Add(" " + model);
       }
     }
 
@@ -94,7 +92,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
       foreach (String model in _device.SelectedDeviceModel.CompatibleModels)
       {
-        listBoxCompatibleModels.Items.Add("- " + model);
+        listBoxCompatibleModels.Items.Add(" " + model);
       }
     }
 
@@ -105,7 +103,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     private void comboBoxTV_SelectedIndexChanged(object sender, EventArgs e)
     {
-      buttonRegister.Enabled = true;
       _device.UDN = ((UPnPService)comboBoxTV.SelectedItem).ParentDevice.UDN;
     }
 
@@ -114,10 +111,17 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       _device.SelectedDeviceModel = (Auto3DDeviceModel)comboBoxModel.SelectedItem;
     }
 
+    /*private void buttonShowKey_Click(object sender, EventArgs e)
+    {
+      UPnPService service = (UPnPService)comboBoxTV.SelectedItem;
+      _device.RequestPin(service.ParentDevice.WebAddress.Host);
+    }
+
     private void buttonRegister_Click(object sender, EventArgs e)
     {
       UPnPService service = (UPnPService)comboBoxTV.SelectedItem;
-      _device.RegisterClient(service.ParentDevice.WebAddress.Host + ":80");
-    }
+      _device.RegisterClient2(service.ParentDevice.WebAddress.Host, textBoxPairingKey.Text);
+      //_device.RegisterClient(service.ParentDevice.WebAddress.Host + ":80");
+    }*/
   }
 }

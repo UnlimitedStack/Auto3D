@@ -42,26 +42,39 @@
     <Model>
       <ModelName>LG TV 2011</ModelName>
       <CompatibleModels>
-        <Name>LV7500</Name>
-        <Name>LV5700</Name>
-        <Name>LV5500</Name>
-        <Name>LV375S</Name>
-        <Name>LV373S</Name>
-        <Name>LV372S</Name>
-        <Name>LV3700</Name>
-        <Name></Name>
-        <Name>LW9800</Name>
-        <Name>LW9500</Name>
-        <Name>LW8500</Name>
-        <Name>LW7700</Name>
-        <Name>LW7500</Name>
-        <Name>LW6500</Name>
-        <Name>LW5700</Name>
-        <Name>LW5500</Name>
-        <Name>LZ9900</Name>
+        <Name>LEX8</Name>
         <Name>LZ9800</Name>
+        <Name>LZ970*</Name>
         <Name>LZ9700</Name>
         <Name>LZ9600</Name>
+        <Name>LW9600</Name>
+        <Name>LW950*</Name>
+        <Name>LW9500</Name>
+        <Name>LW770*</Name>
+        <Name>LW7700</Name>
+        <Name>LW7500</Name>
+        <Name>LW650*</Name>
+        <Name>LW6500</Name>
+        <Name>LW570*</Name>
+        <Name>LW5700</Name>
+        <Name>LW5600</Name>
+        <Name>LW550*</Name>
+        <Name>LW5500</Name>
+        <Name>LV570*</Name>
+        <Name>LV5700</Name>
+        <Name>LV550W</Name>
+        <Name>LV550T</Name>
+        <Name>LV5500 (except size 26", 22" and Hong Kong)</Name>
+        <Name>LV5400</Name>
+        <Name>LV375*, LV373S, LV372S, LV3700</Name>
+        <Name>LK550</Name>
+        <Name>LK550</Name>
+        <Name>LK530</Name>
+        <Name>PZ950</Name>
+        <Name>PZ570</Name>
+        <Name>PZ750</Name>
+        <Name>PZ550</Name>
+        <Name>PZ540</Name>
       </CompatibleModels>
       <CommandLists>
         <Commands2D3DSBS>
@@ -108,6 +121,62 @@
         <Name>LM5700</Name>
         <Name>LS5750</Name>
         <Name>LS5700</Name>
+        <Name>PA6900</Name>
+        <Name>PA4700</Name>
+        <Name>Series @TV 2012</Name>
+        <Name>LA9700</Name>
+        <Name>LA9600</Name>
+        <Name>LA8800</Name>
+        <Name>LA8650</Name>
+        <Name>LA8600</Name>
+        <Name>LA7900</Name>
+        <Name>LA7470</Name>
+        <Name>LA7450</Name>
+        <Name>LA7410</Name>
+        <Name>LA7400</Name>
+        <Name>LA7100</Name>
+        <Name>LA6950</Name>
+        <Name>LA6928</Name>
+        <Name>LA6910</Name>
+        <Name>LA6900</Name>
+        <Name>LA6800</Name>
+        <Name>LA6680</Name>
+        <Name>LA6670</Name>
+        <Name>LA6650</Name>
+        <Name>LA6690</Name>
+        <Name>LA6620</Name>
+        <Name>LA6610</Name>
+        <Name>LA6600</Name>
+        <Name>LA6500</Name>
+        <Name>LA6510</Name>
+        <Name>LA6400</Name>
+        <Name>LA6205</Name>
+        <Name>LA6250</Name>
+        <Name>LA6230</Name>
+        <Name>LA6200</Name>
+        <Name>LN6150</Name>
+        <Name>LN6130</Name>
+        <Name>LN6100</Name>
+        <Name>LN5790</Name>
+        <Name>LN5770</Name>
+        <Name>LN5750</Name>
+        <Name>LN5710</Name>
+        <Name>LN5700</Name>
+        <Name>LN570B</Name>
+        <Name>PH6710</Name>
+        <Name>PH6700</Name>
+        <Name>PH6600</Name>
+        <Name>PN6700</Name>
+        <Name>PN5700</Name>
+        <Name>PN4700</Name>
+        <Name>Series @TV 2013</Name>
+        <Name>UB83XX</Name>
+        <Name>UB82XX</Name>
+        <Name>LB57XX</Name>
+        <Name>LB58XX</Name>
+        <Name>LB49XX</Name>
+        <Name>PB69XX</Name>
+        <Name>PB66XX</Name>
       </CompatibleModels>
       <CommandLists>
         <Commands2D3DSBS>

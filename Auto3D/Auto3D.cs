@@ -57,6 +57,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
     GUIDialogMenu _dlgMenu = null;
 
+    List<String> _keywordsSBS = new List<string>();
+    List<String> _keywordsSBSR = new List<string>();
+    List<String> _keywordsTAB = new List<string>();
+    List<String> _keywordsTABR = new List<string>();
+
     public List<IAuto3D> Devices
     {
       get { return _listDevices; }
@@ -257,6 +262,21 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         bSuppressSwitchBackTo2D = reader.GetValueAsBool("Auto3DPlugin", "SupressSwitchBackTo2D", false);
         bConvert3DTo2D = reader.GetValueAsBool("Auto3DPlugin", "Convert3DTo2D", false);
+
+        SplitKeywords(ref _keywordsSBS, reader.GetValueAsString("Auto3DPlugin", "SwitchSBSLabels", "\"3DSBS\", \"3D SBS\""));
+        SplitKeywords(ref _keywordsSBSR, reader.GetValueAsString("Auto3DPlugin", "SwitchSBSRLabels", "\"3DSBSR\", \"3D SBS R\""));
+        SplitKeywords(ref _keywordsTAB, reader.GetValueAsString("Auto3DPlugin", "SwitchTABLabels", "\"3DTAB\", \"3D TAB\""));
+        SplitKeywords(ref _keywordsTABR, reader.GetValueAsString("Auto3DPlugin", "SwitchTABRLabels", "\"3DTABR\", \"3D TAB R\""));        
+      }
+    }
+
+    void SplitKeywords(ref List<String> list, String keywords)
+    {
+      String[] split = keywords.Split(',');
+
+      foreach (String keyword in split)
+      {
+          list.Add(keyword.Trim("\" ".ToCharArray()));
       }
     }
 
@@ -324,7 +344,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         for (int i = 0; i < 10; i++)
         {
-          if (!_bPlaying) // if playing is stopped why we wait then return
+          if (!_bPlaying) // if playing is stopped while we wait then return
             return;
 
           Thread.Sleep(20);
@@ -509,6 +529,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       {
         _currentMode = VideoFormat.Fmt2D;
         GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.None;
+        GUIGraphicsContext.Switch3DSides = false;
       }
     }
 
@@ -616,13 +637,31 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
             if (bCheckNameFull)
             {
-              if (_currentName.ToUpper().Contains("3D"))
+              foreach (String keyword in _keywordsSBSR)
               {
-                Log.Info("Auto3D: Name contains \"3D\"");
+                Log.Debug("Auto3D: Check if name contains \"" + keyword + "\"");
 
-                if (_currentName.Contains("SBS"))
+                if (_currentName.Contains(keyword))
                 {
-                  Log.Info("Auto3D: Name contains \"SBS\"");
+                  Log.Info("Auto3D: Name contains \"" + keyword + "\"");
+
+                  if (_activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt3DSBS))
+                  {
+                    GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.SideBySide;
+                    GUIGraphicsContext.Switch3DSides = true;
+                    _currentMode = VideoFormat.Fmt3DSBS;
+                    return;
+                  }
+                }
+              }
+
+              foreach (String keyword in _keywordsSBS)
+              {
+                Log.Debug("Auto3D: Check if name contains \"" + keyword + "\"");
+
+                if (_currentName.Contains(keyword))
+                {
+                  Log.Info("Auto3D: Name contains \"" + keyword + "\"");
 
                   if (_activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt3DSBS))
                   {
@@ -631,18 +670,41 @@ namespace MediaPortal.ProcessPlugins.Auto3D
                     return;
                   }
                 }
-                else
-                  if (_currentName.Contains("TAB"))
-                  {
-                    Log.Info("Auto3D: Name contains \"TAB\"");
+              }
 
-                    if (_activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt3DTAB))
-                    {
-                      GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.TopAndBottom;
-                      _currentMode = VideoFormat.Fmt3DTAB;
-                      return;
-                    }
+              foreach (String keyword in _keywordsTABR)
+              {
+                Log.Debug("Auto3D: Check if name contains \"" + keyword + "\"");
+
+                if (_currentName.Contains(keyword))
+                {
+                  Log.Info("Auto3D: Name contains \"" + keyword + "\"");
+
+                  if (_activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt3DTAB))
+                  {
+                    GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.TopAndBottom;
+                    GUIGraphicsContext.Switch3DSides = true;
+                    _currentMode = VideoFormat.Fmt3DTAB;
+                    return;
                   }
+                }
+              }
+
+              foreach (String keyword in _keywordsTAB)
+              {
+                Log.Debug("Auto3D: Check if name contains \"" + keyword + "\"");
+
+                if (_currentName.Contains(keyword))
+                {
+                  Log.Info("Auto3D: Name contains \"" + keyword + "\"");
+
+                  if (_activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt3DTAB))
+                  {
+                    GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.TopAndBottom;
+                    _currentMode = VideoFormat.Fmt3DTAB;
+                    return;
+                  }
+                }
               }
             }
 
@@ -710,7 +772,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         {
           _dlgMenu.Add("3D Top and Bottom");
           _dlgMenu.Add("3D TAB -> 2D via MediaPortal");
-
         }
 
         if (_currentMode == VideoFormat.Fmt3DSBS || _currentMode == VideoFormat.Fmt3DTAB)
@@ -723,6 +784,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         if (_activeDevice.IsDefined(VideoFormat.Fmt2D3D))
           _dlgMenu.Add("2D -> 3D via TV");
+
+        /*if (Auto3DUPnP.Running)
+          _dlgMenu.Add("Stop SSDP");
+        else
+          _dlgMenu.Add("Start SSDP");*/
 
         _dlgMenu.DoModal((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
 
@@ -781,6 +847,16 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
             GUIGraphicsContext.Switch3DSides = false;
             break;
+
+          /*case "Stop SSDP":
+
+            Auto3DUPnP.StopSSDP();
+            break;
+
+          case "Start SSDP":
+
+            Auto3DUPnP.StartSSDP();
+            break;*/
         }
 
         _dlgMenu = null;

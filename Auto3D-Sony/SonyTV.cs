@@ -48,6 +48,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       set;
     }
 
+    /*public String PairingKey
+    {
+      get;
+      set;
+    }*/
+
     public override void Start()
     {
     }
@@ -62,6 +68,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         DeviceModelName = reader.GetValueAsString("Auto3DPlugin", "SonyModel", "BRAVIA");
         UDN = reader.GetValueAsString("Auto3DPlugin", "SonyAddress", "");
+        //PairingKey = reader.GetValueAsString("Auto3DPlugin", "SonyPairingKey", "");
       }
     }
 
@@ -71,6 +78,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         writer.SetValue("Auto3DPlugin", "SonyModel", SelectedDeviceModel.Name);
         writer.SetValue("Auto3DPlugin", "SonyAddress", UDN);
+        //writer.SetValue("Auto3DPlugin", "SonyPairingKey", PairingKey);
       }
     }
 
@@ -109,7 +117,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
         case "Return":
 
-          if (!InternalSendCommand("AAAAAgAAAJcAAAAjAw =="))
+          if (!InternalSendCommand("AAAAAgAAAJcAAAAjAw=="))
             return false;
           break;
 
@@ -152,11 +160,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       return true;
     }
 
-    public void RegisterClient(String ip)
+    /*public void RegisterClient(String ip)
     {
       String registrationUrl = "http://" + ip + "/cers/api/register?name=DeviceName&registrationType=initial&deviceId=MediaRemote";
 
       Log.Info("Auto3D: Register Sony client");
+      Log.Info("Auto3D: " + registrationUrl);
 
       HttpWebRequest request = null;
 
@@ -189,6 +198,82 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
 
       ShowMessageBoxFromNonUIThread("Registration at Sony TV succeeded!");
+    }
+
+    public void RequestPin(String ip)
+    {
+      string hostname = System.Windows.Forms.SystemInformation.ComputerName;
+      string jsontosend = "{\"id\":13,\"method\":\"actRegister\",\"version\":\"1.0\",\"params\":[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"nickname\":\"" + hostname + " (Auto3D)\"},[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"value\":\"yes\",\"nickname\":\"" + hostname + " (Auto3D)\",\"function\":\"WOL\"}]]}";
+
+      PostRequest("http://" + ip + "/sony/accessControl", jsontosend, null);
+    }
+
+    public void RegisterClient2(String ip, String pinCode)
+    {
+      string hostname = System.Windows.Forms.SystemInformation.ComputerName;
+      string jsontosend = "{\"id\":13,\"method\":\"actRegister\",\"version\":\"1.0\",\"params\":[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"nickname\":\"" + hostname + " (Auto3D)\"},[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"value\":\"yes\",\"nickname\":\"" + hostname + " (Auto3D)\",\"function\":\"WOL\"}]]}";
+
+      PostRequest("http://" + ip + "/sony/accessControl", jsontosend, pinCode);
+    }
+
+    public bool PostRequest(String url, String jsonString, String pinCode, CookieContainer cc)
+    {
+      try
+      {
+        Log.Debug("Auto3D: PostRequest to URL = \"" + url + "\"");
+
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
+        request.Timeout = 3000;
+        request.ContentType = "text/json";
+        request.Method = "POST";
+        request.AllowAutoRedirect = true;
+
+        if (cc != null)
+          request.CookieContainer = cc;
+
+        if (pinCode != null)
+        {
+          string authInfo = "" + ":" + pinCode;
+          authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
+          request.Headers["Authorization"] = "Basic " + authInfo;
+        }
+
+        Log.Debug("Auto3D: JSON-String = \"" + jsonString + "\"");
+
+        using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+        {
+          streamWriter.Write(jsonString);
+          streamWriter.Flush();
+          streamWriter.Close();
+        }
+
+        Application.DoEvents();
+        Thread.Sleep(50);
+
+        HttpWebResponse httpResponse = (HttpWebResponse)request.GetResponse();
+
+
+        // serialize cookies of httpresponse
+         
+        using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+        {
+          var result = streamReader.ReadToEnd();
+          Log.Debug(result);
+        }
+
+        httpResponse.Close();
+
+        Application.DoEvents();
+      }
+      catch (Exception ex)
+      {
+        Log.Info("Auto3D: PostRequest: " + ex.Message);
+        ShowMessageBoxFromNonUIThread("Command could not be sent. The error message is: " + ex.Message);
+        return false;
+      }
+
+      return true;
     }
 
     /*private string Envelope(string command)

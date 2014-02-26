@@ -58,12 +58,19 @@ namespace MediaPortal.ProcessPlugins.Auto3D.UPnP
       Auto3DUPnPCore.Instance.StopSSDP();
     }
 
+    public static bool Running
+    {
+      get
+      {
+        return Auto3DUPnPCore.Instance.Running;
+      }
+    }
+
     public static void RegisterForCallbacks(IAuto3DUPnPServiceCallBack callback)
     {
       ServiceCallBack scb = new ServiceCallBack(callback);
       _serviceCallbacks.Add(scb);
     }
-
 
     static void Auto3DUPnP_ServiceFound(object sender, ServiceEventArgs e)
     {

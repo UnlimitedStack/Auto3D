@@ -29,12 +29,14 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     UserControl _remoteKeyPad = null;
 
     bool bSendEventGhostEvents = false;
+    bool bShowMessageOnModeChange = false;
 
     public Auto3DBaseDevice()
     {
       using (Settings reader = new MPSettings())
       {
         bSendEventGhostEvents = reader.GetValueAsBool("Auto3DPlugin", "EventGhostEvents", false);
+        bShowMessageOnModeChange = reader.GetValueAsBool("Auto3DPlugin", "ShowMessageOnModeChange", false);
       }
 
       if (DeviceName != "No device")
@@ -259,6 +261,66 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public bool SwitchFormat(VideoFormat fmtOld, VideoFormat fmtNew)
     {
+      if (GUIGraphicsContext.IsFullScreenVideo && bShowMessageOnModeChange)
+      {
+        GUIMessage guiMsg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_REFRESHRATE_CHANGED, 0, 0, 0, 0, 0, null);
+        guiMsg.Label = "Auto3D";
+
+        String format = "";
+
+        switch (fmtNew)
+        {
+          case VideoFormat.Fmt2D:
+
+            switch (GUIGraphicsContext.Render3DMode)
+            {
+              case GUIGraphicsContext.eRender3DMode.None:
+              case GUIGraphicsContext.eRender3DMode.SideBySide:
+              case GUIGraphicsContext.eRender3DMode.TopAndBottom:
+
+                format = "2D";
+                break;
+
+              case GUIGraphicsContext.eRender3DMode.SideBySideTo2D:
+
+                format = "3D SBS -> 2D via MediaPortal";
+                break;
+
+              case GUIGraphicsContext.eRender3DMode.TopAndBottomTo2D:
+
+                format = "3D TAB -> 2D via MediaPortal";
+                break;
+            }
+            break;
+
+          case VideoFormat.Fmt3DSBS:
+
+            format = "3D Side by Side";
+
+            if (GUIGraphicsContext.Switch3DSides)
+              format += " Reverse";
+            break;
+
+          case VideoFormat.Fmt3DTAB:
+
+            format = "3D Top and Bottom";
+
+            if (GUIGraphicsContext.Switch3DSides)
+              format += " Reverse";
+            break;
+
+          case VideoFormat.Fmt2D3D:
+
+            format = "2D -> 3D via TV";
+            break;
+        }
+
+        guiMsg.Label2 = "VideoFormat: " + format;
+        guiMsg.Param1 = 4;
+
+        GUIGraphicsContext.SendMessage(guiMsg);
+      }   
+
       Log.Info("Auto3D: Begin SwitchToFormat");
 
       try

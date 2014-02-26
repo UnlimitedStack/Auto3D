@@ -108,7 +108,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         case "Home":
 
           if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKey(DiVine.RC6Codes.rc6S0MenuOn);
+            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0MenuOn);
           else
             if (!PostRequest(address, "{ \"key\": \"Home\" }"))
               return false;
@@ -117,7 +117,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         case "Adjust":
 
           if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKey(DiVine.RC6Codes.rc6S0AmbLightMode);
+            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0AmbLightMode);
           else
             if (!PostRequest(address, "{ \"key\": \"Adjust\" }"))
               return false;
@@ -126,7 +126,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         case "Back":
 
           if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKey(DiVine.RC6Codes.rc6S0PreviousProgram);
+            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0PreviousProgram);
           else
             if (!PostRequest(address, "{ \"key\": \"Back\" }"))
               return false;
@@ -135,7 +135,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         case "Options":
 
           if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKey(DiVine.RC6Codes.rc6S0Options);
+            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0Options);
           else
             if (!PostRequest(address, "{ \"key\": \"Options\" }"))
               return false;
@@ -144,7 +144,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         case "OK":
 
           if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKey(DiVine.RC6Codes.rc6S0Acknowledge);
+            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0Acknowledge);
           else
             if (!PostRequest(address, "{ \"key\": \"Confirm\" }"))
               return false;
@@ -153,7 +153,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         case "CursorLeft":
 
           if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKey(DiVine.RC6Codes.rc6S0StepLeft);
+            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0StepLeft);
           else
             if (!PostRequest(address, "{ \"key\": \"CursorLeft\" }"))
               return false;
@@ -162,7 +162,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         case "CursorRight":
 
           if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKey(DiVine.RC6Codes.rc6S0StepRight);
+            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0StepRight);
           else
             if (!PostRequest(address, "{ \"key\": \"CursorRight\" }"))
               return false;
@@ -171,7 +171,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         case "CursorUp":
 
           if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKey(DiVine.RC6Codes.rc6S0StepUp);
+            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0StepUp);
           else
             if (!PostRequest(address, "{ \"key\": \"CursorUp\" }"))
               return false;
@@ -180,7 +180,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         case "CursorDown":
 
           if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKey(DiVine.RC6Codes.rc6S0StepDown);
+            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0StepDown);
           else
             if (!PostRequest(address, "{ \"key\": \"CursorDown\" }"))
               return false;
@@ -189,7 +189,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         case "3D":
 
           if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKey(DiVine.RC6Codes.rc6S0SaturationDownOr3D);
+            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0Display3D);
           else
             return false;
           break;

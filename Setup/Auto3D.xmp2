@@ -370,7 +370,7 @@ Click Next to continue or Cancel to exit Setup.</Value>
       <Major>1</Major>
       <Minor>0</Minor>
       <Build>6</Build>
-      <Revision>3</Revision>
+      <Revision>25</Revision>
     </Version>
     <ExtensionDescription />
     <VersionDescription />
@@ -571,7 +571,7 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\Auto3D\Auto3d-Icon2.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{8e675177-cb54-46d5-be6c-c65779e7ea13}-Auto3d-Icon2.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{ba3219d5-6cae-43a4-b7e2-a05a928e1087}-Auto3d-Icon2.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>

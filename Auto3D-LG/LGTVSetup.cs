@@ -58,7 +58,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
       foreach (String model in _device.SelectedDeviceModel.CompatibleModels)
       {
-        listBoxCompatibleModels.Items.Add("- " + model);
+        listBoxCompatibleModels.Items.Add(" " + model);
       }
     }
 
@@ -96,7 +96,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
       foreach (String model in _device.SelectedDeviceModel.CompatibleModels)
       {
-        listBoxCompatibleModels.Items.Add("- " + model);
+        listBoxCompatibleModels.Items.Add(" " + model);
       }
 
       textBoxPairingKey.Text = _device.PairingKey;
@@ -117,8 +117,17 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       else
         UDAPnP.Protocol = UDAPnP.LGProtocol.LG2012x;
 
+      listBoxCompatibleModels.Items.Clear();
+
+      foreach (String model in _device.SelectedDeviceModel.CompatibleModels)
+      {
+        listBoxCompatibleModels.Items.Add(" " + model);
+      }
+
       _device.SaveSettings();
-      _device.ConnectAndPair();
+
+      if (comboBoxTV.SelectedIndex > -1)
+        _device.ConnectAndPair();
     }
 
     private void comboBoxTV_SelectedIndexChanged(object sender, EventArgs e)

@@ -49,13 +49,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
       if (comboBoxTV.SelectedIndex == -1)
         comboBoxTV.SelectedItem = service;
-
-      listBoxCompatibleModels.Items.Clear();
-
-      foreach (String model in _device.SelectedDeviceModel.CompatibleModels)
-      {
-        listBoxCompatibleModels.Items.Add("- " + model);
-      }
     }
 
     public void ServiceRemoved(UPnPService service)
@@ -87,6 +80,13 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
 
       comboBoxModel.SelectedItem = _device.SelectedDeviceModel;
+
+      listBoxCompatibleModels.Items.Clear();
+
+      foreach (String model in _device.SelectedDeviceModel.CompatibleModels)
+      {
+        listBoxCompatibleModels.Items.Add(" " + model);
+      }
     }
 
     public void SaveSettings()

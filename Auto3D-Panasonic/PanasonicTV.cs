@@ -131,6 +131,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             return false;
           break;
 
+        case "Red":
+
+          if (!InternalSendCommand("NRC_RED-ONOFF"))
+            return false;
+          break;
+
         case "Delay":
 
           // do nothing here

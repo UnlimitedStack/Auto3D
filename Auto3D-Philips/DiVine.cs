@@ -66,6 +66,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       rc6S0Digit8 = 8,
       rc6S0Digit9 = 9,
       rc6S0PreviousProgram = 10,
+      rc6S0 = 11,
       rc6S0Standby = 12,
       rc6S0MuteDemute = 13,
       rc6S0PersonalPreference = 14,
@@ -104,6 +105,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       rc6S0Sleeptimer = 71,
       rc6S0PictureNumberTime = 74,
       rc6S0TvTextSubtitle = 75,
+      rc6S0PlayNextFile = 76,
+      rc6S0PlayPreviousFile = 77,
       rc6S0SoundSelect = 78,
       rc6S0SpatialStereo = 79,
       rc6S0StereoMono = 80,
@@ -171,7 +174,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       rc6S0AvMute = 163,
       rc6S0MainSubmode = 176,
       rc6S0Resume = 177,
-      rc650Test3D = 186,
+      rc6S0Display3D = 186,
       rc6S0DisplayBrowser = 190,
       rc6S0AnalogueDigital = 192,
       rc6S0DigitalSetupMenu = 193,
@@ -257,6 +260,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     static extern void jslibrc_KeyUp(RCCodeBase src, int sys, int cmd);
 
     [DllImport("libjs.dll", SetLastError = true)]
+    static extern void jslibrc_KeyDownEx(RCCodeBase src, int sys, int cmd);
+
+    [DllImport("libjs.dll", SetLastError = true)]
+    static extern void jslibrc_KeyUpEx(RCCodeBase src, int sys, int cmd);
+
+    [DllImport("libjs.dll", SetLastError = true)]
     static extern void jslibrc_RequestActivity(amLib_EnumActivityId act, amLib_EnumActivation mode, int cookie);
 
     public static bool IsConnected
@@ -303,6 +312,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     {
       jslibrc_KeyDown(RCCodeBase.keySourceRc6, 0, (int)code);
       jslibrc_KeyUp(RCCodeBase.keySourceRc6, 0, (int)code);
+    }
+
+    public static void SendKeyEx(RC6Codes code)
+    {
+      jslibrc_KeyDownEx(RCCodeBase.keySourceRc6, 0, (int)code);
+      jslibrc_KeyUpEx(RCCodeBase.keySourceRc6, 0, (int)code);
     }
 
     public static void KeyDown(RC6Codes code)

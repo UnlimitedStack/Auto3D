@@ -75,7 +75,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         }
       }
       catch (System.Exception ex)
-      {              
+      {
+        Log.Error("Auto3D: InternalGetDeviceDescription failed: " + ex.Message);
       }
 
       return false;
@@ -97,6 +98,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             if (InternalGetDeviceDescription(scanIP, "8080"))
             {
               _port = "8080";
+              _ipAddress = scanIP;
               return true;
             }
 
@@ -105,6 +107,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             if (InternalGetDeviceDescription(scanIP, "6767"))
             {
               _port = "6767";
+              _ipAddress = scanIP;
               return true;
             }
           }

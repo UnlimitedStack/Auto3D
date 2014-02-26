@@ -29,12 +29,16 @@
       <Command>CursorDown</Command>
       <Delay>400</Delay>
     </CommandItem>
+     <CommandItem>
+      <Command>Red</Command>
+      <Delay>400</Delay>
+    </CommandItem>
   </Commands>
   <Models>
     <Model>
       <ModelName>VIErA</ModelName>
       <CompatibleModels>
-        <Name>VIErA</Name>
+        <Name>VIErA Series</Name>
       </CompatibleModels>
       <CommandLists>
         <Commands2D3DSBS>

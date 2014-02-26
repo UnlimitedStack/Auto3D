@@ -48,7 +48,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
       foreach (String model in _device.SelectedDeviceModel.CompatibleModels)
       {
-        listBoxCompatibleModels.Items.Add("- " + model);
+        listBoxCompatibleModels.Items.Add(" " + model);
       }
 
       comboBoxInterface.SelectedIndex = (int)_device.ConnectionMethod;

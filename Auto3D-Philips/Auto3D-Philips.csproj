@@ -110,9 +110,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="libjs.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Philips.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>

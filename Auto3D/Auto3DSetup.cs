@@ -28,12 +28,18 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       {
         comboBoxModel.Items.Add(item);
         panelSettings.Controls.Add(item.GetSetupControl());
-        item.GetSetupControl().Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+        //item.GetSetupControl().Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+        item.GetSetupControl().Dock = DockStyle.Fill;
 
         String[] versionInfo = item.GetType().Assembly.FullName.Split(',');
         String[] version = versionInfo[1].Split('=');
         labeInfoText += versionInfo[0] + "\n" + version[0] + " = " + version[1] + "\n\n";
       }
+
+      String [] versionInfoUPnP = System.Reflection.Assembly.GetAssembly(typeof(MediaPortal.ProcessPlugins.Auto3D.UPnP.Auto3DUPnP)).FullName.Split(',');
+      String[] versionUPnP = versionInfoUPnP[1].Split('=');
+
+      labeInfoText += versionInfoUPnP[0] + " (UPnP)\n" + versionUPnP[0] + " = " + versionUPnP[1] + "\n\n";
 
       labelInfo.Text = labeInfoText;
 
@@ -130,8 +136,14 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         checkBox3DSubTitles.Checked = reader.GetValueAsBool("Auto3DPlugin", "3DSubtitles", true);
         trackBarDepth3D.Value = reader.GetValueAsInt("Auto3DPlugin", "SubtitleDepth", 0);
 
+        checkBoxModeSwitchMessage.Checked = reader.GetValueAsBool("Auto3DPlugin", "ShowMessageOnModeChange", true);
         checkBoxSupressSwitchBackTo2D.Checked = reader.GetValueAsBool("Auto3DPlugin", "SupressSwitchBackTo2D", false);
         checkBoxConvert3Dto2D.Checked = reader.GetValueAsBool("Auto3DPlugin", "Convert3DTo2D", false);
+
+        textBoxSBS.Text = reader.GetValueAsString("Auto3DPlugin", "SwitchSBSLabels", "\"3DSBS\", \"3D SBS\"");
+        textBoxSBSR.Text = reader.GetValueAsString("Auto3DPlugin", "SwitchSBSRLabels", "\"3DSBSR\", \"3D SBS R\"");
+        textBoxTAB.Text = reader.GetValueAsString("Auto3DPlugin", "SwitchTABLabels", "\"3DTAB\", \"3D TAB\"");
+        textBoxTABR.Text = reader.GetValueAsString("Auto3DPlugin", "SwitchTABRLabels", "\"3DTABR\", \"3D TAB R\"");
       }
 
       foreach (IAuto3D item in comboBoxModel.Items)
@@ -160,11 +172,17 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         writer.SetValueAsBool("Auto3DPlugin", "EventGhostEvents", checkBoxEventGhost.Checked);
 
+        writer.SetValueAsBool("Auto3DPlugin", "ShowMessageOnModeChange", checkBoxModeSwitchMessage.Checked);
         writer.SetValueAsBool("Auto3DPlugin", "SupressSwitchBackTo2D", checkBoxSupressSwitchBackTo2D.Checked);
         writer.SetValueAsBool("Auto3DPlugin", "Convert3DTo2D", checkBoxConvert3Dto2D.Checked);
 
         writer.SetValueAsBool("Auto3DPlugin", "3DSubtitles", checkBox3DSubTitles.Checked);
         writer.SetValue("Auto3DPlugin", "SubtitleDepth", trackBarDepth3D.Value);
+
+        writer.SetValue("Auto3DPlugin", "SwitchSBSLabels", textBoxSBS.Text);
+        writer.SetValue("Auto3DPlugin", "SwitchSBSRLabels", textBoxSBSR.Text);
+        writer.SetValue("Auto3DPlugin", "SwitchTABLabels", textBoxTAB.Text);
+        writer.SetValue("Auto3DPlugin", "SwitchTABRLabels", textBoxTABR.Text);
       }
 
       foreach (IAuto3D item in comboBoxModel.Items)
