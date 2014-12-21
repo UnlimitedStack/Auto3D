@@ -45,7 +45,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         _serialPort.Close();
 
       _serialPort = new SerialPort(PortName, 38400, Parity.Even, 8, StopBits.One);
-      _serialPort.NewLine = "\r";
       _serialPort.DataReceived += _serialPort_DataReceived;
 
       try
@@ -108,22 +107,15 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     {
       switch (command)
       {
-        case "3DDisplayOn":
-
-          if (!InternalSendCommand("A9,00,60,00,00,01,61,9A"))
-            return false;
-          break;
-
-        case "3DDisplayOff":
-
-          //if (!InternalSendCommand("A9,00,60,00,00,02,62,9A"))
-          if (!InternalSendCommand("A90060000001619A"))
-            return false;
-          break;
-
         case "3DFormatAuto":
 
           if (!InternalSendCommand("A9,00,60,00,00,00,60,9A"))
+            return false;
+          break;
+
+        case "3DFormat3D":
+
+          if (!InternalSendCommand("A9,00,60,00,00,01,61,9A"))
             return false;
           break;
 
@@ -135,8 +127,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
         case "3DFormatSBS":
 
-          //if (!InternalSendCommand("A9,00,61,00,00,01,60,9A"))
-          if (!InternalSendCommand("A90061000001609A"))
+          if (!InternalSendCommand("A9,00,61,00,00,01,61,9A"))
             return false;
           break;
 
@@ -146,13 +137,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             return false;
           break;
 
-        case "2D3DConversionOn":
-
-          if (!InternalSendCommand("A9,00,61,00,00,00,61,9A"))
-            return false;
-          break;
-
-        case "2D3DConversionOff":
+        case "3DDisplaySimulated":
 
           if (!InternalSendCommand("A9,00,60,00,00,02,62,9A"))
             return false;
@@ -164,17 +149,17 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     private bool InternalSendCommand(String command)
     {
-        String [] byteStrings = command.Split(",".ToCharArray());
-        Byte [] buffer = new Byte[byteStrings.GetLength(0)];
+      String[] byteStrings = command.Split(",".ToCharArray());
+      Byte[] buffer = new Byte[byteStrings.GetLength(0)];
 
-        for (int i = 0; i < byteStrings.GetLength(0); i++)
-        {
-            buffer[i] = (Byte)Convert.ToInt32(byteStrings[i], 16);
-        }
+      for (int i = 0; i < byteStrings.GetLength(0); i++)
+      {
+        buffer[i] = (Byte)Convert.ToInt32(byteStrings[i], 16);
+      }
 
       try
       {
-          _serialPort.Write(buffer, 0, buffer.GetLength(0));
+        _serialPort.Write(buffer, 0, buffer.GetLength(0));
       }
       catch (System.Exception ex)
       {
