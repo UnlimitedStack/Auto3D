@@ -88,6 +88,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public override void ServiceRemoved(UPnPService service)
     {
+      Log.Info("Auto3D: Panasonic service removed");
       base.ServiceRemoved(service);
     }
 

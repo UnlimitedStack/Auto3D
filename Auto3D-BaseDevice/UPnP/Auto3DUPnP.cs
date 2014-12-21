@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediaPortal.GUI.Library;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -6,6 +7,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using MediaPortal.Configuration;
+using MediaPortal.Profile;
+using MediaPortal.UserInterface.Controls;
+
 
 namespace MediaPortal.ProcessPlugins.Auto3D.UPnP
 {
@@ -76,8 +81,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D.UPnP
     {
       foreach (ServiceCallBack scb in _serviceCallbacks)
       {
-        System.Diagnostics.Debug.WriteLine(e.Service.ParentDevice.Manufacturer + " - " + e.Service.ServiceID);
-
         bool bNameCheck = true;
 
         if (scb.Callback.UPnPManufacturer != "")
@@ -85,20 +88,37 @@ namespace MediaPortal.ProcessPlugins.Auto3D.UPnP
           bNameCheck = e.Service.ParentDevice.Manufacturer.StartsWith(scb.Callback.UPnPManufacturer);
         }
 
-        if (((scb.Callback.UPnPServiceName == e.Service.ServiceType) || (e.Service.ServiceType.Contains(scb.Callback.UPnPServiceName))) && bNameCheck && !scb.ClientNotified)
+        using (Settings reader = new MPSettings())
         {
-          scb.Callback.ServiceAdded(e.Service);
-          scb.ClientNotified = true;
+            bool logOnlyKnownDevices = reader.GetValueAsBool("Auto3DPlugin", "LogOnlyKnownDevices", true);
+
+            if (((scb.Callback.UPnPServiceName == e.Service.ServiceType) || (e.Service.ServiceType.Contains(scb.Callback.UPnPServiceName))) && bNameCheck && !scb.ClientNotified)
+            {
+                LogService(e.Service, true, true);
+
+                scb.Callback.ServiceAdded(e.Service);
+                scb.ClientNotified = true;
+            }
+            else
+                if (!logOnlyKnownDevices)
+                    LogService(e.Service, false, true);
         }
       }
+    }
+
+    static void LogService(UPnPService service, bool known, bool add)
+    {
+        Log.Debug("Auto3D: UPnP scan -> " + (known ? "known" : "unknown") + " service " + (add ? "added" : "removed"));
+        Log.Debug("Auto3D: Device = " + service.ParentDevice.FriendlyName);
+        Log.Debug("Auto3D: ServiceType = " + service.ServiceType);
+        Log.Debug("Auto3D: ServiceID = " + service.ServiceID);
+        Log.Debug("Auto3D: ControlUrl = " + service.ControlUrl);
     }
 
     static void Auto3DUPnP_ServiceRemoved(object sender, ServiceEventArgs e)
     {
        foreach (ServiceCallBack scb in _serviceCallbacks)
       {
-        System.Diagnostics.Debug.WriteLine(e.Service.ParentDevice.Manufacturer + " - " + e.Service.ServiceID);
-
         bool bNameCheck = true;
 
         if (scb.Callback.UPnPManufacturer != "")
@@ -106,10 +126,20 @@ namespace MediaPortal.ProcessPlugins.Auto3D.UPnP
           bNameCheck = e.Service.ParentDevice.Manufacturer.StartsWith(scb.Callback.UPnPManufacturer);
         }
 
-        if (((scb.Callback.UPnPServiceName == e.Service.ServiceType) || (e.Service.ServiceType.Contains(scb.Callback.UPnPServiceName))) && bNameCheck && scb.ClientNotified)
+        using (Settings reader = new MPSettings())
         {
-          scb.Callback.ServiceRemoved(e.Service);
-          scb.ClientNotified = false;
+            bool logOnlyKnownDevices = reader.GetValueAsBool("Auto3DPlugin", "LogOnlyKnownDevices", true);
+
+            if (((scb.Callback.UPnPServiceName == e.Service.ServiceType) || (e.Service.ServiceType.Contains(scb.Callback.UPnPServiceName))) && bNameCheck && scb.ClientNotified)
+            {
+                LogService(e.Service, true, false);
+
+                scb.Callback.ServiceRemoved(e.Service);
+                scb.ClientNotified = false;
+            }
+            else
+                if (!logOnlyKnownDevices)
+                    LogService(e.Service, false, false);
         }
       }
     }

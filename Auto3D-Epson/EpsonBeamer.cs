@@ -57,7 +57,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
       catch (Exception ex)
       {
-        MessageBox.Show(ex.Message, "Auto3D");
+        Auto3DHelpers.ShowAuto3DMessage("Opening serial port failed: " + ex.Message, false, 0);         
         Log.Info("Auto3D: " + ex.Message);
       }
     }
@@ -89,7 +89,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         }
         catch (Exception ex)
         {
-          MessageBox.Show(ex.Message, "Auto3D");
+          Auto3DHelpers.ShowAuto3DMessage("Opening serial port failed: " + ex.Message, false, 0);         
           Log.Info("Auto3D: " + ex.Message);
         }
       }
@@ -169,7 +169,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
       catch (System.Exception ex)
       {
-        Log.Info("Auto3D: Error sending command: " + ex.Message);
+        Auto3DHelpers.ShowAuto3DMessage("Command to TV could not be sent: " + ex.Message, false, 0);
+        Log.Error("Auto3D: Error sending command: " + ex.Message);
         return false;
       }
 

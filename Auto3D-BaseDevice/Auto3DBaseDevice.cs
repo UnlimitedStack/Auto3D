@@ -200,6 +200,14 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     {
     }
 
+    public virtual void Suspend()
+    {
+    }
+
+    public virtual void Resume()
+    {
+    }
+
     public virtual void LoadSettings()
     {
     }
@@ -263,8 +271,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     {
       if (GUIGraphicsContext.IsFullScreenVideo && bShowMessageOnModeChange)
       {
-        GUIMessage guiMsg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_REFRESHRATE_CHANGED, 0, 0, 0, 0, 0, null);
-        guiMsg.Label = "Auto3D";
 
         String format = "";
 
@@ -315,10 +321,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             break;
         }
 
-        guiMsg.Label2 = "VideoFormat: " + format;
-        guiMsg.Param1 = 4;
-
-        GUIGraphicsContext.SendMessage(guiMsg);
+        Auto3DHelpers.ShowAuto3DMessage("VideoFormat: " + format, true, 4);
       }   
 
       Log.Info("Auto3D: Begin SwitchToFormat");
@@ -427,18 +430,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     {
       return DeviceName;
     }
-
-    public DialogResult ShowMessageBoxFromNonUIThread(String message)
-    {
-      if (Auto3DHelpers.GetMainForm().InvokeRequired)
-      {
-        return (DialogResult)Auto3DHelpers.GetMainForm().Invoke(new MessageBoxDelegate(ShowMessageBoxFromNonUIThread), message);
-      }
-
-      return MessageBox.Show(message, "Auto3D");
-    }
-
-    public delegate DialogResult MessageBoxDelegate(String s1);
   }
 }
 

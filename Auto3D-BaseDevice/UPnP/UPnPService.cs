@@ -18,11 +18,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D.UPnP
       ServiceType = service.Elements().First(e => e.Name.LocalName == "serviceType").Value;
       ServiceID = service.Elements().First(e => e.Name.LocalName == "serviceId").Value;
       ControlUrl = service.Elements().First(e => e.Name.LocalName == "controlURL").Value;
-
-      Log.Debug("Auto3D: Device = " + parent.FriendlyName);
-      Log.Debug("Auto3D: ServiceType = " + ServiceType);
-      Log.Debug("Auto3D: ServiceID = " + ServiceID);
-      Log.Debug("Auto3D: ControlUrl = " + ControlUrl);
     }
 
     public UPnPDevice ParentDevice

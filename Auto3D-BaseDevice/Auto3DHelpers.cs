@@ -1,7 +1,9 @@
-﻿using System;
+﻿using MediaPortal.GUI.Library;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
@@ -28,5 +30,30 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
       return false;
     }
+
+    public static void ShowAuto3DMessage(String msg, bool forceMPGUI, int seconds)
+    {
+        if (Auto3DHelpers.GetMainForm().InvokeRequired)
+        {
+            Auto3DHelpers.GetMainForm().Invoke(new ShowMessageDelegate(ShowAuto3DMessage), msg, forceMPGUI, seconds);
+            return;
+        }
+
+        if (GUIGraphicsContext.IsFullScreenVideo || forceMPGUI)
+        {
+            GUIMessage guiMsg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_REFRESHRATE_CHANGED, 0, 0, 0, 0, 0, null);
+            guiMsg.Label = "Auto3D";
+            guiMsg.Label2 = msg;
+            guiMsg.Param1 = seconds;
+
+            GUIGraphicsContext.SendMessage(guiMsg);
+        }
+        else
+        {
+            MessageBox.Show(msg, "Auto3D");
+        }
+    }
+
+    public delegate void ShowMessageDelegate(String msg, bool forceMPGUI, int seconds);
   }
 }

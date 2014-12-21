@@ -227,6 +227,30 @@
           </Items>
         </Files>
       </GroupItem>
+      <GroupItem Name="Optoma">
+        <ParentGroup />
+        <DisplayName>Optoma</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>Optoma</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\Auto3D-Optoma\bin\Release\Auto3D-Optoma.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d9e5bcde-cf7e-4d81-b98a-691ae9e76b51}-Auto3D-Optoma.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\Process\Auto3D\Auto3D-Optoma.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\Auto3D-Optoma\Optoma.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{aa7daa25-e2b7-4624-ad9e-862f615817ea}-Optoma.xml</ZipFileName>
+              <DestinationFilename>%Config%\Auto3D\Optoma.xml</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
     </Items>
   </Groups>
   <Sections>
@@ -370,7 +394,7 @@ Click Next to continue or Cancel to exit Setup.</Value>
       <Major>1</Major>
       <Minor>0</Minor>
       <Build>6</Build>
-      <Revision>25</Revision>
+      <Revision>30</Revision>
     </Version>
     <ExtensionDescription />
     <VersionDescription />
@@ -566,6 +590,20 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <LocalFileName>..\Auto3D-LG\bin\Release\LG.xml</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{433b4b67-1b3b-4f11-92bb-c423c0998e9e}-LG.xml</ZipFileName>
         <DestinationFilename>%Config%\Auto3D\LG.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\Auto3D-Optoma\bin\Release\Auto3D-Optoma.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d9e5bcde-cf7e-4d81-b98a-691ae9e76b51}-Auto3D-Optoma.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\Process\Auto3D\Auto3D-Optoma.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\Auto3D-Optoma\Optoma.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{aa7daa25-e2b7-4624-ad9e-862f615817ea}-Optoma.xml</ZipFileName>
+        <DestinationFilename>%Config%\Auto3D\Optoma.xml</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="true" Modified="true">
         <Param1 />

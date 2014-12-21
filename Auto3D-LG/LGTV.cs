@@ -120,7 +120,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public override void ServiceRemoved(UPnPService service)
     {
-      base.ServiceRemoved(service);
+      Log.Info("Auto3D: LG service removed");   
+      base.ServiceRemoved(service);      
     }
 
     void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
@@ -348,9 +349,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
         if (!ConnectAndPair())
         {
-          if (Auto3DHelpers.GetMainForm().Name == "SettingsForm")
-            MessageBox.Show("Auto3D: Connection to LG TV failed!");
-          else
+            Auto3DHelpers.ShowAuto3DMessage("Connection to LG TV failed!", false, 0);             
             Log.Error("Auto3D: Connection to LG TV failed!");
 
           return false;

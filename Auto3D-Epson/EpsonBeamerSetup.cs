@@ -24,7 +24,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       InitializeComponent();
 
       if (!(device is EpsonBeamer))
-        throw new Exception("Auto3D: Device is no EpsonBeamer");
+        throw new Exception("Auto3D: Device is no Epson Beamer");
 
       _device = (EpsonBeamer)device;
 

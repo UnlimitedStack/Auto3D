@@ -96,7 +96,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public override void ServiceRemoved(UPnPService service)
     {
-      base.ServiceRemoved(service);
+        Log.Info("Auto3D: Sony service removed");        
+        base.ServiceRemoved(service);
     }
 
     public override bool SendCommand(String command)

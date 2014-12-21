@@ -67,7 +67,7 @@
       this.pictureBox.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox.BackgroundImage")));
       this.pictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
       this.pictureBox.InitialImage = null;
-      this.pictureBox.Location = new System.Drawing.Point(302, 214);
+      this.pictureBox.Location = new System.Drawing.Point(302, 217);
       this.pictureBox.Name = "pictureBox";
       this.pictureBox.Size = new System.Drawing.Size(222, 151);
       this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -101,7 +101,7 @@
       this.listBoxCompatibleModels.Location = new System.Drawing.Point(0, 158);
       this.listBoxCompatibleModels.Name = "listBoxCompatibleModels";
       this.listBoxCompatibleModels.SelectionMode = System.Windows.Forms.SelectionMode.None;
-      this.listBoxCompatibleModels.Size = new System.Drawing.Size(280, 207);
+      this.listBoxCompatibleModels.Size = new System.Drawing.Size(280, 210);
       this.listBoxCompatibleModels.TabIndex = 36;
       // 
       // label1

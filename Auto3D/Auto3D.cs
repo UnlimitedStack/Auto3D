@@ -103,10 +103,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
             }
           }
         }
-      }
-
-      // start UPnP
-      Auto3DUPnP.StartSSDP();
+      }     
     }
 
     // Returns the name of the plugin which is shown in the plugin menu
@@ -252,6 +249,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         _activeDevice.Start();
 
+        if (_activeDevice is Auto3DUPnPBaseDevice)
+            Auto3DUPnP.StartSSDP();
+
         if (b3DMenuOnKey)
         {
           Auto3DHelpers.GetMainForm().PreviewKeyDown += form_PreviewKeyDown;
@@ -259,6 +259,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         GUIGraphicsContext.Render3DSubtitle = reader.GetValueAsBool("Auto3DPlugin", "3DSubtitles", true);
         GUIGraphicsContext.Render3DSubtitleDistance = -reader.GetValueAsInt("Auto3DPlugin", "SubtitleDepth", 0);
+        GUIGraphicsContext.StretchSubtitles = reader.GetValueAsBool("Auto3DPlugin", "StretchSubtitles", false);
 
         bSuppressSwitchBackTo2D = reader.GetValueAsBool("Auto3DPlugin", "SupressSwitchBackTo2D", false);
         bConvert3DTo2D = reader.GetValueAsBool("Auto3DPlugin", "Convert3DTo2D", false);
@@ -268,6 +269,24 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         SplitKeywords(ref _keywordsTAB, reader.GetValueAsString("Auto3DPlugin", "SwitchTABLabels", "\"3DTAB\", \"3D TAB\""));
         SplitKeywords(ref _keywordsTABR, reader.GetValueAsString("Auto3DPlugin", "SwitchTABRLabels", "\"3DTABR\", \"3D TAB R\""));        
       }
+
+      SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+    }
+
+    void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+    {
+        switch (e.Mode)
+        {
+            case PowerModes.Suspend:
+
+                _activeDevice.Stop();
+                break;
+
+            case PowerModes.Resume:
+
+                _activeDevice.Start();
+                break;
+        }
     }
 
     void SplitKeywords(ref List<String> list, String keywords)
@@ -323,6 +342,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
       if (!bSuppressSwitchBackTo2D)
         GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.None;
+
+      SystemEvents.PowerModeChanged -= SystemEvents_PowerModeChanged;
     }
 
     private void RunAnalyzeVideo()
@@ -351,7 +372,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         }
 
         System.Drawing.Bitmap image = fg.GetCurrentImage();
-
+          
         if (image != null)
         {
           Bitmap fastCompareImage = new Bitmap(96, 96);
@@ -525,7 +546,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     private void RunSwitchBack()
     {
       Log.Info("Auto3D: Switch TV back to Normal Mode");
-      if (!bSuppressSwitchBackTo2D && _activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt2D))
+      if (!bSuppressSwitchBackTo2D && (bConvert3DTo2D || _activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt2D)))
       {
         _currentMode = VideoFormat.Fmt2D;
         GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.None;
@@ -779,7 +800,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
           if (!GUIGraphicsContext.Switch3DSides)
             _dlgMenu.Add("3D Reverse Mode");
           else
-            _dlgMenu.Add("3D Normal Mode");
+            _dlgMenu.Add("3D Normal Mode");          
         }
 
         if (_activeDevice.IsDefined(VideoFormat.Fmt2D3D))

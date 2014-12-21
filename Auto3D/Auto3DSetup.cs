@@ -8,6 +8,7 @@ using MediaPortal.ProcessPlugins.Auto3D.Devices;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using MediaPortal.ProcessPlugins.Auto3D.UPnP;
 
 namespace MediaPortal.ProcessPlugins.Auto3D
 {
@@ -144,6 +145,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         textBoxSBSR.Text = reader.GetValueAsString("Auto3DPlugin", "SwitchSBSRLabels", "\"3DSBSR\", \"3D SBS R\"");
         textBoxTAB.Text = reader.GetValueAsString("Auto3DPlugin", "SwitchTABLabels", "\"3DTAB\", \"3D TAB\"");
         textBoxTABR.Text = reader.GetValueAsString("Auto3DPlugin", "SwitchTABRLabels", "\"3DTABR\", \"3D TAB R\"");
+
+        checkBoxLogKnown.Checked = reader.GetValueAsBool("Auto3DPlugin", "LogOnlyKnownDevices", true);
+        checkBoxPreRendered.Checked = reader.GetValueAsBool("Auto3DPlugin", "StretchSubtitles", false);
       }
 
       foreach (IAuto3D item in comboBoxModel.Items)
@@ -183,6 +187,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         writer.SetValue("Auto3DPlugin", "SwitchSBSRLabels", textBoxSBSR.Text);
         writer.SetValue("Auto3DPlugin", "SwitchTABLabels", textBoxTAB.Text);
         writer.SetValue("Auto3DPlugin", "SwitchTABRLabels", textBoxTABR.Text);
+
+        writer.SetValueAsBool("Auto3DPlugin", "LogOnlyKnownDevices", checkBoxLogKnown.Checked);
+        writer.SetValueAsBool("Auto3DPlugin", "StretchSubtitles", checkBoxPreRendered.Checked);
       }
 
       foreach (IAuto3D item in comboBoxModel.Items)
@@ -215,9 +222,14 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       if (_lastDevice != null)
         _lastDevice.Stop();
 
+      Auto3DUPnP.StopSSDP();
+
       IAuto3DSetup setup = (IAuto3DSetup)((IAuto3D)comboBoxModel.SelectedItem).GetSetupControl();
       setup.BringToFront();
       setup.GetDevice().Start();
+
+      if (setup.GetDevice() is Auto3DUPnPBaseDevice)
+        Auto3DUPnP.StartSSDP();
 
       buttonConfig.Visible = (setup.GetDevice().GetRemoteControl() != null);
     }

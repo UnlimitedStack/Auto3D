@@ -61,6 +61,16 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
     }
 
+    public override void Suspend()
+    {
+        Stop();
+    }
+
+    public override void Resume()
+    {
+        Start();
+    }
+
     public override void LoadSettings()
     {
       using (Settings reader = new MPSettings())

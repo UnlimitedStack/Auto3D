@@ -78,7 +78,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
     }
 
-
     public override void LoadSettings()
     {
       using (Settings reader = new MPSettings())
@@ -246,7 +245,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       catch (Exception ex)
       {
         Log.Info("Auto3D: PostRequest: " + ex.Message);
-        ShowMessageBoxFromNonUIThread("Command could not be sent. The error message is: " + ex.Message);
+        Auto3DHelpers.ShowAuto3DMessage("Command to TV could not be sent: " + ex.Message, false, 0);
         return false;
       }
 

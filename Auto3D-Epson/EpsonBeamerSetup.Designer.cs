@@ -67,10 +67,11 @@
       this.pictureBox.BackColor = System.Drawing.Color.Transparent;
       this.pictureBox.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox.BackgroundImage")));
       this.pictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+      this.pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.pictureBox.InitialImage = null;
-      this.pictureBox.Location = new System.Drawing.Point(392, 291);
+      this.pictureBox.Location = new System.Drawing.Point(362, 286);
       this.pictureBox.Name = "pictureBox";
-      this.pictureBox.Size = new System.Drawing.Size(128, 73);
+      this.pictureBox.Size = new System.Drawing.Size(162, 82);
       this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
       this.pictureBox.TabIndex = 23;
       this.pictureBox.TabStop = false;
@@ -111,7 +112,7 @@
       this.listBoxCompatibleModels.Location = new System.Drawing.Point(0, 77);
       this.listBoxCompatibleModels.Name = "listBoxCompatibleModels";
       this.listBoxCompatibleModels.SelectionMode = System.Windows.Forms.SelectionMode.None;
-      this.listBoxCompatibleModels.Size = new System.Drawing.Size(280, 287);
+      this.listBoxCompatibleModels.Size = new System.Drawing.Size(280, 291);
       this.listBoxCompatibleModels.TabIndex = 30;
       // 
       // EpsonBeamerSetup

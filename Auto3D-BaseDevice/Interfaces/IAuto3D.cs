@@ -14,6 +14,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     void Start();                                               // Sub-plugin is started (alloc resources)
     void Stop();                                                // Sub-plugin is stopped (release resources)
 
+    void Suspend();                                             // Sub-plugin is supended
+    void Resume();                                              // Sub-plugin is resumed
+
     void LoadSettings();                                        // Load all settings for the device
     void SaveSettings();                                        // Save all settings for the device
 
