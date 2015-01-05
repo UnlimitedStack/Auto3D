@@ -27,5 +27,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     bool IsDefined(VideoFormat fmt);                            // Check if sequence for format is defined (normally handled by Auto3DBaseDevice)
 
     bool SendCommand(String rc);                                // Send a command to the device
+
+    bool CanTurnOff();
+    void TurnOff();
   }
 }

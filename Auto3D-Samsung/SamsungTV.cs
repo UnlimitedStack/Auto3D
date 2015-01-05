@@ -159,6 +159,16 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
           iRemote.SendRemocon(REMOCONCODE.REMOCON_DOWN, REMOCON_TYPE.REMOCON_TYPE_NORMAL);
           break;
 
+        case "Off":
+
+          iRemote.SendRemocon(REMOCONCODE.REMOCON_POWER, REMOCON_TYPE.REMOCON_TYPE_NORMAL);
+          break;
+
+        case "Delay":
+
+          // do nothing here
+          break;
+
         default:
 
           Log.Info("Auto3D: Unknown command - " + command);
@@ -166,6 +176,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
 
       return true;
+    }
+
+    public override bool CanTurnOff()
+    {
+        return true;
     }
   }
 }

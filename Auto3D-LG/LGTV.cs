@@ -40,7 +40,13 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public override String UPnPServiceName
     {
-      get { return "urn:schemas-upnp-org:service:ConnectionManager:1"; }
+      get 
+      {
+          if (UDAPnP.Protocol == UDAPnP.LGProtocol.WebOS)
+            return "urn:lge-com:service:webos-second-screen:1"; 
+          else
+            return "urn:schemas-upnp-org:service:ConnectionManager:1"; 
+      }
     }
 
     public override String UPnPManufacturer
@@ -89,6 +95,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
             UDAPnP.Protocol = UDAPnP.LGProtocol.LG2012x;
             break;
+
+          case "WebOS":
+
+            UDAPnP.Protocol = UDAPnP.LGProtocol.WebOS;
+            break;
         }
       }
     }
@@ -120,7 +131,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public override void ServiceRemoved(UPnPService service)
     {
-      Log.Info("Auto3D: LG service removed");   
+      Log.Info("Auto3D: LG service removed");
+      WebOS.Close();
       base.ServiceRemoved(service);      
     }
 
@@ -155,128 +167,240 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         case "Home":
 
-          if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2012x)
+          switch (UDAPnP.Protocol)
           {
-            if (!InternalSendCommand("21"))
-              return false;
-          }
-          else
-          {
-            if (!InternalSendCommand("67"))
-              return false;
+              case UDAPnP.LGProtocol.LG2011:
+
+                  if (!InternalSendCommand("67"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.LG2012x:
+
+                  if (!InternalSendCommand("21"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.WebOS:
+
+                  if (!InternalSendCommand("HOME"))
+                      return false;
+                  break;
           }
           break;
 
         case "Back":
 
-          if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2012x)
+          switch (UDAPnP.Protocol)
           {
-            if (!InternalSendCommand("412"))
-              return false;
-          }
-          else
-          {
-            if (!InternalSendCommand("40"))
-              return false;
+              case UDAPnP.LGProtocol.LG2011:
+
+                  if (!InternalSendCommand("40"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.LG2012x:
+
+                  if (!InternalSendCommand("412"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.WebOS:
+
+                  if (!InternalSendCommand("BACK"))
+                      return false;
+                  break;
           }
           break;
 
-
         case "OK":
 
-          if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2012x)
+          switch (UDAPnP.Protocol)
           {
-            if (!InternalSendCommand("20"))
-              return false;
-          }
-          else
-          {
-            if (!InternalSendCommand("68"))
-              return false;
+              case UDAPnP.LGProtocol.LG2011:
+
+                  if (!InternalSendCommand("68"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.LG2012x:
+
+                  if (!InternalSendCommand("20"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.WebOS:
+
+                  if (!InternalSendCommand("ENTER"))
+                      return false;
+                  break;
           }
           break;
 
         case "CursorLeft":
 
-          if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2012x)
+          switch (UDAPnP.Protocol)
           {
-            if (!InternalSendCommand("14"))
-              return false;
-          }
-          else
-          {
-            if (!InternalSendCommand("7"))
-              return false;
+              case UDAPnP.LGProtocol.LG2011:
+
+                  if (!InternalSendCommand("7"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.LG2012x:
+
+                  if (!InternalSendCommand("14"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.WebOS:
+
+                  if (!InternalSendCommand("LEFT"))
+                      return false;
+                  break;
           }
           break;
 
         case "CursorRight":
 
-          if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2012x)
+          switch (UDAPnP.Protocol)
           {
-            if (!InternalSendCommand("15"))
-              return false;
-          }
-          else
-          {
-            if (!InternalSendCommand("6"))
-              return false;
+              case UDAPnP.LGProtocol.LG2011:
+
+                  if (!InternalSendCommand("6"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.LG2012x:
+
+                  if (!InternalSendCommand("15"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.WebOS:
+
+                  if (!InternalSendCommand("RIGHT"))
+                      return false;
+                  break;
           }
           break;
 
         case "CursorUp":
 
-          if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2012x)
+          switch (UDAPnP.Protocol)
           {
-            if (!InternalSendCommand("12"))
-              return false;
-          }
-          else
-          {
-            if (!InternalSendCommand("64"))
-              return false;
+              case UDAPnP.LGProtocol.LG2011:
+
+                  if (!InternalSendCommand("64"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.LG2012x:
+
+                  if (!InternalSendCommand("12"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.WebOS:
+
+                  if (!InternalSendCommand("UP"))
+                      return false;
+                  break;
           }
           break;
 
         case "CursorDown":
 
-          if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2012x)
+          switch (UDAPnP.Protocol)
           {
-            if (!InternalSendCommand("13"))
-              return false;
-          }
-          else
-          {
-            if (!InternalSendCommand("65"))
-              return false;
+              case UDAPnP.LGProtocol.LG2011:
+
+                  if (!InternalSendCommand("65"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.LG2012x:
+
+                  if (!InternalSendCommand("13"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.WebOS:
+
+                  if (!InternalSendCommand("DOWN"))
+                      return false;
+                  break;
           }
           break;
 
         case "Mode3D":
 
-          if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2012x)
+          switch (UDAPnP.Protocol)
           {
-            if (!InternalSendCommand("400"))
-              return false;
-          }
-          else
-          {
-            if (!InternalSendCommand("220"))
-              return false;
+              case UDAPnP.LGProtocol.LG2011:
+
+                  if (!InternalSendCommand("220"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.LG2012x:
+
+                  if (!InternalSendCommand("400"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.WebOS:
+
+                  if (!InternalSendCommand("3D_MODE"))
+                      return false;
+                  break;
           }
           break;
 
         case "Exit":
 
-          if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2012x)
+          switch (UDAPnP.Protocol)
           {
-            if (!InternalSendCommand("412"))
-              return false;
+              case UDAPnP.LGProtocol.LG2011:
+
+                  if (!InternalSendCommand("91"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.LG2012x:
+
+                  if (!InternalSendCommand("412"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.WebOS:
+
+                  if (!InternalSendCommand("EXIT"))
+                      return false;
+                  break;
           }
-          else
+          break;
+
+         case "Off":
+
+          switch (UDAPnP.Protocol)
           {
-            if (!InternalSendCommand("91"))
-              return false;
+              case UDAPnP.LGProtocol.LG2011:
+
+                  if (!InternalSendCommand("8"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.LG2012x:
+
+                  if (!InternalSendCommand("1"))
+                      return false;
+                  break;
+
+              case UDAPnP.LGProtocol.WebOS:
+
+                  WebOS.TurnOff();
+                  break;
           }
           break;
 
@@ -296,75 +420,93 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     internal bool ConnectAndPair()
     {
-      // LG UPnP stack is sometimes very slow in answering,
-      // so wait up to 5 seconds before giving up pairing.
-
-      int loops = 0;
-
-      while (IPAddress == null || IPAddress.Length == 0)
-      {
-        Thread.Sleep(5);
-
-        if (loops++ > 100)
+        if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2011 ||
+            UDAPnP.Protocol == UDAPnP.LGProtocol.LG2012x)
         {
-          Log.Error("Auto3D: LG service not connected withing additional 10 seconds!");
-          return false;
+            // LG UPnP stack is sometimes very slow in answering,
+            // so wait up to 5 seconds before giving up pairing.
+
+            int loops = 0;
+
+            while (IPAddress == null || IPAddress.Length == 0)
+            {
+                Thread.Sleep(5);
+
+                if (loops++ > 100)
+                {
+                    Log.Error("Auto3D: LG service not connected withing additional 10 seconds!");
+                    return false;
+                }
+            }
+
+            if (UDAPnP.UpdateServiceInformation(IPAddress))
+            {
+                Log.Info("Auto3D: UpdateServiceInfo OK");
+
+                if (PairingKey.Length > 0)
+                {
+                    if (UDAPnP.RequestPairing(PairingKey))
+                    {
+                        Log.Info("Auto3D: Pairing LG client with key {0} succeeded", PairingKey);
+                    }
+                    else
+                    {
+                        Log.Error("Auto3D: Pairing LG client with key {0} failed!", PairingKey);
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                Log.Error("Auto3D: UpdateServiceInfo failed!");
+                return false;
+            }
         }
-      }
-
-      if (UDAPnP.UpdateServiceInformation(IPAddress))
-      {
-        Log.Info("Auto3D: UpdateServiceInfo OK");
-
-        if (PairingKey.Length > 0)
+        else // WebOS
         {
-          if (UDAPnP.RequestPairing(PairingKey))
-          {
-            Log.Info("Auto3D: Pairing LG client with key {0} succeeded", PairingKey);
-          }
-          else
-          {
-            Log.Error("Auto3D: Pairing LG client with key {0} failed!", PairingKey);
-            return false;
-          }
+            WebOS.Register(IPAddress, PairingKey);
         }
-      }
-      else
-      {
-        Log.Error("Auto3D: UpdateServiceInfo failed!");
-        return false;
-      }
 
       return true;
     }
 
     private bool InternalSendCommand(String command)
     {
-      //if (IPAddress == null || IPAddress.Length == 0)
-      //ConnectAndPair();
-
-      if (!UDAPnP.HandleKeyInput(command))
+      if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2011 ||
+          UDAPnP.Protocol == UDAPnP.LGProtocol.LG2012x)
       {
-        // if for some reason connection was lost, try to reconnect
+          if (!UDAPnP.HandleKeyInput(command))
+          {
+              // if for some reason connection was lost, try to reconnect
 
-        if (!ConnectAndPair())
-        {
-            Auto3DHelpers.ShowAuto3DMessage("Connection to LG TV failed!", false, 0);             
-            Log.Error("Auto3D: Connection to LG TV failed!");
+              if (!ConnectAndPair())
+              {
+                  Auto3DHelpers.ShowAuto3DMessage("Connection to LG TV failed!", false, 0);
+                  Log.Error("Auto3D: Connection to LG TV failed!");
 
-          return false;
-        }
+                  return false;
+              }
 
-        // second try to send the command
+              // second try to send the command
 
-        if (!UDAPnP.HandleKeyInput(command))
-        {
-          Log.Error("Auto3D: HandleKeyInput failed for command: " + command);
-          return false;
-        }
+              if (!UDAPnP.HandleKeyInput(command))
+              {
+                  Log.Error("Auto3D: HandleKeyInput failed for command: " + command);
+                  return false;
+              }
+          }
+      }
+      else // WebOS
+      {
+          WebOS.SendSpecialKey(command);
       }
 
       return true;
+    }
+
+    public override bool CanTurnOff()
+    {
+        return true;
     }
   }
 }

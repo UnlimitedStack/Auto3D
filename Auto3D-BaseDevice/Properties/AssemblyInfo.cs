@@ -11,7 +11,7 @@ using MediaPortal.Common.Utils;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Auto3D-BaseDevice")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,8 +33,8 @@ using MediaPortal.Common.Utils;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.3.0.103")]
-[assembly: AssemblyFileVersion("1.3.0.103")]
+[assembly: AssemblyVersion("1.3.0.105")]
+[assembly: AssemblyFileVersion("1.3.0.105")]
 [assembly: CompatibleVersion("1.2.100.0", "1.1.6.27644")]
 [assembly: UsesSubsystem("MP.Config")]
 [assembly: UsesSubsystem("MP.SkinEngine")]

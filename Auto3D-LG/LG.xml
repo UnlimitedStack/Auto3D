@@ -212,5 +212,43 @@
         </Commands3D2D>
       </CommandLists>
     </Model>
+    <Model>
+      <ModelName>WebOS</ModelName>
+      <CompatibleModels>
+        <Name>All models with WebOS</Name>
+      </CompatibleModels>
+      <CommandLists>
+        <Commands2D3DSBS>
+          <Command>Mode3D</Command>
+          <Command>Delay</Command>
+          <Command>CursorRight</Command>
+          <Command>Delay</Command>
+          <Command>OK</Command>
+        </Commands2D3DSBS>
+        <Commands3DSBS2D>
+          <Command>Mode3D</Command>
+        </Commands3DSBS2D>
+        <Commands2D3DTAB>
+          <Command>Mode3D</Command>
+          <Command>Delay</Command>
+          <Command>CursorRight</Command>
+          <Command>Delay</Command>
+          <Command>CursorRight</Command>
+          <Command>Delay</Command>
+          <Command>OK</Command>
+        </Commands2D3DTAB>
+        <Commands3DTAB2D>
+          <Command>Mode3D</Command>
+        </Commands3DTAB2D>
+        <Commands2D3D>
+          <Command>Mode3D</Command>
+          <Command>Delay</Command>
+          <Command>OK</Command>
+        </Commands2D3D>
+        <Commands3D2D>
+          <Command>Mode3D</Command>
+        </Commands3D2D>
+      </CommandLists>
+    </Model>
   </Models>
 </Device>

@@ -426,6 +426,16 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       return false;
     }
 
+    public virtual bool CanTurnOff()
+    {
+        return false;
+    }
+
+    public virtual void TurnOff()
+    {
+        SendCommand("Off");
+    }
+
     public override String ToString()
     {
       return DeviceName;

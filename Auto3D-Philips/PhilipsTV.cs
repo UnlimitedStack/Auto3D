@@ -198,6 +198,15 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
           // do nothing here
           break;
 
+        case "Off":
+
+          if (_connectionMethod == eConnectionMethod.DirectFB)
+              DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0SystemStandby);
+          else
+            if (!PostRequest(address, "{ \"key\": \"Standby\" }"))
+              return false;
+          break;
+              
         default:
 
           Log.Info("Auto3D: Unknown command - " + command);
@@ -250,6 +259,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
 
       return true;
+    }
+
+    public override bool CanTurnOff()
+    {
+        return true;
     }
   }
 }

@@ -12,7 +12,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
   public class UDAPnP
   {
-    public enum LGProtocol { LG2011, LG2012x };
+    public enum LGProtocol { LG2011, LG2012x, WebOS };
 
     static LGProtocol _protocol;
 

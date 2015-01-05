@@ -156,6 +156,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             return false;
           break;
 
+        case "Off":
+
+          if (!InternalSendCommand("PWR OFF"))
+            return false;
+          break;
       }
 
       return true;
@@ -184,6 +189,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       string data = sp.ReadExisting();
 
       Log.Info("Auto3D: Command answer: \"" + data + "\"");
+    }
+
+    public override bool CanTurnOff()
+    {
+        return true;
     }
   }
 }

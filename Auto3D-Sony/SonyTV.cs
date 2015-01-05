@@ -48,11 +48,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       set;
     }
 
-    /*public String PairingKey
+    public String PairingKey
     {
       get;
       set;
-    }*/
+    }
 
     public override void Start()
     {
@@ -146,6 +146,17 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             return false;
           break;
 
+        case "Off":
+
+          if (!InternalSendCommand("AAAAAQAAAAEAAAAvAw=="))
+            return false;
+          break;
+
+        case "Delay":
+
+          // do nothing here
+          break;
+
         default:
 
           Log.Info("Auto3D: Unknown command - " + command);
@@ -159,6 +170,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     {
       UPnPService.InvokeAction("X_SendIRCC", "IRCCCode", command);
       return true;
+    }
+
+    public override bool CanTurnOff()
+    {
+        return true;
     }
 
     /*public void RegisterClient(String ip)
@@ -199,22 +215,22 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
 
       ShowMessageBoxFromNonUIThread("Registration at Sony TV succeeded!");
-    }
+    }*/
 
     public void RequestPin(String ip)
     {
       string hostname = System.Windows.Forms.SystemInformation.ComputerName;
-      string jsontosend = "{\"id\":13,\"method\":\"actRegister\",\"version\":\"1.0\",\"params\":[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"nickname\":\"" + hostname + " (Auto3D)\"},[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"value\":\"yes\",\"nickname\":\"" + hostname + " (Auto3D)\",\"function\":\"WOL\"}]]}";
+      string jsontosend = "{\"id\":13,\"method\":\"actRegister\",\"version\":\"1.0\",\"params\":[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"nickname\":\"" + hostname + "_Auto3D\"},[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"value\":\"yes\",\"nickname\":\"" + hostname + "_Auto3D\",\"function\":\"WOL\"}]]}";
 
-      PostRequest("http://" + ip + "/sony/accessControl", jsontosend, null);
+      PostRequest("http://" + ip + "/sony/accessControl", jsontosend, null, null);
     }
 
     public void RegisterClient2(String ip, String pinCode)
     {
       string hostname = System.Windows.Forms.SystemInformation.ComputerName;
-      string jsontosend = "{\"id\":13,\"method\":\"actRegister\",\"version\":\"1.0\",\"params\":[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"nickname\":\"" + hostname + " (Auto3D)\"},[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"value\":\"yes\",\"nickname\":\"" + hostname + " (Auto3D)\",\"function\":\"WOL\"}]]}";
+      string jsontosend = "{\"id\":13,\"method\":\"actRegister\",\"version\":\"1.0\",\"params\":[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"nickname\":\"" + hostname + "_Auto3D\"},[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"value\":\"yes\",\"nickname\":\"" + hostname + "_Auto3D\",\"function\":\"WOL\"}]]}";
 
-      PostRequest("http://" + ip + "/sony/accessControl", jsontosend, pinCode);
+      PostRequest("http://" + ip + "/sony/accessControl", jsontosend, pinCode, null);
     }
 
     public bool PostRequest(String url, String jsonString, String pinCode, CookieContainer cc)
@@ -226,7 +242,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
         request.Timeout = 3000;
-        request.ContentType = "text/json";
+        request.ContentType = "application/json";
         request.Method = "POST";
         request.AllowAutoRedirect = true;
 
@@ -254,7 +270,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
         HttpWebResponse httpResponse = (HttpWebResponse)request.GetResponse();
 
-
         // serialize cookies of httpresponse
          
         using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
@@ -269,8 +284,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
       catch (Exception ex)
       {
-        Log.Info("Auto3D: PostRequest: " + ex.Message);
-        ShowMessageBoxFromNonUIThread("Command could not be sent. The error message is: " + ex.Message);
+        Log.Error("Auto3D: PostRequest: " + ex.Message);
+        Auto3DHelpers.ShowAuto3DMessage("Command could not be sent. The error message is: " + ex.Message, false, 0);
         return false;
       }
 

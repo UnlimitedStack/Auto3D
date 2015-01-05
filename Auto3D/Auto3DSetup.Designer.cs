@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Auto3DSetup));
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -83,6 +84,9 @@
             this.panel7 = new System.Windows.Forms.Panel();
             this.checkBox3DSubTitles = new System.Windows.Forms.CheckBox();
             this.tabPageOptions = new System.Windows.Forms.TabPage();
+            this.comboBoxTurnOffDevice = new System.Windows.Forms.ComboBox();
+            this.buttonTurnOffDevice = new System.Windows.Forms.Button();
+            this.checkBoxTurnOffDevice = new System.Windows.Forms.CheckBox();
             this.label18 = new System.Windows.Forms.Label();
             this.panel9 = new System.Windows.Forms.Panel();
             this.checkBoxLogKnown = new System.Windows.Forms.CheckBox();
@@ -98,6 +102,7 @@
             this.panel8 = new System.Windows.Forms.Panel();
             this.labelInfo = new System.Windows.Forms.Label();
             this.linkLabelAuto3D = new System.Windows.Forms.LinkLabel();
+            this.label26 = new System.Windows.Forms.Label();
             this.panel3D.SuspendLayout();
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarDepth3D)).BeginInit();
@@ -619,6 +624,7 @@
             // tabPagesSubTitles
             // 
             this.tabPagesSubTitles.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPagesSubTitles.Controls.Add(this.label26);
             this.tabPagesSubTitles.Controls.Add(this.checkBoxPreRendered);
             this.tabPagesSubTitles.Controls.Add(this.label4);
             this.tabPagesSubTitles.Controls.Add(this.panel7);
@@ -680,6 +686,9 @@
             // tabPageOptions
             // 
             this.tabPageOptions.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageOptions.Controls.Add(this.comboBoxTurnOffDevice);
+            this.tabPageOptions.Controls.Add(this.buttonTurnOffDevice);
+            this.tabPageOptions.Controls.Add(this.checkBoxTurnOffDevice);
             this.tabPageOptions.Controls.Add(this.label18);
             this.tabPageOptions.Controls.Add(this.panel9);
             this.tabPageOptions.Controls.Add(this.checkBoxLogKnown);
@@ -697,12 +706,45 @@
             this.tabPageOptions.TabIndex = 2;
             this.tabPageOptions.Text = "Options";
             // 
+            // comboBoxTurnOffDevice
+            // 
+            this.comboBoxTurnOffDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTurnOffDevice.FormattingEnabled = true;
+            this.comboBoxTurnOffDevice.Items.AddRange(new object[] {
+            "Suspend",
+            "Shutdown",
+            "Suspend & Shutdown"});
+            this.comboBoxTurnOffDevice.Location = new System.Drawing.Point(162, 187);
+            this.comboBoxTurnOffDevice.Name = "comboBoxTurnOffDevice";
+            this.comboBoxTurnOffDevice.Size = new System.Drawing.Size(144, 21);
+            this.comboBoxTurnOffDevice.TabIndex = 78;
+            // 
+            // buttonTurnOffDevice
+            // 
+            this.buttonTurnOffDevice.Location = new System.Drawing.Point(312, 186);
+            this.buttonTurnOffDevice.Name = "buttonTurnOffDevice";
+            this.buttonTurnOffDevice.Size = new System.Drawing.Size(61, 23);
+            this.buttonTurnOffDevice.TabIndex = 77;
+            this.buttonTurnOffDevice.Text = "Test";
+            this.buttonTurnOffDevice.UseVisualStyleBackColor = true;
+            this.buttonTurnOffDevice.Click += new System.EventHandler(this.buttonTurnOff_Click);
+            // 
+            // checkBoxTurnOffDevice
+            // 
+            this.checkBoxTurnOffDevice.AutoSize = true;
+            this.checkBoxTurnOffDevice.Location = new System.Drawing.Point(17, 189);
+            this.checkBoxTurnOffDevice.Name = "checkBoxTurnOffDevice";
+            this.checkBoxTurnOffDevice.Size = new System.Drawing.Size(142, 17);
+            this.checkBoxTurnOffDevice.TabIndex = 76;
+            this.checkBoxTurnOffDevice.Text = "Turn off TV / Beamer on";
+            this.checkBoxTurnOffDevice.UseVisualStyleBackColor = true;
+            // 
             // label18
             // 
             this.label18.AutoSize = true;
             this.label18.BackColor = System.Drawing.Color.Silver;
             this.label18.ForeColor = System.Drawing.Color.Black;
-            this.label18.Location = new System.Drawing.Point(19, 203);
+            this.label18.Location = new System.Drawing.Point(19, 227);
             this.label18.Margin = new System.Windows.Forms.Padding(0);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(45, 13);
@@ -712,7 +754,7 @@
             // panel9
             // 
             this.panel9.BackColor = System.Drawing.Color.Silver;
-            this.panel9.Location = new System.Drawing.Point(16, 200);
+            this.panel9.Location = new System.Drawing.Point(16, 224);
             this.panel9.Name = "panel9";
             this.panel9.Size = new System.Drawing.Size(524, 21);
             this.panel9.TabIndex = 75;
@@ -720,7 +762,7 @@
             // checkBoxLogKnown
             // 
             this.checkBoxLogKnown.AutoSize = true;
-            this.checkBoxLogKnown.Location = new System.Drawing.Point(17, 235);
+            this.checkBoxLogKnown.Location = new System.Drawing.Point(17, 259);
             this.checkBoxLogKnown.Name = "checkBoxLogKnown";
             this.checkBoxLogKnown.Size = new System.Drawing.Size(209, 17);
             this.checkBoxLogKnown.TabIndex = 73;
@@ -847,6 +889,14 @@
             this.linkLabelAuto3D.Text = "Auto3D Forum discussion";
             this.linkLabelAuto3D.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelAuto3D_LinkClicked);
             // 
+            // label26
+            // 
+            this.label26.Location = new System.Drawing.Point(33, 193);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(467, 48);
+            this.label26.TabIndex = 79;
+            this.label26.Text = resources.GetString("label26.Text");
+            // 
             // Auto3DSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -956,5 +1006,9 @@
         private System.Windows.Forms.Panel panel9;
         private System.Windows.Forms.CheckBox checkBoxLogKnown;
         private System.Windows.Forms.CheckBox checkBoxPreRendered;
+        private System.Windows.Forms.CheckBox checkBoxTurnOffDevice;
+        private System.Windows.Forms.Button buttonTurnOffDevice;
+        private System.Windows.Forms.ComboBox comboBoxTurnOffDevice;
+        private System.Windows.Forms.Label label26;
     }
 }

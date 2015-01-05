@@ -148,6 +148,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         checkBoxLogKnown.Checked = reader.GetValueAsBool("Auto3DPlugin", "LogOnlyKnownDevices", true);
         checkBoxPreRendered.Checked = reader.GetValueAsBool("Auto3DPlugin", "StretchSubtitles", false);
+
+        checkBoxTurnOffDevice.Checked = reader.GetValueAsBool("Auto3DPlugin", "TurnDeviceOff", false);
+        comboBoxTurnOffDevice.SelectedIndex = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOffWhen", 0);
       }
 
       foreach (IAuto3D item in comboBoxModel.Items)
@@ -190,6 +193,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         writer.SetValueAsBool("Auto3DPlugin", "LogOnlyKnownDevices", checkBoxLogKnown.Checked);
         writer.SetValueAsBool("Auto3DPlugin", "StretchSubtitles", checkBoxPreRendered.Checked);
+
+        if (checkBoxTurnOffDevice.Enabled)
+        {
+            writer.SetValueAsBool("Auto3DPlugin", "TurnDeviceOff", checkBoxTurnOffDevice.Checked);
+            writer.SetValue("Auto3DPlugin", "TurnDeviceOffWhen", comboBoxTurnOffDevice.SelectedIndex);
+        }
       }
 
       foreach (IAuto3D item in comboBoxModel.Items)
@@ -232,6 +241,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         Auto3DUPnP.StartSSDP();
 
       buttonConfig.Visible = (setup.GetDevice().GetRemoteControl() != null);
+      
+      checkBoxTurnOffDevice.Enabled = setup.GetDevice().CanTurnOff();
+      buttonTurnOffDevice.Enabled = setup.GetDevice().CanTurnOff();
+
+      if (!setup.GetDevice().CanTurnOff())
+        checkBoxTurnOffDevice.Checked = false;      
     }
 
     private void radioButtonSBS_CheckedChanged(object sender, EventArgs e)
@@ -268,6 +283,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     {
       linkLabelAuto3D.LinkVisited = true;
       System.Diagnostics.Process.Start("http://forum.team-mediaportal.com/threads/auto3d-plugin-for-mediaportal-1-2-3-and-1-3-0-final.116708/");
+    }
+
+    private void buttonTurnOff_Click(object sender, EventArgs e)
+    {
+        ((IAuto3D)comboBoxModel.SelectedItem).TurnOff();
     }
   }
 }

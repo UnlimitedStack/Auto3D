@@ -22,6 +22,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D
   [PluginIcons("MediaPortal.ProcessPlugins.Auto3D.Auto3d-Icon2.png", "MediaPortal.ProcessPlugins.Auto3D.Auto3d-Icon2Disabled.png")]
   public class Auto3D : ISetupForm, IPlugin
   {
+    enum eSubTitle { Default, TextBased, ImageBased };
+
     bool _run = false;
     bool _bPlaying = false;
 
@@ -53,6 +55,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     bool bSuppressSwitchBackTo2D = false;
     bool bConvert3DTo2D = false;
 
+    bool bTurnDeviceOff = false;
+    int nTurnDeviceOffWhen = 0;
+
     Thread _workerThread = null;
 
     GUIDialogMenu _dlgMenu = null;
@@ -61,6 +66,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     List<String> _keywordsSBSR = new List<string>();
     List<String> _keywordsTAB = new List<string>();
     List<String> _keywordsTABR = new List<string>();
+
+    eSubTitle subTitleType = eSubTitle.Default;
+    bool bStretchSubtitles = false;
 
     public List<IAuto3D> Devices
     {
@@ -259,25 +267,75 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         GUIGraphicsContext.Render3DSubtitle = reader.GetValueAsBool("Auto3DPlugin", "3DSubtitles", true);
         GUIGraphicsContext.Render3DSubtitleDistance = -reader.GetValueAsInt("Auto3DPlugin", "SubtitleDepth", 0);
-        GUIGraphicsContext.StretchSubtitles = reader.GetValueAsBool("Auto3DPlugin", "StretchSubtitles", false);
+        
+        bStretchSubtitles = reader.GetValueAsBool("Auto3DPlugin", "StretchSubtitles", false);
 
         bSuppressSwitchBackTo2D = reader.GetValueAsBool("Auto3DPlugin", "SupressSwitchBackTo2D", false);
         bConvert3DTo2D = reader.GetValueAsBool("Auto3DPlugin", "Convert3DTo2D", false);
-
+        
         SplitKeywords(ref _keywordsSBS, reader.GetValueAsString("Auto3DPlugin", "SwitchSBSLabels", "\"3DSBS\", \"3D SBS\""));
         SplitKeywords(ref _keywordsSBSR, reader.GetValueAsString("Auto3DPlugin", "SwitchSBSRLabels", "\"3DSBSR\", \"3D SBS R\""));
         SplitKeywords(ref _keywordsTAB, reader.GetValueAsString("Auto3DPlugin", "SwitchTABLabels", "\"3DTAB\", \"3D TAB\""));
-        SplitKeywords(ref _keywordsTABR, reader.GetValueAsString("Auto3DPlugin", "SwitchTABRLabels", "\"3DTABR\", \"3D TAB R\""));        
+        SplitKeywords(ref _keywordsTABR, reader.GetValueAsString("Auto3DPlugin", "SwitchTABRLabels", "\"3DTABR\", \"3D TAB R\""));
+
+        bTurnDeviceOff = reader.GetValueAsBool("Auto3DPlugin", "TurnDeviceOff", false);
+        nTurnDeviceOffWhen = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOffWhen", 0);
       }
 
       SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+      SystemEvents.SessionEnding += SystemEvents_SessionEnding;
+      GUIGraphicsContext.OnNewAction += GUIGraphicsContext_OnNewAction;
+    }
+
+    // system was shut down through MediaPortal GUI
+
+    void GUIGraphicsContext_OnNewAction(GUI.Library.Action action)
+    {
+        if (action.wID == GUI.Library.Action.ActionType.ACTION_SHUTDOWN && 
+            GUIGraphicsContext.CurrentState == GUIGraphicsContext.State.STOPPING)
+        {
+            Log.Debug("Auto3D: MediaPortal ShutDown");
+
+            SystemShutDown();
+        }
+    }
+
+    // system was shut down through Windows GUI
+
+    void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
+    {
+        Log.Debug("Auto3D: SessionEnding");
+
+        if (e.Reason == SessionEndReasons.SystemShutdown)
+        {
+            SystemShutDown();
+        }
+    }
+
+    private void SystemShutDown()
+    {
+        Log.Debug("Auto3D: SystemShutDown");
+
+        if (bTurnDeviceOff && (nTurnDeviceOffWhen == 1 || nTurnDeviceOffWhen == 2) && _activeDevice.CanTurnOff())
+        {
+            Log.Debug("Auto3D: Turn TV off");
+            _activeDevice.TurnOff();
+        }
     }
 
     void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
     {
+        Log.Debug("Auto3D: PowerModeChanged");
+
         switch (e.Mode)
         {
             case PowerModes.Suspend:
+
+                if (bTurnDeviceOff && (nTurnDeviceOffWhen == 0 || nTurnDeviceOffWhen == 2) && _activeDevice.CanTurnOff())
+                {
+                    Log.Debug("Auto3D: Turned TV off");
+                    _activeDevice.TurnOff();
+                }
 
                 _activeDevice.Stop();
                 break;
@@ -312,6 +370,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         {
           Log.Info("Auto3D: Manual Mode via Hotkey");
           ManualSelect3DFormat(VideoFormat.Fmt2D);
+          UpdateSubtitleRenderFormat();
         }
       }
     }
@@ -329,9 +388,25 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       }
     }
 
+    [DllImport("user32.dll")]
+    static extern int GetSystemMetrics(int smIndex);
+
     public void Stop()
     {
-      // start UPnP
+      // sometimes stop is called before SystemEvents_SessionEnding
+      // in this case we shut down devices here, if necessary (before connection is closed)
+
+      //##mave - comment out for unpatched version
+      bool bShutDownPending = GetSystemMetrics(0x2000) != 0;
+
+      Log.Debug("Auto3D: Stop - ShutDownPending = " + bShutDownPending);
+      Log.Debug("Auto3D: Stop - MePoPowerOff = " + GUIGraphicsContext.StoppingToPowerOff);
+
+      if (bShutDownPending || GUIGraphicsContext.StoppingToPowerOff)
+          SystemShutDown();
+      //##mave
+
+      // stop UPnP
       Auto3DUPnP.StopSSDP();
 
       _run = false;
@@ -499,10 +574,13 @@ namespace MediaPortal.ProcessPlugins.Auto3D
                   _currentMode = videoFormat;
                 }
               }
+
+              UpdateSubtitleRenderFormat();
             }
             else
             {
               ManualSelect3DFormat(videoFormat);
+              UpdateSubtitleRenderFormat();
             }
 
             return; // exit thread
@@ -534,6 +612,22 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       }
     }
 
+   private void UpdateSubtitleRenderFormat()
+    {
+        //##mave - comment out for unpatched version
+
+        if (bStretchSubtitles)
+        {
+            GUIGraphicsContext.StretchSubtitles = true;
+        }
+        else
+        {
+            GUIGraphicsContext.StretchSubtitles = subTitleType == eSubTitle.ImageBased ? true : false;
+        }
+
+       //##mave
+    }
+
     private void AnalyzeVideo()
     {
       _workerThread = new Thread(new ThreadStart(RunAnalyzeVideo));
@@ -550,7 +644,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       {
         _currentMode = VideoFormat.Fmt2D;
         GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.None;
-        GUIGraphicsContext.Switch3DSides = false;
+        GUIGraphicsContext.Switch3DSides = false;        
       }
     }
 
@@ -671,6 +765,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
                     GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.SideBySide;
                     GUIGraphicsContext.Switch3DSides = true;
                     _currentMode = VideoFormat.Fmt3DSBS;
+                    UpdateSubtitleRenderFormat();
                     return;
                   }
                 }
@@ -688,6 +783,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
                   {
                     GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.SideBySide;
                     _currentMode = VideoFormat.Fmt3DSBS;
+                    UpdateSubtitleRenderFormat();
                     return;
                   }
                 }
@@ -706,6 +802,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
                     GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.TopAndBottom;
                     GUIGraphicsContext.Switch3DSides = true;
                     _currentMode = VideoFormat.Fmt3DTAB;
+                    UpdateSubtitleRenderFormat();
                     return;
                   }
                 }
@@ -723,6 +820,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
                   {
                     GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.TopAndBottom;
                     _currentMode = VideoFormat.Fmt3DTAB;
+                    UpdateSubtitleRenderFormat();
                     return;
                   }
                 }
@@ -751,6 +849,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
                   }
 
                   _currentMode = _nameFormat;
+                  UpdateSubtitleRenderFormat();
                 }
 
                 return;
@@ -762,6 +861,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
             Log.Info("Auto3D: Manual Mode");
 
             ManualSelect3DFormat(VideoFormat.Fmt2D);
+            UpdateSubtitleRenderFormat();
             return;
           }
 
@@ -805,11 +905,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         if (_activeDevice.IsDefined(VideoFormat.Fmt2D3D))
           _dlgMenu.Add("2D -> 3D via TV");
-
-        /*if (Auto3DUPnP.Running)
-          _dlgMenu.Add("Stop SSDP");
-        else
-          _dlgMenu.Add("Start SSDP");*/
 
         _dlgMenu.DoModal((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
 
@@ -868,16 +963,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
             GUIGraphicsContext.Switch3DSides = false;
             break;
-
-          /*case "Stop SSDP":
-
-            Auto3DUPnP.StopSSDP();
-            break;
-
-          case "Start SSDP":
-
-            Auto3DUPnP.StartSSDP();
-            break;*/
         }
 
         _dlgMenu = null;
@@ -894,6 +979,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       // do not handle e.g. visualization window, last.fm player, etc
       if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV)
       {
+        subTitleType = eSubTitle.Default;
         ThreadPool.QueueUserWorkItem(new WaitCallback(RunVideoEnded), type);
       }
     }
@@ -909,6 +995,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       // do not handle e.g. visualization window, last.fm player, etc
       if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV)
       {
+        subTitleType = eSubTitle.Default;
         ThreadPool.QueueUserWorkItem(new WaitCallback(RunVideoStopped), type);
       }
     }
@@ -922,6 +1009,17 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV)
       {
         _currentName = s;
+
+        String baseName = Path.Combine(Path.GetDirectoryName(s), Path.GetFileNameWithoutExtension(s));
+
+        if (File.Exists(baseName + ".srt"))
+            subTitleType = eSubTitle.TextBased;
+        else
+            if (File.Exists(baseName + ".idx") && File.Exists(baseName + ".sub"))
+                subTitleType = eSubTitle.ImageBased;
+            else
+                subTitleType = eSubTitle.Default;
+
         ThreadPool.QueueUserWorkItem(new WaitCallback(RunVideoStarted), type);
       }
     }
@@ -929,6 +1027,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     void OnTVChannelChanged()
     {
       g_Player.MediaType type = g_Player.MediaType.TV;
+      subTitleType = eSubTitle.Default;
       ThreadPool.QueueUserWorkItem(new WaitCallback(RunVideoStarted), type);
     }
   }

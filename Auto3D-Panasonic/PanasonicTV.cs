@@ -143,6 +143,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
           // do nothing here
           break;
 
+        case "Off":
+
+          if (!InternalSendCommand("NRC_POWER-ONOFF"))
+            return false;
+          break;
+
         default:
 
           Log.Info("Auto3D: Unknown command - " + command);
@@ -161,6 +167,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
       else
         return false;
+    }
+
+    public override bool CanTurnOff()
+    {
+        return true;
     }
   }
 }

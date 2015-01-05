@@ -111,17 +111,16 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       _device.SelectedDeviceModel = (Auto3DDeviceModel)comboBoxModel.SelectedItem;
     }
 
-    /*private void buttonShowKey_Click(object sender, EventArgs e)
+    private void buttonShowKey_Click(object sender, EventArgs e)
     {
-      UPnPService service = (UPnPService)comboBoxTV.SelectedItem;
-      _device.RequestPin(service.ParentDevice.WebAddress.Host);
+        UPnPService service = (UPnPService)comboBoxTV.SelectedItem;
+        _device.RequestPin(service.ParentDevice.WebAddress.Host);      
     }
 
-    private void buttonRegister_Click(object sender, EventArgs e)
+    private void buttonSendKey_Click(object sender, EventArgs e)
     {
-      UPnPService service = (UPnPService)comboBoxTV.SelectedItem;
-      _device.RegisterClient2(service.ParentDevice.WebAddress.Host, textBoxPairingKey.Text);
-      //_device.RegisterClient(service.ParentDevice.WebAddress.Host + ":80");
-    }*/
+        UPnPService service = (UPnPService)comboBoxTV.SelectedItem;
+        _device.RegisterClient2(service.ParentDevice.WebAddress.Host, textBoxPairingKey.Text);
+    }
   }
 }

@@ -27,6 +27,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         throw new Exception("Auto3D: Device is no LGTV");
 
       _device = (LGTV)device;
+
+      WebOS.UpdatePairingKey += WebOS_UpdatePairingKey;
     }
 
     protected override void OnLoad(EventArgs e)
@@ -112,10 +114,29 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     {
       _device.SelectedDeviceModel = (Auto3DDeviceModel)comboBoxModel.SelectedItem;
 
-      if (comboBoxModel.SelectedIndex == 0)
-        UDAPnP.Protocol = UDAPnP.LGProtocol.LG2011;
-      else
-        UDAPnP.Protocol = UDAPnP.LGProtocol.LG2012x;
+      switch (comboBoxModel.SelectedIndex)
+      {
+          case 0:
+            
+              UDAPnP.Protocol = UDAPnP.LGProtocol.LG2011;
+              buttonShowKey.Text = "Show key on TV";
+              break;
+      
+          case 1:
+            
+              UDAPnP.Protocol = UDAPnP.LGProtocol.LG2012x;
+              buttonShowKey.Text = "Show key on TV";
+              break;
+
+          case 2:
+
+              UDAPnP.Protocol = UDAPnP.LGProtocol.WebOS;
+              buttonShowKey.Text = "Show pair request on TV";
+              break;
+    }
+
+      textBoxPairingKey.Enabled = (UDAPnP.Protocol != UDAPnP.LGProtocol.WebOS);
+      buttonSendKey.Enabled = (UDAPnP.Protocol != UDAPnP.LGProtocol.WebOS);
 
       listBoxCompatibleModels.Items.Clear();
 
@@ -143,16 +164,25 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     private void buttonShowKey_Click(object sender, EventArgs e)
     {
-      if (!UDAPnP.Connected)
-      {
-        if (!UDAPnP.UpdateServiceInformation(_device.IPAddress))
+        if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2011 ||
+            UDAPnP.Protocol == UDAPnP.LGProtocol.LG2012x)
         {
-          MessageBox.Show("Connection to LG TV failed!");
-          return;
-        }
-      }
+            if (!UDAPnP.Connected)
+            {
+                if (!UDAPnP.UpdateServiceInformation(_device.IPAddress))
+                {
+                    MessageBox.Show("Connection to LG TV failed!");
+                    return;
+                }
+            }
 
-      UDAPnP.RequestPairingKey();
+            UDAPnP.RequestPairingKey();
+        }
+        else // WebOS
+        {
+            textBoxPairingKey.Text = WebOS.Pair(_device.IPAddress);
+            SaveSettings();
+        }
     }
 
     private void buttonSendKey_Click(object sender, EventArgs e)
@@ -169,7 +199,14 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       if (UDAPnP.RequestPairing(textBoxPairingKey.Text))
       {
         SaveSettings();
-      }
+      }    
+    }
+
+    void WebOS_UpdatePairingKey(object sender, string key)
+    {
+        textBoxPairingKey.Text = key;
+        SaveSettings();
+        _device.ConnectAndPair();
     }
   }
 }

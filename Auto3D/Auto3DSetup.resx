@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label26.Text" xml:space="preserve">
+    <value>This plugin checks wether the subtitle is based on text (SRT), image (SUB) or is already integrated into the movie. If this fails for image based subtitles, then the subtitles appear twice on the screen. Settings this flag can fix this, but then movies with text based subtitles might be displayed wrong. </value>
+  </data>
 </root>
