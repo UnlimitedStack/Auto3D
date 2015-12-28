@@ -1,56 +1,74 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Device>
   <Commands>
+	<CommandItem>
+      <Command>Power (IR)</Command>
+      <IrCode></IrCode>
+      <Delay>500</Delay>
+    </CommandItem>
     <CommandItem>
       <Command>Delay</Command>
+	  <IrCode></IrCode>
       <Delay>500</Delay>
     </CommandItem>
     <CommandItem>
       <Command>CursorLeft</Command>
+	  <IrCode></IrCode>
       <Delay>3000</Delay>
     </CommandItem>
     <CommandItem>
       <Command>CursorRight</Command>
+	  <IrCode></IrCode>
       <Delay>3000</Delay>
     </CommandItem>
     <CommandItem>
       <Command>CursorUp</Command>
+	  <IrCode></IrCode>
       <Delay>3000</Delay>
     </CommandItem>
     <CommandItem>
       <Command>CursorDown</Command>
+	  <IrCode></IrCode>
       <Delay>3000</Delay>
     </CommandItem>
     <CommandItem>
       <Command>Enter</Command>
+	  <IrCode></IrCode>
       <Delay>3000</Delay>
     </CommandItem>
     <CommandItem>
       <Command>Menu</Command>
+	  <IrCode></IrCode>
       <Delay>3000</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3DFormatOff</Command>
+	  <IrCode></IrCode>
       <Delay>3000</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3DFormatSBS</Command>
+	  <IrCode></IrCode>
       <Delay>3000</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3DFormatTAB</Command>
+	  <IrCode></IrCode>
       <Delay>3000</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3D2DFormat3D</Command>
+	  <IrCode></IrCode>
       <Delay>3000</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3D2DFormatL</Command>
+	  <IrCode></IrCode>
       <Delay>3000</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3D2DFormatR</Command>
+	  <IrCode></IrCode>
       <Delay>3000</Delay>
     </CommandItem>    
   </Commands>

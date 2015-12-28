@@ -12,11 +12,14 @@ using MediaPortal.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Xml;
+using IrToyLibrary;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
   public abstract class Auto3DBaseDevice : IAuto3D
   {
+	static IrToy _irToy = new IrToy();
+
     String _docName;
     XmlDocument _deviceDoc = new XmlDocument();
 
@@ -97,6 +100,19 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
           }
       }
     }
+
+	public IrToy IrToy
+	{
+		get
+		{
+			return _irToy;
+		}
+
+		set
+		{
+			_irToy = value;
+		}
+	}
 
     public bool Modified
     {
@@ -194,10 +210,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public virtual void Start()
     {
+		internalStartGenericDevice();
     }
 
     public virtual void Stop()
     {
+		internalStopGenericDevice();
     }
 
     public virtual void Suspend()
@@ -225,7 +243,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       foreach (XmlNode node in commandsNode.ChildNodes)
       {
         RemoteCommand rc = GetRemoteCommandFromString(node.ChildNodes.Item(0).InnerText);
-        node.ChildNodes.Item(1).InnerText = rc.Delay.ToString();
+		node.ChildNodes.Item(1).InnerText = rc.IrCode;
+        node.ChildNodes.Item(2).InnerText = rc.Delay.ToString();		
       }
 
       // write document to file
@@ -269,7 +288,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public bool SwitchFormat(VideoFormat fmtOld, VideoFormat fmtNew)
     {
-      if (GUIGraphicsContext.IsFullScreenVideo && bShowMessageOnModeChange)
+      if (/*GUIGraphicsContext.IsFullScreenVideo &&*/ bShowMessageOnModeChange)
       {
 
         String format = "";
@@ -398,10 +417,17 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         Log.Info("Auto3D: Send Command " + command);
 
-        if (!SendCommand(command))
-          return false;
+		RemoteCommand rc = GetRemoteCommandFromString(command);
 
-        RemoteCommand rc = GetRemoteCommandFromString(command);
+		if (rc == null)
+		{
+			Log.Info("Auto3D: Unknown command - " + command);
+			return false;
+		}
+
+        if (!SendCommand(rc))
+          return false;
+        
         Thread.Sleep(rc.Delay);
       }
 
@@ -421,25 +447,103 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       return null;
     }
 
-    public virtual bool SendCommand(String command)
+    public virtual bool SendCommand(RemoteCommand rc)
     {
+		/*if (command == "Power (IR)")
+		{
+			RemoteCommand rc = GetRemoteCommandFromString(command);
+			
+			if (rc != null)
+			{
+				if (rc.IrCode != null)
+				{
+					_irLib.Send(rc.IrCode);
+				}
+			}
+		}*/
+
       return false;
     }
 
-    public virtual bool CanTurnOff()
+	public virtual DeviceInterface GetTurnOffInterfaces()
     {
-        return false;
+        return DeviceInterface.None;
     }
 
-    public virtual void TurnOff()
-    {
-        SendCommand("Off");
+	public virtual void TurnOff(DeviceInterface type)
+    {		
     }
+
+	public virtual DeviceInterface GetTurnOnInterfaces()
+	{
+		return DeviceInterface.None;
+	}
+
+	public virtual void TurnOn(DeviceInterface type)
+	{		
+	}
+
+	public virtual bool IsOn()
+	{
+		return false;
+	}
 
     public override String ToString()
     {
       return DeviceName;
     }
+
+	static void internalStartGenericDevice()
+	{
+		if (IrPortName != "None" && !IsIrConnected())
+		{
+			try
+			{
+				_irToy.Connect(IrPortName);
+				Log.Info("Auto3D: IrToy connected");
+			}
+			catch (Exception ex)
+			{
+				Auto3DHelpers.ShowAuto3DMessage("Could not connect to IrToy: " + ex.Message, false, 0);
+				Log.Error("Auto3D: Could not connect to IrToy: " + ex.Message);
+			}
+		}
+	}
+
+	static void internalStopGenericDevice()
+	{
+        try
+        {
+            _irToy.Close();
+        }
+        catch (Exception ex)
+        {
+            Auto3DHelpers.ShowAuto3DMessage("Could not close IrToy: " + ex.Message, false, 0);
+            Log.Error("Auto3D: Could not close IrToy: " + ex.Message);
+        }
+	}
+
+	public static bool IsIrConnected()
+	{
+		return _irToy.IsConnected();
+	}
+
+	public static String IrPortName
+	{
+		get;
+		set;
+	}
+
+	public static bool AllowIrCommandsForAllDevices
+	{
+		get;
+		set;
+	}
+
+	public virtual String GetMacAddress()
+	{
+		return "00-00-00-00-00-00";
+	}
   }
 }
 

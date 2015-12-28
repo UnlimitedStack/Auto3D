@@ -29,7 +29,35 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         checkBoxSendOnAdd.Checked = reader.GetValueAsBool("Auto3DPluginSequenceManager", "SendCommandOnAdd", true);
       }
+
+			listBox2D3D.ItemHeight = 19;
+			listBox2D3DSBS.ItemHeight = 19;
+			listBox2D3DTAB.ItemHeight = 19;
+			listBox3D2D.ItemHeight = 19;
+			listBox3DSBS2D.ItemHeight = 19;
+			listBox3DTAB2D.ItemHeight = 19;
+
+			listBox2D3D.DrawItem += listBox_DrawItem;
+			listBox2D3DSBS.DrawItem += listBox_DrawItem;
+			listBox2D3DTAB.DrawItem += listBox_DrawItem;
+			listBox3D2D.DrawItem += listBox_DrawItem;
+			listBox3DSBS2D.DrawItem += listBox_DrawItem;
+			listBox3DTAB2D.DrawItem += listBox_DrawItem;
+
+			CenterToParent();
     }
+
+		void listBox_DrawItem(object sender, DrawItemEventArgs e)
+		{
+			e.DrawBackground();
+
+			ListBox listBox = (ListBox)sender;
+
+			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+				TextRenderer.DrawText(e.Graphics, listBox.Items[e.Index].ToString(), e.Font, e.Bounds, Color.White, TextFormatFlags.VerticalCenter);
+			else
+				TextRenderer.DrawText(e.Graphics, listBox.Items[e.Index].ToString(), e.Font, e.Bounds, Color.Black, TextFormatFlags.VerticalCenter);
+		}
 
     public static IAuto3DSequenceManager SequenceManager
     {
@@ -47,7 +75,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     public void SetDevice(IAuto3D device)
     {
       _device = (Auto3DBaseDevice)device;
-      textBoxDeviceName.Text = _device.SelectedDeviceModel.Name;
+      labelDeviceName.Text = _device.SelectedDeviceModel.Name;
 
       InternalCommandSetToListBox(_device.SelectedDeviceModel.RemoteCommandSequences.Commands2D3DSBS, listBox2D3DSBS);
       InternalCommandSetToListBox(_device.SelectedDeviceModel.RemoteCommandSequences.Commands3DSBS2D, listBox3DSBS2D);
@@ -179,8 +207,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         _lbList[tabControl.SelectedIndex].Items.Insert(_lbList[tabControl.SelectedIndex].SelectedIndex, cmd);
 
-        if (checkBoxSendOnAdd.Checked)
-          _device.SendCommand(cmd);
+		if (checkBoxSendOnAdd.Checked)
+		{
+			RemoteCommand rc = _device.GetRemoteCommandFromString(cmd);
+			_device.SendCommand(rc);
+		}
       }
       catch (Exception ex)
       {
@@ -253,7 +284,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
         String cmd = _lbList[tabControl.SelectedIndex].Items[i].ToString();
 
-        if (!_device.SendCommand(cmd))
+		RemoteCommand rc = _device.GetRemoteCommandFromString(cmd);
+
+        if (!_device.SendCommand(rc))
           break;
 
         Thread.Sleep(_device.GetRemoteCommandFromString(cmd).Delay);
@@ -284,9 +317,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     private void InternalSave()
     {
-      if (textBoxDeviceName.Text != _device.SelectedDeviceModel.Name)
+      if (labelDeviceName.Text != _device.SelectedDeviceModel.Name)
       {
-        if (MessageBox.Show("Save new settings as " + textBoxDeviceName.Text + "?", "Save TV Settings", MessageBoxButtons.YesNo) == DialogResult.Yes)
+          if (MessageBox.Show("Save new settings as " + labelDeviceName.Text + "?", "Save TV Settings", MessageBoxButtons.YesNo) == DialogResult.Yes)
         {
           InternalListBoxToCommandset(_device.SelectedDeviceModel.RemoteCommandSequences.Commands2D3DSBS, listBox2D3DSBS);
           InternalListBoxToCommandset(_device.SelectedDeviceModel.RemoteCommandSequences.Commands3DSBS2D, listBox3DSBS2D);

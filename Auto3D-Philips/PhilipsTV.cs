@@ -14,11 +14,15 @@ using MediaPortal.Configuration;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
-  public enum eConnectionMethod { jointSpace, DirectFB };
+  public enum eConnectionMethod { jointSpaceV1, jointSpaceV5, DirectFB }; 
 
   public class PhilipsTV : Auto3DBaseDevice
   {
-    eConnectionMethod _connectionMethod = eConnectionMethod.jointSpace;
+    eConnectionMethod _connectionMethod = eConnectionMethod.jointSpaceV1;
+	private IPhilipsTVAdapter _currentAdapter;
+	private static readonly IPhilipsTVAdapter _divineAdapter = new DiVineAdapter();
+	private static readonly IPhilipsTVAdapter _jointSpaceV1Adapter = new JointSpaceV1Adapter();
+	private static readonly IPhilipsTVAdapter _jointSpaceV5Adapter = new JointSpaceV5Adapter();
 
     public PhilipsTV()
     {
@@ -34,26 +38,71 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       get { return "Philips TV"; }
     }
 
-    public String IPAddress
+	public String IPAddress
+	{
+		get;
+		set;
+	}
+
+	public String MAC
+	{
+		get;
+		internal set;
+	}
+
+	public SystemBase Test()
+	{
+		if (_currentAdapter != null)
+		{
+			try
+			{
+				return _currentAdapter.Connect(IPAddress);
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
+
+		return null;
+	}
+
+    private void Connect()
     {
-      get;
-      set;
+		if (_currentAdapter != null) 
+        {
+			_currentAdapter.Connect(IPAddress); 
+        }
+    }
+
+    private void Disconnect()
+    {
+		if (_currentAdapter != null) 
+        {
+			_currentAdapter.Disconnect(); 
+        }
     }
 
     public override void Start()
     {
-      if (_connectionMethod == eConnectionMethod.DirectFB)
-      {
-        DiVine.Init(IPAddress);
-      }
+	  base.Start();
+      Connect(); 
     }
 
     public override void Stop()
     {
-      if (_connectionMethod == eConnectionMethod.DirectFB)
-      {
-        DiVine.Exit();
-      }
+	  base.Stop();
+      Disconnect();
+    }
+
+    public override void Suspend()
+    {
+        Disconnect();
+    }
+
+    public override void Resume()
+    {
+        Connect();
     }
 
     public eConnectionMethod ConnectionMethod
@@ -63,15 +112,20 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         if (value != _connectionMethod)
         {
-          if (value == eConnectionMethod.DirectFB)
-          {
-            DiVine.Init(IPAddress);
-          }
-          else
-          {
-            if (DiVine.IsConnected)
-              DiVine.Exit();
-          }
+			Disconnect();
+
+			switch (value)
+			{
+				case eConnectionMethod.DirectFB:
+					_currentAdapter = _divineAdapter;
+					break;
+				case eConnectionMethod.jointSpaceV1:
+					_currentAdapter = _jointSpaceV1Adapter;
+					break;
+				case eConnectionMethod.jointSpaceV5:
+					_currentAdapter = _jointSpaceV5Adapter;
+					break;
+			}
 
           _connectionMethod = value;
         }
@@ -84,7 +138,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         DeviceModelName = reader.GetValueAsString("Auto3DPlugin", CompanyName + "Model", "55PFL7606K-02");
         IPAddress = reader.GetValueAsString("Auto3DPlugin", "PhilipsAddress", "0.0.0.0");
-        _connectionMethod = (eConnectionMethod)reader.GetValueAsInt("Auto3DPlugin", "PhilipsConnectionMethod", (int)eConnectionMethod.jointSpace);
+		MAC = reader.GetValueAsString("Auto3DPlugin", "PhilipsMAC", "00-00-00-00-00-00");
+		ConnectionMethod = (eConnectionMethod)reader.GetValueAsInt("Auto3DPlugin", "PhilipsConnectionMethod", (int)eConnectionMethod.jointSpaceV1);
       }
     }
 
@@ -95,175 +150,125 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         writer.SetValue("Auto3DPlugin", "PhilipsModel", SelectedDeviceModel.Name);
         writer.SetValue("Auto3DPlugin", "PhilipsAddress", IPAddress);
         writer.SetValue("Auto3DPlugin", "PhilipsConnectionMethod", (int)_connectionMethod);
+		writer.SetValue("Auto3DPlugin", "PhilipsMAC", MAC);
       }
     }
 
-    public override bool SendCommand(String command)
+    public override bool SendCommand(RemoteCommand rc)
     {
-      String address = "http://" + IPAddress + ":1925/1/input/key";
+		switch (rc.Command)
+		{
+			case "Power (IR)":
 
-      switch (command)
-      {
-        case "Home":
+				base.SendCommand(rc);
+				break;
 
-          if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0MenuOn);
-          else
-            if (!PostRequest(address, "{ \"key\": \"Home\" }"))
-              return false;
-          break;
+			case "On":
 
-        case "Adjust":
+				if (!IsOn())
+					Auto3DHelpers.WakeOnLan(Auto3DHelpers.RequestMACAddress(IPAddress));
+				break;
 
-          if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0AmbLightMode);
-          else
-            if (!PostRequest(address, "{ \"key\": \"Adjust\" }"))
-              return false;
-          break;
+			default:
 
-        case "Back":
+				if (_currentAdapter != null)
+				{
+					return _currentAdapter.SendCommand(rc.Command);
+				}
+				break;
+		}
 
-          if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0PreviousProgram);
-          else
-            if (!PostRequest(address, "{ \"key\": \"Back\" }"))
-              return false;
-          break;
-
-        case "Options":
-
-          if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0Options);
-          else
-            if (!PostRequest(address, "{ \"key\": \"Options\" }"))
-              return false;
-          break;
-
-        case "OK":
-
-          if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0Acknowledge);
-          else
-            if (!PostRequest(address, "{ \"key\": \"Confirm\" }"))
-              return false;
-          break;
-
-        case "CursorLeft":
-
-          if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0StepLeft);
-          else
-            if (!PostRequest(address, "{ \"key\": \"CursorLeft\" }"))
-              return false;
-          break;
-
-        case "CursorRight":
-
-          if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0StepRight);
-          else
-            if (!PostRequest(address, "{ \"key\": \"CursorRight\" }"))
-              return false;
-          break;
-
-        case "CursorUp":
-
-          if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0StepUp);
-          else
-            if (!PostRequest(address, "{ \"key\": \"CursorUp\" }"))
-              return false;
-          break;
-
-        case "CursorDown":
-
-          if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0StepDown);
-          else
-            if (!PostRequest(address, "{ \"key\": \"CursorDown\" }"))
-              return false;
-          break;
-
-        case "3D":
-
-          if (_connectionMethod == eConnectionMethod.DirectFB)
-            DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0Display3D);
-          else
-            return false;
-          break;
-
-        case "Delay":
-
-          // do nothing here
-          break;
-
-        case "Off":
-
-          if (_connectionMethod == eConnectionMethod.DirectFB)
-              DiVine.SendKeyEx(DiVine.RC6Codes.rc6S0SystemStandby);
-          else
-            if (!PostRequest(address, "{ \"key\": \"Standby\" }"))
-              return false;
-          break;
-              
-        default:
-
-          Log.Info("Auto3D: Unknown command - " + command);
-          break;
-      }
-
-      return true;
+      return false;
     }
 
-    public bool PostRequest(String url, String jsonString)
-    {
-      try
-      {
-        Log.Debug("Auto3D: PostRequest to URL = \"" + url + "\"");
+	public override DeviceInterface GetTurnOffInterfaces()
+	{
+		DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
+		return irDevice | DeviceInterface.Network;
+	}
 
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+	public override void TurnOff(DeviceInterface type)
+	{
+		if (IsOn())
+		{
+			switch (type)
+			{
+				case DeviceInterface.IR:
 
-        request.Timeout = 3000;
-        request.ContentType = "text/json";
-        request.Method = "POST";
+					RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
 
-        Log.Debug("Auto3D: JSON-String = \"" + jsonString + "\"");
+					try
+					{
+						IrToy.Send(rc.IrCode);
+					}
+					catch (Exception ex)
+					{
+						Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+					}
+					break;
 
-        using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-        {
-          streamWriter.Write(jsonString);
-          streamWriter.Flush();
-          streamWriter.Close();
-        }
+				case DeviceInterface.Network:
 
-        Application.DoEvents();
-        Thread.Sleep(50);
+					SendCommand(new RemoteCommand("Off", 0, null));
+					break;
 
-        var httpResponse = (HttpWebResponse)request.GetResponse();
-        using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-        {
-          var result = streamReader.ReadToEnd();
-          Log.Debug(result);
-        }
+				default:
 
-        httpResponse.Close();
+					break;
+			}
+		}
+		else
+			Log.Debug("Auto3D: TV is already off");
+	}
 
-        Application.DoEvents();
-      }
-      catch (Exception ex)
-      {
-        Log.Info("Auto3D: PostRequest: " + ex.Message);
-        Auto3DHelpers.ShowAuto3DMessage("Command to TV could not be sent: " + ex.Message, false, 0);
-        return false;
-      }
+	public override DeviceInterface GetTurnOnInterfaces()
+	{
+		DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
+		return irDevice | DeviceInterface.Network;
+	}
 
-      return true;
-    }
+	public override void TurnOn(DeviceInterface type)
+	{
+		if (!IsOn())
+		{
+			switch (type)
+			{
+				case DeviceInterface.IR:
 
-    public override bool CanTurnOff()
-    {
-        return true;
-    }
+					RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+
+					try
+					{
+						IrToy.Send(rc.IrCode);
+					}
+					catch (Exception ex)
+					{
+						Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+					}
+					break;
+
+				case DeviceInterface.Network:
+
+					Auto3DHelpers.WakeOnLan(MAC);
+					break;
+
+				default:
+
+					break;
+			}
+		}
+		else
+			Log.Debug("Auto3D: TV is already on");
+	}
+
+	public override bool IsOn()
+	{
+		return Auto3DHelpers.Ping(IPAddress);		
+	}
+
+	public override String GetMacAddress()
+	{
+		return MAC;
+	}
   }
 }

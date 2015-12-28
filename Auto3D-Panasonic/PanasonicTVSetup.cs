@@ -36,19 +36,22 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public void ServiceAdded(UPnPService service)
     {
-      comboBoxTV.Items.Add(service);
+		this.Invoke((System.Windows.Forms.MethodInvoker)delegate
+		{
+			comboBoxTV.Items.Add(service);
 
-      foreach (UPnPService item in comboBoxTV.Items)
-      {
-        if (item.ParentDevice.UDN == _device.UDN)
-        {
-          comboBoxTV.SelectedItem = item;
-          break;
-        }
-      }
+			foreach (UPnPService item in comboBoxTV.Items)
+			{
+				if (item.ParentDevice.UDN == _device.UDN)
+				{
+					comboBoxTV.SelectedItem = item;
+					break;
+				}
+			}
 
-      if (comboBoxTV.SelectedIndex == -1)
-        comboBoxTV.SelectedItem = service;
+			if (comboBoxTV.SelectedIndex == -1)
+				comboBoxTV.SelectedItem = service;
+		});
     }
 
     public void ServiceRemoved(UPnPService service)

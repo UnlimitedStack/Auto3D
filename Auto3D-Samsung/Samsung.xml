@@ -1,44 +1,59 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Device>
   <Commands>
-    <CommandItem>
-      <Command>Delay</Command>
+	<CommandItem>
+      <Command>Power (IR)</Command>
+      <IrCode></IrCode>
       <Delay>500</Delay>
     </CommandItem>
     <CommandItem>
+      <Command>Delay</Command>
+ 	  <IrCode></IrCode>
+     <Delay>500</Delay>
+    </CommandItem>
+    <CommandItem>
       <Command>REMOCON_MENU</Command>
+	  <IrCode></IrCode>
       <Delay>800</Delay>
     </CommandItem>
     <CommandItem>
       <Command>REMOCON_3D</Command>
+	   <IrCode></IrCode>
       <Delay>800</Delay>
     </CommandItem>
     <CommandItem>
       <Command>REMOCON_RETURN</Command>
+	  <IrCode></IrCode>
       <Delay>400</Delay>
     </CommandItem>
     <CommandItem>
       <Command>REMOCON_EXIT</Command>
+	  <IrCode></IrCode>
       <Delay>400</Delay>
     </CommandItem>
     <CommandItem>
       <Command>REMOCON_ENTER</Command>
+	  <IrCode></IrCode>
       <Delay>800</Delay>
     </CommandItem>
     <CommandItem>
       <Command>REMOCON_LEFT</Command>
+	  <IrCode></IrCode>
       <Delay>300</Delay>
     </CommandItem>
     <CommandItem>
       <Command>REMOCON_RIGHT</Command>
+	  <IrCode></IrCode>
       <Delay>300</Delay>
     </CommandItem>
     <CommandItem>
       <Command>REMOCON_UP</Command>
+	  <IrCode></IrCode>
       <Delay>300</Delay>
     </CommandItem>
     <CommandItem>
       <Command>REMOCON_DOWN</Command>
+	  <IrCode></IrCode>
       <Delay>300</Delay>
     </CommandItem>
   </Commands>

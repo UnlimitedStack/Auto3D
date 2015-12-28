@@ -14,6 +14,7 @@
   <xs:complexType name="commanditemtype">
     <xs:sequence>
       <xs:element name="Command" type="commandtype"/>
+      <xs:element name="IrCode" type="xs:string"/>
       <xs:element name="Delay" type="xs:integer"/>
     </xs:sequence>
   </xs:complexType>

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SonyBeamerSetup));
             this.comboBoxModel = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.comboBoxPort = new System.Windows.Forms.ComboBox();
@@ -94,7 +95,7 @@
             this.listBoxCompatibleModels.Location = new System.Drawing.Point(0, 77);
             this.listBoxCompatibleModels.Name = "listBoxCompatibleModels";
             this.listBoxCompatibleModels.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.listBoxCompatibleModels.Size = new System.Drawing.Size(280, 287);
+            this.listBoxCompatibleModels.Size = new System.Drawing.Size(280, 291);
             this.listBoxCompatibleModels.TabIndex = 30;
             // 
             // pictureBox
@@ -103,12 +104,12 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.pictureBox.Image = global::MediaPortal.ProcessPlugins.Auto3D.Devices.Properties.Resources.SonyBeamer;
+            this.pictureBox.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox.BackgroundImage")));
+            this.pictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.pictureBox.InitialImage = null;
-            this.pictureBox.Location = new System.Drawing.Point(291, 244);
+            this.pictureBox.Location = new System.Drawing.Point(290, 158);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(234, 120);
+            this.pictureBox.Size = new System.Drawing.Size(232, 208);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox.TabIndex = 23;
             this.pictureBox.TabStop = false;

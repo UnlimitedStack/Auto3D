@@ -40,35 +40,53 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       set;
     }
 
+	public String MAC
+	{
+		get;
+		set;
+	}
+
+    private void Connect()
+    {
+        if (_iRemote == null)
+        {
+            _iRemote = new iRemote();
+            _iRemote.addTVEvent += new Auto3D.Samsung.iRemoteWrapper.iRemote.AddTVEventHandler(_iRemote_addTVEvent);
+            _iRemote.removeTVEvent += new Auto3D.Samsung.iRemoteWrapper.iRemote.RemoveTVEventHandler(iRemote_removeTVEvent);
+        }
+    }
+
+    private void Disconnect()
+    {
+        if (_iRemote != null)
+        {
+            _iRemote.addTVEvent -= _iRemote_addTVEvent;
+            _iRemote.removeTVEvent -= iRemote_removeTVEvent;
+            _iRemote.disconnect();
+            _iRemote = null;
+        }
+    }
+
     public override void Start()
     {
-      if (_iRemote == null)
-      {
-        _iRemote = new iRemote();
-        _iRemote.addTVEvent += new Auto3D.Samsung.iRemoteWrapper.iRemote.AddTVEventHandler(_iRemote_addTVEvent);
-        _iRemote.removeTVEvent += new Auto3D.Samsung.iRemoteWrapper.iRemote.RemoveTVEventHandler(iRemote_removeTVEvent);
-      }
+	  base.Start();
+      Connect();  
     }
 
     public override void Stop()
     {
-      if (_iRemote != null)
-      {
-        _iRemote.addTVEvent -= _iRemote_addTVEvent;
-        _iRemote.removeTVEvent -= iRemote_removeTVEvent;
-        _iRemote.disconnect();
-        _iRemote = null;
-      }
+	   base.Stop();
+       Disconnect();     
     }
 
     public override void Suspend()
     {
-        Stop();
+        Disconnect();
     }
 
     public override void Resume()
     {
-        Start();
+        Connect();
     }
 
     public override void LoadSettings()
@@ -77,6 +95,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         DeviceModelName = reader.GetValueAsString("Auto3DPlugin", "SamsungModel", "UE55D6500");
         IPAddress = reader.GetValueAsString("Auto3DPlugin", "SamsungAddress", "");
+		MAC = reader.GetValueAsString("Auto3DPlugin", "SamsungMAC", "00-00-00-00-00-00");
       }
     }
 
@@ -86,6 +105,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         writer.SetValue("Auto3DPlugin", "SamsungModel", SelectedDeviceModel.Name);
         writer.SetValue("Auto3DPlugin", "SamsungAddress", IPAddress);
+		writer.SetValue("Auto3DPlugin", "SamsungMAC", MAC);
       }
     }
 
@@ -95,6 +115,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
       if (info.ToString() == IPAddress)
       {
+		MAC = Auto3DHelpers.RequestMACAddress(IPAddress);
+
         if (iRemote.ToString() != info.ToString())
           _iRemote.ConnectTo(info);
       }
@@ -110,9 +132,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       get { return _iRemote; }
     }
 
-    public override bool SendCommand(String command)
+    public override bool SendCommand(RemoteCommand rc)
     {
-      switch (command)
+      switch (rc.Command)
       {
         case "REMOCON_MENU":
 
@@ -171,16 +193,101 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
         default:
 
-          Log.Info("Auto3D: Unknown command - " + command);
+          Log.Info("Auto3D: Unknown command - " + rc.Command);
           break;
       }
 
       return true;
     }
 
-    public override bool CanTurnOff()
-    {
-        return true;
-    }
+	public override DeviceInterface GetTurnOffInterfaces()
+	{
+		DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
+		return irDevice | DeviceInterface.Network;
+	}
+
+	public override void TurnOff(DeviceInterface type)
+	{
+		if (IsOn())
+		{
+			switch (type)
+			{
+				case DeviceInterface.IR:
+
+					RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+
+					try
+					{
+						IrToy.Send(rc.IrCode);
+					}
+					catch (Exception ex)
+					{
+						Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+					}
+					break;
+
+				case DeviceInterface.Network:
+
+					SendCommand(new RemoteCommand("Off", 0, null));
+					break;
+
+				default:
+
+					break;
+			}
+		}
+		else
+			Log.Debug("Auto3D: TV is already off");
+	}
+
+	public override DeviceInterface GetTurnOnInterfaces()
+	{
+		DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
+		return irDevice | DeviceInterface.Network;
+	}
+
+	public override void TurnOn(DeviceInterface type)
+	{
+		if (!IsOn())
+		{
+			switch (type)
+			{
+				case DeviceInterface.IR:
+
+					RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+
+					try
+					{
+						IrToy.Send(rc.IrCode);
+					}
+					catch (Exception ex)
+					{
+						Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+					}
+					break;
+
+				case DeviceInterface.Network:
+
+					Auto3DHelpers.WakeOnLan(MAC);
+					break;
+
+				default:
+
+					break;
+			}
+		}
+		else
+			Log.Debug("Auto3D: TV is already on");
+	}
+
+	public override bool IsOn()
+	{
+		return Auto3DHelpers.Ping(_iRemote.GetCurrentTV().Ip);		
+	}
+
+	public override String GetMacAddress()
+	{
+		return MAC;
+	}
   }
 }

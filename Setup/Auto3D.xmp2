@@ -24,6 +24,13 @@
               <ZipFileName>Installer{CopyFile}\{2d959cfe-41aa-4139-b664-dc9da61a433b}-Auto3D-BaseDevice.dll</ZipFileName>
               <DestinationFilename>%Plugins%\Process\Auto3D-BaseDevice.dll</DestinationFilename>
             </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\Externals\SharpLibHid.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{2d139ace-bad5-458a-9f06-f442da539382}-SharpLibHid.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\Process\SharpLibHid.dll</DestinationFilename>
+            </FileItem>
           </Items>
         </Files>
       </GroupItem>
@@ -220,16 +227,9 @@
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\Auto3D-LG\bin\Release\LG.xml</LocalFileName>
+              <LocalFileName>..\Auto3D-LG\LG.xml</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{433b4b67-1b3b-4f11-92bb-c423c0998e9e}-LG.xml</ZipFileName>
               <DestinationFilename>%Config%\Auto3D\LG.xml</DestinationFilename>
-            </FileItem>
-            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
-              <Param1 />
-              <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\Externals\Newtonsoft.Json.dll</LocalFileName>
-              <ZipFileName>Installer{CopyFile}\{940724c1-0720-4df7-82c4-e905529c3977}-Newtonsoft.Json.dll</ZipFileName>
-              <DestinationFilename>%Plugins%\Process\Auto3D\Newtonsoft.Json.dll</DestinationFilename>
             </FileItem>
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
@@ -285,6 +285,47 @@
               <LocalFileName>..\Auto3D-SonyVP\SonyVP.xml</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{5cb9dee4-fb82-435b-940a-67f8d0ac307e}-SonyVP.xml</ZipFileName>
               <DestinationFilename>%Config%\Auto3D\SonyVP.xml</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+      <GroupItem Name="Common">
+        <ParentGroup />
+        <DisplayName>Common</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>Common</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\Externals\Newtonsoft.Json.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{dd76f1ad-b794-424c-8192-ef402e4144e6}-Newtonsoft.Json.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\Process\Auto3D\Newtonsoft.Json.dll</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+      <GroupItem Name="GenericIR">
+        <ParentGroup />
+        <DisplayName>GenericIR</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>GenericIR</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\Auto3D-GenericDevice\bin\Release\Auto3D-GenericDevice.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{4b8bd6cf-4730-485e-accb-10881e2219a0}-Auto3D-GenericDevice.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\Process\Auto3D\Auto3D-GenericDevice.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\Auto3D-GenericDevice\Generic-IR.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{3d6904e0-312c-4e21-b1a2-2aa35584a8bc}-Generic-IR.xml</ZipFileName>
+              <DestinationFilename>%Config%\Auto3D\Generic-IR.xml</DestinationFilename>
             </FileItem>
           </Items>
         </Files>
@@ -430,15 +471,15 @@ Click Next to continue or Cancel to exit Setup.</Value>
     <UpdateUrl />
     <Version>
       <Major>1</Major>
-      <Minor>0</Minor>
-      <Build>7</Build>
-      <Revision>4</Revision>
+      <Minor>3</Minor>
+      <Build>0</Build>
+      <Revision>5</Revision>
     </Version>
     <ExtensionDescription />
     <VersionDescription />
     <DevelopmentStatus>Beta</DevelopmentStatus>
     <OnlineLocation />
-    <ReleaseDate>2012-12-05T21:05:58</ReleaseDate>
+    <ReleaseDate>2015-03-14T21:05:58</ReleaseDate>
     <Tags />
     <Location>Auto3D.mpe1</Location>
     <Params>
@@ -488,6 +529,13 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <LocalFileName>..\Auto3D-BaseDevice\bin\Release\Auto3D-BaseDevice.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{2d959cfe-41aa-4139-b664-dc9da61a433b}-Auto3D-BaseDevice.dll</ZipFileName>
         <DestinationFilename>%Plugins%\Process\Auto3D-BaseDevice.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\Externals\SharpLibHid.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{2d139ace-bad5-458a-9f06-f442da539382}-SharpLibHid.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\Process\SharpLibHid.dll</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
@@ -625,16 +673,9 @@ Click Next to continue or Cancel to exit Setup.</Value>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\Auto3D-LG\bin\Release\LG.xml</LocalFileName>
+        <LocalFileName>..\Auto3D-LG\LG.xml</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{433b4b67-1b3b-4f11-92bb-c423c0998e9e}-LG.xml</ZipFileName>
         <DestinationFilename>%Config%\Auto3D\LG.xml</DestinationFilename>
-      </FileItem>
-      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
-        <Param1 />
-        <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\Externals\Newtonsoft.Json.dll</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{940724c1-0720-4df7-82c4-e905529c3977}-Newtonsoft.Json.dll</ZipFileName>
-        <DestinationFilename>%Plugins%\Process\Auto3D\Newtonsoft.Json.dll</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
@@ -671,11 +712,32 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <ZipFileName>Installer{CopyFile}\{5cb9dee4-fb82-435b-940a-67f8d0ac307e}-SonyVP.xml</ZipFileName>
         <DestinationFilename>%Config%\Auto3D\SonyVP.xml</DestinationFilename>
       </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\Externals\Newtonsoft.Json.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{dd76f1ad-b794-424c-8192-ef402e4144e6}-Newtonsoft.Json.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\Process\Auto3D\Newtonsoft.Json.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\Auto3D-GenericDevice\bin\Release\Auto3D-GenericDevice.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{4b8bd6cf-4730-485e-accb-10881e2219a0}-Auto3D-GenericDevice.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\Process\Auto3D\Auto3D-GenericDevice.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\Auto3D-GenericDevice\Generic-IR.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{3d6904e0-312c-4e21-b1a2-2aa35584a8bc}-Generic-IR.xml</ZipFileName>
+        <DestinationFilename>%Config%\Auto3D\Generic-IR.xml</DestinationFilename>
+      </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="true" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\Auto3D\Auto3d-Icon2.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{cb0bc32c-f43a-45c0-8b2f-7647f2b40886}-Auto3d-Icon2.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{0612dc7d-c248-4605-ad36-aabb1f7bc5b3}-Auto3d-Icon2.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>

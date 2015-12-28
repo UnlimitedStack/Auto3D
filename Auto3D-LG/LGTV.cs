@@ -38,6 +38,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       set;
     }
 
+	public String MAC
+	{
+		get;
+		set;
+	}
+
     public override String UPnPServiceName
     {
       get 
@@ -68,12 +74,22 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public override void Start()
     {
-      SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+	  base.Start();
     }
 
     public override void Stop()
     {
-      SystemEvents.PowerModeChanged -= SystemEvents_PowerModeChanged;
+	  base.Stop();
+    }
+
+    public override void Suspend()
+    {
+    }
+
+    public override void Resume()
+    {
+        Log.Info("Auto3D: LG resume from sleep");
+        ConnectAndPair();
     }
 
     public override void LoadSettings()
@@ -83,6 +99,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         DeviceModelName = reader.GetValueAsString("Auto3DPlugin", "LGModel", "LG");
         UDN = reader.GetValueAsString("Auto3DPlugin", "LGAddress", "");
         PairingKey = reader.GetValueAsString("Auto3DPlugin", "LGPairingKey", "");
+		MAC = reader.GetValueAsString("Auto3DPlugin", "LGMAC", "00-00-00-00-00-00");
 
         switch (DeviceModelName)
         {
@@ -111,6 +128,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         writer.SetValue("Auto3DPlugin", "LGModel", SelectedDeviceModel.Name);
         writer.SetValue("Auto3DPlugin", "LGAddress", UDN);
         writer.SetValue("Auto3DPlugin", "LGPairingKey", PairingKey);
+		writer.SetValue("Auto3DPlugin", "LGMAC", MAC);
       }
     }
 
@@ -125,6 +143,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
       if (service.ParentDevice.UDN == UDN)
       {
+		MAC = Auto3DHelpers.RequestMACAddress(service.ParentDevice.WebAddress.Host);
         Log.Info("Auto3D: LG service connected!");
       }
     }
@@ -136,15 +155,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       base.ServiceRemoved(service);      
     }
 
-    void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
-    {
-      if (e.Mode == PowerModes.Resume)
-      {
-        Log.Info("Auto3D: LG resume from sleep");
-        ConnectAndPair();
-      }
-    }
-
     public override void BeforeSequence()
     {
       // This is a fix for 2011 TV, because there is
@@ -154,16 +164,16 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       // Not nice, but effective :)
 
       if (UDAPnP.Protocol == UDAPnP.LGProtocol.LG2011)
-      {
-        SendCommand("Exit");
+      {        
         RemoteCommand rc = GetRemoteCommandFromString("Exit");
+		SendCommand(rc);
         Thread.Sleep(rc.Delay);
       }
     }
 
-    public override bool SendCommand(String command)
+    public override bool SendCommand(RemoteCommand rc)
     {
-      switch (command)
+      switch (rc.Command)
       {
         case "Home":
 
@@ -399,10 +409,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
               case UDAPnP.LGProtocol.WebOS:
 
-                  WebOS.TurnOff();
+                  if (Auto3DHelpers.Ping(IPAddress))
+                    WebOS.TurnOff();
                   break;
           }
-          break;
+          break;	
 
         case "Delay":
 
@@ -411,7 +422,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
         default:
 
-          Log.Info("Auto3D: Unknown command - " + command);
+          Log.Info("Auto3D: Unknown command - " + rc.Command);
           break;
       }
 
@@ -504,9 +515,87 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       return true;
     }
 
-    public override bool CanTurnOff()
-    {
-        return true;
-    }
+	public override DeviceInterface GetTurnOffInterfaces()
+	{
+		return AllowIrCommandsForAllDevices ? (DeviceInterface.IR | DeviceInterface.Network) : DeviceInterface.None;
+	}
+
+	public override void TurnOff(DeviceInterface type)
+	{
+		if (IsOn())
+		{
+			switch (type)
+			{
+				case DeviceInterface.IR:
+
+					RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+
+					try
+					{
+						IrToy.Send(rc.IrCode);
+					}
+					catch (Exception ex)
+					{
+						Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+					}
+					break;
+
+				case DeviceInterface.Network:
+
+					SendCommand(new RemoteCommand("Off", 0, null));
+					break;
+
+				default:
+
+					break;
+			}
+		}
+		else
+			Log.Debug("Auto3D: TV is already off");
+	}
+
+	public override DeviceInterface GetTurnOnInterfaces()
+	{
+		return AllowIrCommandsForAllDevices ? (DeviceInterface.IR | DeviceInterface.Network) : DeviceInterface.None;
+	}
+
+	public override void TurnOn(DeviceInterface type)
+	{
+		if (!IsOn())
+		{
+			switch (type)
+			{
+				case DeviceInterface.IR:
+
+					RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+
+					try
+					{
+						IrToy.Send(rc.IrCode);
+					}
+					catch (Exception ex)
+					{
+						Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+					}
+					break;
+
+				case DeviceInterface.Network:
+
+					Auto3DHelpers.WakeOnLan(MAC);
+					break;
+
+				default:
+
+					break;
+			}
+		}
+		else
+			Log.Debug("Auto3D: TV is already on");
+	}
+
+	public override bool IsOn()
+	{
+		return Auto3DHelpers.Ping(IPAddress);		
+	}
   }
 }

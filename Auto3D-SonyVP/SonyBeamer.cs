@@ -39,31 +39,49 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       set;
     }
 
+    private void StartSerial()
+    {
+        if (_serialPort != null && _serialPort.IsOpen)
+            _serialPort.Close();
+
+        _serialPort = new SerialPort(PortName, 38400, Parity.Even, 8, StopBits.One);
+        _serialPort.DataReceived += _serialPort_DataReceived;
+
+        try
+        {
+            if (_serialPort.PortName != "None")
+            {
+                _serialPort.Open();
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "Auto3D");
+            Log.Info("Auto3D: " + ex.Message);
+        }
+    }
+
     public override void Start()
     {
-      if (_serialPort != null && _serialPort.IsOpen)
-        _serialPort.Close();
+	  base.Start();
 
-      _serialPort = new SerialPort(PortName, 38400, Parity.Even, 8, StopBits.One);
-      _serialPort.DataReceived += _serialPort_DataReceived;
-
-      try
-      {
-        if (_serialPort.PortName != "None")
-        {
-          _serialPort.Open();
-        }
-      }
-      catch (Exception ex)
-      {
-        MessageBox.Show(ex.Message, "Auto3D");
-        Log.Info("Auto3D: " + ex.Message);
-      }
+      StartSerial();     
     }
 
     public override void Stop()
     {
+	  base.Stop();
       _serialPort.Close();
+    }
+
+    public override void Suspend()
+    {
+        _serialPort.Close();
+    }
+
+    public override void Resume()
+    {
+        StartSerial();
     }
 
     public override void LoadSettings()
@@ -103,9 +121,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
     }
 
-    public override bool SendCommand(String command)
+    public override bool SendCommand(RemoteCommand rc)
     {
-      switch (command)
+      switch (rc.Command)
       {
         case "3DFormatAuto":
 

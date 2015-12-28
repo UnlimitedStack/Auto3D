@@ -1,48 +1,75 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Device>
   <Commands>
     <CommandItem>
+      <Command>Power (IR)</Command>
+      <IrCode></IrCode>
+      <Delay>500</Delay>
+    </CommandItem>
+    <CommandItem>
       <Command>Delay</Command>
+      <IrCode>
+      </IrCode>
       <Delay>500</Delay>
     </CommandItem>
     <CommandItem>
       <Command>Home</Command>
+      <IrCode>
+      </IrCode>
       <Delay>800</Delay>
     </CommandItem>
     <CommandItem>
       <Command>Adjust</Command>
+      <IrCode>
+      </IrCode>
       <Delay>800</Delay>
     </CommandItem>
     <CommandItem>
       <Command>Back</Command>
+      <IrCode>
+      </IrCode>
       <Delay>400</Delay>
     </CommandItem>
     <CommandItem>
       <Command>Options</Command>
+      <IrCode>
+      </IrCode>
       <Delay>800</Delay>
     </CommandItem>
     <CommandItem>
       <Command>OK</Command>
+      <IrCode>
+      </IrCode>
       <Delay>800</Delay>
     </CommandItem>
     <CommandItem>
       <Command>CursorLeft</Command>
+      <IrCode>
+      </IrCode>
       <Delay>300</Delay>
     </CommandItem>
     <CommandItem>
       <Command>CursorRight</Command>
+      <IrCode>
+      </IrCode>
       <Delay>300</Delay>
     </CommandItem>
     <CommandItem>
       <Command>CursorUp</Command>
+      <IrCode>
+      </IrCode>
       <Delay>300</Delay>
     </CommandItem>
     <CommandItem>
       <Command>CursorDown</Command>
+      <IrCode>
+      </IrCode>
       <Delay>300</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3D</Command>
+      <IrCode>
+      </IrCode>
       <Delay>800</Delay>
     </CommandItem>
   </Commands>
@@ -50,7 +77,8 @@
     <Model>
       <ModelName>Philips xxPFLxxxxx</ModelName>
       <CompatibleModels>
-        <Name>55PFL7606K (jointSpace)</Name>
+        <Name>55PFL7606K (jointSpace v1)</Name>
+        <Name>55PUS9109/12 (jointSpace v5)</Name>
         <Name>46PFL9705H (DirectFB)</Name>
       </CompatibleModels>
       <CommandLists>
@@ -131,4 +159,3 @@
     </Model>
   </Models>
 </Device>
-

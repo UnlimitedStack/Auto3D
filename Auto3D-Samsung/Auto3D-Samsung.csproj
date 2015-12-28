@@ -62,6 +62,11 @@
     <Compile Include="iRemoteWrapper\HttpDownloader.cs" />
     <Compile Include="iRemoteWrapper\iRemote.cs" />
     <Compile Include="iRemoteWrapper\iRemoteWrapperCommon.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SamsungRemoteKeypad.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -81,6 +86,10 @@
     <None Include="SamsungTV.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="SamsungRemoteKeypad.resx">
       <DependentUpon>SamsungRemoteKeypad.cs</DependentUpon>
     </EmbeddedResource>
@@ -89,15 +98,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaPortal-1-master\Common-MP-TVE3\Common.Utils\Common.Utils.csproj">
+    <ProjectReference Include="..\..\MediaPortal-1\Common-MP-TVE3\Common.Utils\Common.Utils.csproj">
       <Project>{f6eda1f3-3dcd-43f4-8a90-e32da70c8227}</Project>
       <Name>Common.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MediaPortal-1-master\mediaportal\Core\Core.csproj">
+    <ProjectReference Include="..\..\MediaPortal-1\mediaportal\Core\Core.csproj">
       <Project>{02fffc1f-2555-4b99-8b01-3432d0673855}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MediaPortal-1-master\mediaportal\Utils\Utils.csproj">
+    <ProjectReference Include="..\..\MediaPortal-1\mediaportal\Utils\Utils.csproj">
       <Project>{6da0e4df-6230-4642-98b5-e690bb6942bb}</Project>
       <Name>Utils</Name>
     </ProjectReference>

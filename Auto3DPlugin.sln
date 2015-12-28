@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auto3D", "Auto3D\Auto3D.csproj", "{AE3C34B1-C6C8-475D-8DD8-4A29737B057F}"
 EndProject
@@ -22,6 +22,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auto3D-Optoma", "Auto3D-Optoma\Auto3D-Optoma.csproj", "{B360D6A6-4BC8-473E-99A6-5B268A6570C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auto3D-SonyVP", "Auto3D-SonyVP\Auto3D-SonyVP.csproj", "{06A2BA53-A0B3-465F-A503-E426CDEFC7EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrToyLibrary", "IrToyLib\IrToyLibrary.csproj", "{BAF5DFE1-AADC-489C-93A1-CD26567596DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,6 +113,14 @@ Global
 		{06A2BA53-A0B3-465F-A503-E426CDEFC7EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{06A2BA53-A0B3-465F-A503-E426CDEFC7EA}.Release|x86.ActiveCfg = Release|x86
 		{06A2BA53-A0B3-465F-A503-E426CDEFC7EA}.Release|x86.Build.0 = Release|x86
+		{BAF5DFE1-AADC-489C-93A1-CD26567596DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAF5DFE1-AADC-489C-93A1-CD26567596DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAF5DFE1-AADC-489C-93A1-CD26567596DB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BAF5DFE1-AADC-489C-93A1-CD26567596DB}.Debug|x86.Build.0 = Debug|Any CPU
+		{BAF5DFE1-AADC-489C-93A1-CD26567596DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAF5DFE1-AADC-489C-93A1-CD26567596DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAF5DFE1-AADC-489C-93A1-CD26567596DB}.Release|x86.ActiveCfg = Release|Any CPU
+		{BAF5DFE1-AADC-489C-93A1-CD26567596DB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

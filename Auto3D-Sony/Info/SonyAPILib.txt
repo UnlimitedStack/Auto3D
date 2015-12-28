@@ -1,0 +1,228 @@
+04.02.2015 19:22:36 - UPnP is Discovering devices with a service of: IRCC:1
+04.02.2015 19:22:36 - Found Device: STR-DN840 4A4724
+04.02.2015 19:22:36 - STR-DN840 4A4724 Added
+04.02.2015 19:22:36 - Found Device: BRAVIA KDL-50W805B
+04.02.2015 19:22:36 - BRAVIA KDL-50W805B Added
+04.02.2015 19:22:36 - Devices Discovered: 2
+04.02.2015 19:22:44 - Retrieving Action List URL from device description file: BRAVIA KDL-50W805B
+04.02.2015 19:22:44 - Action List URL was NOT found!
+04.02.2015 19:22:44 - Retriving Device Registration Mode
+04.02.2015 19:22:44 - No Action List found.
+04.02.2015 19:22:44 - Using Registration mode: 3
+04.02.2015 19:22:44 - Initializing Device: BRAVIA KDL-50W805B @ 192.168.0.105:80
+04.02.2015 19:22:44 - Retrieving Controlling devices Mac Address. (this computer)
+04.02.2015 19:22:44 - Mac Address retrieved: F0BF97E57433
+04.02.2015 19:22:44 - Re-Parsing Mac Address. (Replace : with -)
+04.02.2015 19:22:44 - Mac Address has been re-Parsed: F0-BF-97-E5-74-33
+04.02.2015 19:22:44 - Retrieving the Mac Address from: BRAVIA KDL-50W805B at IP: 192.168.0.105
+04.02.2015 19:22:45 - Devices Mac Address: 34:23:87:BC:15:4D
+04.02.2015 19:22:45 - Retrieving Control URL from Device
+04.02.2015 19:22:45 - Found UPnP IRCC:1 on device:BRAVIA KDL-50W805B
+04.02.2015 19:22:45 - Found Control URL: http://192.168.0.105/sony/IRCC
+04.02.2015 19:22:45 - Control URL is complete: http://192.168.0.105/sony/IRCC
+04.02.2015 19:22:45 - Checking for Generation 3 Cookie
+04.02.2015 19:22:45 - No Cookie was found
+04.02.2015 19:22:45 - BRAVIA KDL-50W805B: Registration Check returned: False
+04.02.2015 19:22:45 -  Device Initialized: BRAVIA KDL-50W805B
+04.02.2015 19:22:45 - Checking Status of Device BRAVIA KDL-50W805B
+04.02.2015 19:22:45 - Device returned a Status of: 
+  status: active
+}
+04.02.2015 19:23:01 - Controlling Mac address: F0-BF-97-E5-74-33
+04.02.2015 19:23:01 - Registering Generation 3 Sony Sevice
+04.02.2015 19:23:01 - Creating JSON Web Request
+04.02.2015 19:23:01 - Sending Generation 3 JSON Registration
+04.02.2015 19:23:01 - Must run Method: SendAuth(pincode)
+04.02.2015 19:23:01 - Registration not complete for Gen3 device at: 192.168.0.105
+04.02.2015 19:23:08 - Registration response: {"id":13,"result":[]}
+04.02.2015 19:23:09 - BRAVIA KDL-50W805B is Retrieving Generation:3 Remote Command List
+04.02.2015 19:23:09 - Response Returned: {"id":20,"result":[{"bundled":true,"type":"RM-J1100"},[{"name":"PowerOff","value":"AAAAAQAAAAEAAAAvAw=="},{"name":"Input","value":"AAAAAQAAAAEAAAAlAw=="},{"name":"GGuide","value":"AAAAAQAAAAEAAAAOAw=="},{"name":"EPG","value":"AAAAAgAAAKQAAABbAw=="},{"name":"Favorites","value":"AAAAAgAAAHcAAAB2Aw=="},{"name":"Display","value":"AAAAAQAAAAEAAAA6Aw=="},{"name":"Home","value":"AAAAAQAAAAEAAABgAw=="},{"name":"Options","value":"AAAAAgAAAJcAAAA2Aw=="},{"name":"Return","value":"AAAAAgAAAJcAAAAjAw=="},{"name":"Up","value":"AAAAAQAAAAEAAAB0Aw=="},{"name":"Down","value":"AAAAAQAAAAEAAAB1Aw=="},{"name":"Right","value":"AAAAAQAAAAEAAAAzAw=="},{"name":"Left","value":"AAAAAQAAAAEAAAA0Aw=="},{"name":"Confirm","value":"AAAAAQAAAAEAAABlAw=="},{"name":"Red","value":"AAAAAgAAAJcAAAAlAw=="},{"name":"Green","value":"AAAAAgAAAJcAAAAmAw=="},{"name":"Yellow","value":"AAAAAgAAAJcAAAAnAw=="},{"name":"Blue","value":"AAAAAgAAAJcAAAAkAw=="},{"name":"Num1","value":"AAAAAQAAAAEAAAAAAw=="},{"name":"Num2","value":"AAAAAQAAAAEAAAABAw=="},{"name":"Num3","value":"AAAAAQAAAAEAAAACAw=="},{"name":"Num4","value":"AAAAAQAAAAEAAAADAw=="},{"name":"Num5","value":"AAAAAQAAAAEAAAAEAw=="},{"name":"Num6","value":"AAAAAQAAAAEAAAAFAw=="},{"name":"Num7","value":"AAAAAQAAAAEAAAAGAw=="},{"name":"Num8","value":"AAAAAQAAAAEAAAAHAw=="},{"name":"Num9","value":"AAAAAQAAAAEAAAAIAw=="},{"name":"Num0","value":"AAAAAQAAAAEAAAAJAw=="},{"name":"Num11","value":"AAAAAQAAAAEAAAAKAw=="},{"name":"Num12","value":"AAAAAQAAAAEAAAALAw=="},{"name":"VolumeUp","value":"AAAAAQAAAAEAAAASAw=="},{"name":"VolumeDown","value":"AAAAAQAAAAEAAAATAw=="},{"name":"Mute","value":"AAAAAQAAAAEAAAAUAw=="},{"name":"ChannelUp","value":"AAAAAQAAAAEAAAAQAw=="},{"name":"ChannelDown","value":"AAAAAQAAAAEAAAARAw=="},{"name":"SubTitle","value":"AAAAAgAAAJcAAAAoAw=="},{"name":"ClosedCaption","value":"AAAAAgAAAKQAAAAQAw=="},{"name":"Enter","value":"AAAAAQAAAAEAAAALAw=="},{"name":"DOT","value":"AAAAAgAAAJcAAAAdAw=="},{"name":"Analog","value":"AAAAAgAAAHcAAAANAw=="},{"name":"Teletext","value":"AAAAAQAAAAEAAAA/Aw=="},{"name":"Exit","value":"AAAAAQAAAAEAAABjAw=="},{"name":"Analog2","value":"AAAAAQAAAAEAAAA4Aw=="},{"name":"*AD","value":"AAAAAgAAABoAAAA7Aw=="},{"name":"Digital","value":"AAAAAgAAAJcAAAAyAw=="},{"name":"Analog?","value":"AAAAAgAAAJcAAAAuAw=="},{"name":"BS","value":"AAAAAgAAAJcAAAAsAw=="},{"name":"CS","value":"AAAAAgAAAJcAAAArAw=="},{"name":"BSCS","value":"AAAAAgAAAJcAAAAQAw=="},{"name":"Ddata","value":"AAAAAgAAAJcAAAAVAw=="},{"name":"PicOff","value":"AAAAAQAAAAEAAAA+Aw=="},{"name":"Tv_Radio","value":"AAAAAgAAABoAAABXAw=="},{"name":"Theater","value":"AAAAAgAAAHcAAABgAw=="},{"name":"SEN","value":"AAAAAgAAABoAAAB9Aw=="},{"name":"InternetWidgets","value":"AAAAAgAAABoAAAB6Aw=="},{"name":"InternetVideo","value":"AAAAAgAAABoAAAB5Aw=="},{"name":"Netflix","value":"AAAAAgAAABoAAAB8Aw=="},{"name":"SceneSelect","value":"AAAAAgAAABoAAAB4Aw=="},{"name":"Mode3D","value":"AAAAAgAAAHcAAABNAw=="},{"name":"iManual","value":"AAAAAgAAABoAAAB7Aw=="},{"name":"Audio","value":"AAAAAQAAAAEAAAAXAw=="},{"name":"Wide","value":"AAAAAgAAAKQAAAA9Aw=="},{"name":"Jump","value":"AAAAAQAAAAEAAAA7Aw=="},{"name":"PAP","value":"AAAAAgAAAKQAAAB3Aw=="},{"name":"MyEPG","value":"AAAAAgAAAHcAAABrAw=="},{"name":"ProgramDescription","value":"AAAAAgAAAJcAAAAWAw=="},{"name":"WriteChapter","value":"AAAAAgAAAHcAAABsAw=="},{"name":"TrackID","value":"AAAAAgAAABoAAAB+Aw=="},{"name":"TenKey","value":"AAAAAgAAAJcAAAAMAw=="},{"name":"AppliCast","value":"AAAAAgAAABoAAABvAw=="},{"name":"acTVila","value":"AAAAAgAAABoAAAByAw=="},{"name":"DeleteVideo","value":"AAAAAgAAAHcAAAAfAw=="},{"name":"PhotoFrame","value":"AAAAAgAAABoAAABVAw=="},{"name":"TvPause","value":"AAAAAgAAABoAAABnAw=="},{"name":"KeyPad","value":"AAAAAgAAABoAAAB1Aw=="},{"name":"Media","value":"AAAAAgAAAJcAAAA4Aw=="},{"name":"SyncMenu","value":"AAAAAgAAABoAAABYAw=="},{"name":"Forward","value":"AAAAAgAAAJcAAAAcAw=="},{"name":"Play","value":"AAAAAgAAAJcAAAAaAw=="},{"name":"Rewind","value":"AAAAAgAAAJcAAAAbAw=="},{"name":"Prev","value":"AAAAAgAAAJcAAAA8Aw=="},{"name":"Stop","value":"AAAAAgAAAJcAAAAYAw=="},{"name":"Next","value":"AAAAAgAAAJcAAAA9Aw=="},{"name":"Rec","value":"AAAAAgAAAJcAAAAgAw=="},{"name":"Pause","value":"AAAAAgAAAJcAAAAZAw=="},{"name":"Eject","value":"AAAAAgAAAJcAAABIAw=="},{"name":"FlashPlus","value":"AAAAAgAAAJcAAAB4Aw=="},{"name":"FlashMinus","value":"AAAAAgAAAJcAAAB5Aw=="},{"name":"TopMenu","value":"AAAAAgAAABoAAABgAw=="},{"name":"PopUpMenu","value":"AAAAAgAAABoAAABhAw=="},{"name":"RakurakuStart","value":"AAAAAgAAAHcAAABqAw=="},{"name":"OneTouchTimeRec","value":"AAAAAgAAABoAAABkAw=="},{"name":"OneTouchView","value":"AAAAAgAAABoAAABlAw=="},{"name":"OneTouchRec","value":"AAAAAgAAABoAAABiAw=="},{"name":"OneTouchStop","value":"AAAAAgAAABoAAABjAw=="},{"name":"DUX","value":"AAAAAgAAABoAAABzAw=="},{"name":"FootballMode","value":"AAAAAgAAABoAAAB2Aw=="},{"name":"Social","value":"AAAAAgAAABoAAAB0Aw=="}]]}
+04.02.2015 19:23:09 - Retrieve Command List was Successful
+04.02.2015 19:23:09 - BRAVIA KDL-50W805B Commands have been Populated: 98
+04.02.2015 19:23:09 - Retrieving Command String for Command: VolumeUp
+04.02.2015 19:23:09 - Found Command String for: VolumeUp - AAAAAQAAAAEAAAASAw==
+04.02.2015 19:23:14 - Recieved IRCC Command: AAAAAQAAAAEAAAASAw==
+04.02.2015 19:23:14 - Sending IRCC Command: AAAAAQAAAAEAAAASAw==
+04.02.2015 19:23:14 - Creating HttpWebRequest to URL: http://192.168.0.105/sony/IRCC
+04.02.2015 19:23:14 - Sending the following parameter: <?xml version="1.0"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:X_SendIRCC xmlns:u="urn:schemas-sony-com:service:IRCC:1"><IRCCCode>AAAAAQAAAAEAAAASAw==</IRCCCode></u:X_SendIRCC></s:Body></s:Envelope>
+04.02.2015 19:23:14 - Setting Header Information: 192.168.0.105
+04.02.2015 19:23:14 - Header Host: 192.168.0.105
+04.02.2015 19:23:14 - Setting Header User Agent: Dalvik/1.6.0 (Linux; u; Android 4.0.3; EVO Build/IML74K)
+04.02.2015 19:23:14 - Processing Auth Cookie
+04.02.2015 19:23:14 - Cookie Container Count: 1
+04.02.2015 19:23:14 - Setting Header Cookie: auth=466de4e6cab93511502526da8ac40a0f231fad4678fda79e4ef8125b7360f73c
+04.02.2015 19:23:14 - Sending WebRequest
+04.02.2015 19:23:14 - Sending WebRequest Complete
+04.02.2015 19:23:14 - Creating Web Request Response
+04.02.2015 19:23:14 - Response returned: <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <s:Body>
+        <u:X_SendIRCCResponse xmlns:u="urn:schemas-sony-com:service:IRCC:1">
+        </u:X_SendIRCCResponse>
+    </s:Body>
+</s:Envelope>
+
+04.02.2015 19:23:14 - Command WAS sent Successfully
+04.02.2015 19:23:19 - Retrieving Command String for Command: VolumeDown
+04.02.2015 19:23:19 - Found Command String for: VolumeDown - AAAAAQAAAAEAAAATAw==
+04.02.2015 19:23:19 - Recieved IRCC Command: AAAAAQAAAAEAAAATAw==
+04.02.2015 19:23:19 - Sending IRCC Command: AAAAAQAAAAEAAAATAw==
+04.02.2015 19:23:19 - Creating HttpWebRequest to URL: http://192.168.0.105/sony/IRCC
+04.02.2015 19:23:19 - Sending the following parameter: <?xml version="1.0"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:X_SendIRCC xmlns:u="urn:schemas-sony-com:service:IRCC:1"><IRCCCode>AAAAAQAAAAEAAAATAw==</IRCCCode></u:X_SendIRCC></s:Body></s:Envelope>
+04.02.2015 19:23:19 - Setting Header Information: 192.168.0.105
+04.02.2015 19:23:19 - Header Host: 192.168.0.105
+04.02.2015 19:23:19 - Setting Header User Agent: Dalvik/1.6.0 (Linux; u; Android 4.0.3; EVO Build/IML74K)
+04.02.2015 19:23:19 - Processing Auth Cookie
+04.02.2015 19:23:19 - Cookie Container Count: 1
+04.02.2015 19:23:19 - Setting Header Cookie: auth=466de4e6cab93511502526da8ac40a0f231fad4678fda79e4ef8125b7360f73c
+04.02.2015 19:23:19 - Sending WebRequest
+04.02.2015 19:23:19 - Sending WebRequest Complete
+04.02.2015 19:23:19 - Creating Web Request Response
+04.02.2015 19:23:19 - Response returned: <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <s:Body>
+        <u:X_SendIRCCResponse xmlns:u="urn:schemas-sony-com:service:IRCC:1">
+        </u:X_SendIRCCResponse>
+    </s:Body>
+</s:Envelope>
+
+04.02.2015 19:23:19 - Command WAS sent Successfully
+04.02.2015 19:23:22 - Retrieving Command String for Command: VolumeUp
+04.02.2015 19:23:22 - Found Command String for: VolumeUp - AAAAAQAAAAEAAAASAw==
+04.02.2015 19:23:22 - Recieved IRCC Command: AAAAAQAAAAEAAAASAw==
+04.02.2015 19:23:22 - Sending IRCC Command: AAAAAQAAAAEAAAASAw==
+04.02.2015 19:23:22 - Creating HttpWebRequest to URL: http://192.168.0.105/sony/IRCC
+04.02.2015 19:23:22 - Sending the following parameter: <?xml version="1.0"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:X_SendIRCC xmlns:u="urn:schemas-sony-com:service:IRCC:1"><IRCCCode>AAAAAQAAAAEAAAASAw==</IRCCCode></u:X_SendIRCC></s:Body></s:Envelope>
+04.02.2015 19:23:22 - Setting Header Information: 192.168.0.105
+04.02.2015 19:23:22 - Header Host: 192.168.0.105
+04.02.2015 19:23:22 - Setting Header User Agent: Dalvik/1.6.0 (Linux; u; Android 4.0.3; EVO Build/IML74K)
+04.02.2015 19:23:22 - Processing Auth Cookie
+04.02.2015 19:23:22 - Cookie Container Count: 1
+04.02.2015 19:23:22 - Setting Header Cookie: auth=466de4e6cab93511502526da8ac40a0f231fad4678fda79e4ef8125b7360f73c
+04.02.2015 19:23:22 - Sending WebRequest
+04.02.2015 19:23:22 - Sending WebRequest Complete
+04.02.2015 19:23:22 - Creating Web Request Response
+04.02.2015 19:23:22 - Response returned: <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <s:Body>
+        <u:X_SendIRCCResponse xmlns:u="urn:schemas-sony-com:service:IRCC:1">
+        </u:X_SendIRCCResponse>
+    </s:Body>
+</s:Envelope>
+
+04.02.2015 19:23:22 - Command WAS sent Successfully
+04.02.2015 19:23:25 - Retrieving Command String for Command: ChannelUp
+04.02.2015 19:23:25 - Found Command String for: ChannelUp - AAAAAQAAAAEAAAAQAw==
+04.02.2015 19:23:25 - Retrieving Command String for Command: Num4
+04.02.2015 19:23:25 - Found Command String for: Num4 - AAAAAQAAAAEAAAADAw==
+04.02.2015 19:23:25 - Recieved IRCC Command: AAAAAQAAAAEAAAADAw==
+04.02.2015 19:23:25 - Sending IRCC Command: AAAAAQAAAAEAAAADAw==
+04.02.2015 19:23:25 - Creating HttpWebRequest to URL: http://192.168.0.105/sony/IRCC
+04.02.2015 19:23:25 - Sending the following parameter: <?xml version="1.0"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:X_SendIRCC xmlns:u="urn:schemas-sony-com:service:IRCC:1"><IRCCCode>AAAAAQAAAAEAAAADAw==</IRCCCode></u:X_SendIRCC></s:Body></s:Envelope>
+04.02.2015 19:23:25 - Setting Header Information: 192.168.0.105
+04.02.2015 19:23:25 - Header Host: 192.168.0.105
+04.02.2015 19:23:25 - Setting Header User Agent: Dalvik/1.6.0 (Linux; u; Android 4.0.3; EVO Build/IML74K)
+04.02.2015 19:23:25 - Processing Auth Cookie
+04.02.2015 19:23:25 - Cookie Container Count: 1
+04.02.2015 19:23:25 - Setting Header Cookie: auth=466de4e6cab93511502526da8ac40a0f231fad4678fda79e4ef8125b7360f73c
+04.02.2015 19:23:25 - Sending WebRequest
+04.02.2015 19:23:25 - Sending WebRequest Complete
+04.02.2015 19:23:25 - Creating Web Request Response
+04.02.2015 19:23:25 - Response returned: <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <s:Body>
+        <u:X_SendIRCCResponse xmlns:u="urn:schemas-sony-com:service:IRCC:1">
+        </u:X_SendIRCCResponse>
+    </s:Body>
+</s:Envelope>
+
+04.02.2015 19:23:25 - Command WAS sent Successfully
+04.02.2015 19:23:26 - Retrieving Command String for Command: Num7
+04.02.2015 19:23:26 - Found Command String for: Num7 - AAAAAQAAAAEAAAAGAw==
+04.02.2015 19:23:26 - Recieved IRCC Command: AAAAAQAAAAEAAAAGAw==
+04.02.2015 19:23:26 - Sending IRCC Command: AAAAAQAAAAEAAAAGAw==
+04.02.2015 19:23:26 - Creating HttpWebRequest to URL: http://192.168.0.105/sony/IRCC
+04.02.2015 19:23:26 - Sending the following parameter: <?xml version="1.0"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:X_SendIRCC xmlns:u="urn:schemas-sony-com:service:IRCC:1"><IRCCCode>AAAAAQAAAAEAAAAGAw==</IRCCCode></u:X_SendIRCC></s:Body></s:Envelope>
+04.02.2015 19:23:26 - Setting Header Information: 192.168.0.105
+04.02.2015 19:23:26 - Header Host: 192.168.0.105
+04.02.2015 19:23:26 - Setting Header User Agent: Dalvik/1.6.0 (Linux; u; Android 4.0.3; EVO Build/IML74K)
+04.02.2015 19:23:26 - Processing Auth Cookie
+04.02.2015 19:23:26 - Cookie Container Count: 1
+04.02.2015 19:23:26 - Setting Header Cookie: auth=466de4e6cab93511502526da8ac40a0f231fad4678fda79e4ef8125b7360f73c
+04.02.2015 19:23:26 - Sending WebRequest
+04.02.2015 19:23:26 - Sending WebRequest Complete
+04.02.2015 19:23:26 - Creating Web Request Response
+04.02.2015 19:23:26 - Response returned: <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <s:Body>
+        <u:X_SendIRCCResponse xmlns:u="urn:schemas-sony-com:service:IRCC:1">
+        </u:X_SendIRCCResponse>
+    </s:Body>
+</s:Envelope>
+
+04.02.2015 19:23:26 - Command WAS sent Successfully
+04.02.2015 19:23:26 - Retrieving Command String for Command: DOT
+04.02.2015 19:23:26 - Found Command String for: DOT - AAAAAgAAAJcAAAAdAw==
+04.02.2015 19:23:26 - Recieved IRCC Command: AAAAAgAAAJcAAAAdAw==
+04.02.2015 19:23:26 - Sending IRCC Command: AAAAAgAAAJcAAAAdAw==
+04.02.2015 19:23:26 - Creating HttpWebRequest to URL: http://192.168.0.105/sony/IRCC
+04.02.2015 19:23:26 - Sending the following parameter: <?xml version="1.0"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:X_SendIRCC xmlns:u="urn:schemas-sony-com:service:IRCC:1"><IRCCCode>AAAAAgAAAJcAAAAdAw==</IRCCCode></u:X_SendIRCC></s:Body></s:Envelope>
+04.02.2015 19:23:26 - Setting Header Information: 192.168.0.105
+04.02.2015 19:23:26 - Header Host: 192.168.0.105
+04.02.2015 19:23:26 - Setting Header User Agent: Dalvik/1.6.0 (Linux; u; Android 4.0.3; EVO Build/IML74K)
+04.02.2015 19:23:26 - Processing Auth Cookie
+04.02.2015 19:23:26 - Cookie Container Count: 1
+04.02.2015 19:23:26 - Setting Header Cookie: auth=466de4e6cab93511502526da8ac40a0f231fad4678fda79e4ef8125b7360f73c
+04.02.2015 19:23:26 - Sending WebRequest
+04.02.2015 19:23:26 - Sending WebRequest Complete
+04.02.2015 19:23:26 - Creating Web Request Response
+04.02.2015 19:23:26 - Response returned: <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <s:Body>
+        <u:X_SendIRCCResponse xmlns:u="urn:schemas-sony-com:service:IRCC:1">
+        </u:X_SendIRCCResponse>
+    </s:Body>
+</s:Envelope>
+
+04.02.2015 19:23:26 - Command WAS sent Successfully
+04.02.2015 19:23:26 - Retrieving Command String for Command: Num1
+04.02.2015 19:23:26 - Found Command String for: Num1 - AAAAAQAAAAEAAAAAAw==
+04.02.2015 19:23:26 - Recieved IRCC Command: AAAAAQAAAAEAAAAAAw==
+04.02.2015 19:23:26 - Sending IRCC Command: AAAAAQAAAAEAAAAAAw==
+04.02.2015 19:23:26 - Creating HttpWebRequest to URL: http://192.168.0.105/sony/IRCC
+04.02.2015 19:23:26 - Sending the following parameter: <?xml version="1.0"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:X_SendIRCC xmlns:u="urn:schemas-sony-com:service:IRCC:1"><IRCCCode>AAAAAQAAAAEAAAAAAw==</IRCCCode></u:X_SendIRCC></s:Body></s:Envelope>
+04.02.2015 19:23:26 - Setting Header Information: 192.168.0.105
+04.02.2015 19:23:26 - Header Host: 192.168.0.105
+04.02.2015 19:23:26 - Setting Header User Agent: Dalvik/1.6.0 (Linux; u; Android 4.0.3; EVO Build/IML74K)
+04.02.2015 19:23:26 - Processing Auth Cookie
+04.02.2015 19:23:26 - Cookie Container Count: 1
+04.02.2015 19:23:26 - Setting Header Cookie: auth=466de4e6cab93511502526da8ac40a0f231fad4678fda79e4ef8125b7360f73c
+04.02.2015 19:23:26 - Sending WebRequest
+04.02.2015 19:23:26 - Sending WebRequest Complete
+04.02.2015 19:23:26 - Creating Web Request Response
+04.02.2015 19:23:26 - Response returned: <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <s:Body>
+        <u:X_SendIRCCResponse xmlns:u="urn:schemas-sony-com:service:IRCC:1">
+        </u:X_SendIRCCResponse>
+    </s:Body>
+</s:Envelope>
+
+04.02.2015 19:23:26 - Command WAS sent Successfully
+04.02.2015 19:23:47 - Retrieving Command String for Command: Mode3D
+04.02.2015 19:23:47 - Found Command String for: Mode3D - AAAAAgAAAHcAAABNAw==
+04.02.2015 19:23:47 - Recieved IRCC Command: AAAAAgAAAHcAAABNAw==
+04.02.2015 19:23:47 - Sending IRCC Command: AAAAAgAAAHcAAABNAw==
+04.02.2015 19:23:47 - Creating HttpWebRequest to URL: http://192.168.0.105/sony/IRCC
+04.02.2015 19:23:47 - Sending the following parameter: <?xml version="1.0"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:X_SendIRCC xmlns:u="urn:schemas-sony-com:service:IRCC:1"><IRCCCode>AAAAAgAAAHcAAABNAw==</IRCCCode></u:X_SendIRCC></s:Body></s:Envelope>
+04.02.2015 19:23:47 - Setting Header Information: 192.168.0.105
+04.02.2015 19:23:47 - Header Host: 192.168.0.105
+04.02.2015 19:23:47 - Setting Header User Agent: Dalvik/1.6.0 (Linux; u; Android 4.0.3; EVO Build/IML74K)
+04.02.2015 19:23:47 - Processing Auth Cookie
+04.02.2015 19:23:47 - Cookie Container Count: 1
+04.02.2015 19:23:47 - Setting Header Cookie: auth=466de4e6cab93511502526da8ac40a0f231fad4678fda79e4ef8125b7360f73c
+04.02.2015 19:23:47 - Sending WebRequest
+04.02.2015 19:23:47 - Sending WebRequest Complete
+04.02.2015 19:23:47 - Creating Web Request Response
+04.02.2015 19:23:47 - Response returned: <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <s:Body>
+        <u:X_SendIRCCResponse xmlns:u="urn:schemas-sony-com:service:IRCC:1">
+        </u:X_SendIRCCResponse>
+    </s:Body>
+</s:Envelope>
+
+04.02.2015 19:23:47 - Command WAS sent Successfully
+

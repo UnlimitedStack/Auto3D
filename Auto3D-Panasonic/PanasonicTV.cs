@@ -48,12 +48,30 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       set;
     }
 
+	public String MAC
+	{
+		get;
+		private set;
+	}
+
     public override void Start()
     {
+		base.Start();
     }
 
     public override void Stop()
     {
+		base.Stop();
+    }
+
+    public override void Suspend()
+    {
+        
+    }
+
+    public override void Resume()
+    {
+     
     }
 
     public override void LoadSettings()
@@ -62,6 +80,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         DeviceModelName = reader.GetValueAsString("Auto3DPlugin", "PanasonicModel", "VIERA");
         UDN = reader.GetValueAsString("Auto3DPlugin", "PanasonicAddress", "");
+		MAC = reader.GetValueAsString("Auto3DPlugin", "PanasonicMAC", "00-00-00-00-00-00");
       }
     }
 
@@ -71,6 +90,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         writer.SetValue("Auto3DPlugin", "PanasonicModel", SelectedDeviceModel.Name);
         writer.SetValue("Auto3DPlugin", "PanasonicAddress", UDN);
+		writer.SetValue("Auto3DPlugin", "PanasonicMAC", MAC);
       }
     }
 
@@ -82,8 +102,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
       if (service.ParentDevice.UDN == UDN)
       {
-        Log.Info("Auto3D: Panasonic service connected");
-      }
+		  MAC = Auto3DHelpers.RequestMACAddress(service.ParentDevice.WebAddress.Host);
+		  Log.Info("Auto3D: Panasonic service connected");
+      }		
     }
 
     public override void ServiceRemoved(UPnPService service)
@@ -92,9 +113,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       base.ServiceRemoved(service);
     }
 
-    public override bool SendCommand(String command)
+    public override bool SendCommand(RemoteCommand rc)
     {
-      switch (command)
+      switch (rc.Command)
       {
         case "Mode3D":
 
@@ -148,10 +169,10 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
           if (!InternalSendCommand("NRC_POWER-ONOFF"))
             return false;
           break;
-
+	
         default:
 
-          Log.Info("Auto3D: Unknown command - " + command);
+          Log.Info("Auto3D: Unknown command - " + rc.Command);
           break;
       }
 
@@ -169,9 +190,94 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         return false;
     }
 
-    public override bool CanTurnOff()
-    {
-        return true;
-    }
+	public override DeviceInterface GetTurnOffInterfaces()
+	{
+		DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
+		return irDevice | DeviceInterface.Network;
+	}
+
+	public override void TurnOff(DeviceInterface type)
+	{
+		if (IsOn())
+		{
+			switch (type)
+			{
+				case DeviceInterface.IR:
+
+					RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+
+					try
+					{
+						IrToy.Send(rc.IrCode);
+					}
+					catch (Exception ex)
+					{
+						Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+					}
+					break;
+
+				case DeviceInterface.Network:
+
+					SendCommand(new RemoteCommand("Off", 0, null));
+					break;
+
+				default:
+
+					break;
+			}
+		}
+		else
+			Log.Debug("Auto3D: TV is already off");
+	}
+
+	public override DeviceInterface GetTurnOnInterfaces()
+	{
+		DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;		
+		return irDevice | DeviceInterface.Network;
+	}
+
+	public override void TurnOn(DeviceInterface type)
+	{
+		if (!IsOn())
+		{
+			switch (type)
+			{
+				case DeviceInterface.IR:
+
+					RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+
+					try
+					{
+						IrToy.Send(rc.IrCode);
+					}
+					catch (Exception ex)
+					{
+						Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+					}
+					break;
+
+				case DeviceInterface.Network:
+
+					Auto3DHelpers.WakeOnLan(MAC);
+					break;
+
+				default:
+
+					break;
+			}
+		}
+		else
+			Log.Debug("Auto3D: TV is already on");
+	}
+
+	public override bool IsOn()
+	{
+		return Auto3DHelpers.Ping(UPnPService.ParentDevice.WebAddress.Host);		
+	}
+
+	public override String GetMacAddress()
+	{
+		return MAC;
+	}
   }
 }

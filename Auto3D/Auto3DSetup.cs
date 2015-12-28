@@ -29,7 +29,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       {
         comboBoxModel.Items.Add(item);
         panelSettings.Controls.Add(item.GetSetupControl());
-        //item.GetSetupControl().Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+        
         item.GetSetupControl().Dock = DockStyle.Fill;
 
         String[] versionInfo = item.GetType().Assembly.FullName.Split(',');
@@ -50,18 +50,36 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
       LoadSettings();
 
-      MediaPortal.Hardware.Remote.Click += new MediaPortal.Hardware.RemoteEventHandler(OnRemoteClick);
+	  // as we are not in context of MediaPortal, we need our on raw input filter	
+	  HIDInput.HandleOwnDevices = true;
+	  HIDInput.getInstance().HidEvent += Auto3DSetup_HidEvent;
+	  
+	  CenterToParent();
+
+	  tabControl3D.Selected += tabControl3D_Selected;
+	  
+	  //tabControl3D.TabPages.Remove(tabPageConversion);
     }
 
-    private void OnRemoteClick(object sender, MediaPortal.Hardware.RemoteEventArgs e)
-    {
-      textBoxMenuHotkey.Text = "MCE " + e.Button.ToString();
-    }
+	void tabControl3D_Selected(object sender, TabControlEventArgs e)
+	{
+		if (e.TabPageIndex == 5)
+		{
+			IAuto3DSetup setup = (IAuto3DSetup)((IAuto3D)comboBoxModel.SelectedItem).GetSetupControl();
+			labelMAC.Text = setup.GetDevice().GetMacAddress();
+		}
+	}
+	
+	bool Auto3DSetup_HidEvent(object aSender, String key)
+	{
+		textBoxMenuHotkey.Text = key;
+		return true;
+	}
 
     protected override void OnFormClosing(FormClosingEventArgs e)
     {
       base.OnFormClosing(e);
-      MediaPortal.Hardware.Remote.Click -= new MediaPortal.Hardware.RemoteEventHandler(OnRemoteClick);
+	  HIDInput.getInstance().HidEvent -= Auto3DSetup_HidEvent;
     }
 
     void textBoxMenuHotkey_KeyDown(object sender, KeyEventArgs e)
@@ -107,8 +125,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         String activeDeviceName = reader.GetValueAsString("Auto3DPlugin", "ActiveDevice", "");
 
-        comboBoxModel.SelectedIndex = 0;
-
         foreach (IAuto3D device in comboBoxModel.Items)
         {
           if (device.ToString() == activeDeviceName)
@@ -117,6 +133,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D
             break;
           }
         }
+
+        if (comboBoxModel.SelectedIndex == -1)
+			comboBoxModel.SelectedIndex = 0;
 
         checkBoxSelectionAlways.Checked = reader.GetValueAsBool("Auto3DPlugin", "3DMenuAlways", false);
 
@@ -131,6 +150,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         checkBoxSelectionOnKey.Checked = reader.GetValueAsBool("Auto3DPlugin", "3DMenuOnKey", false);
         textBoxMenuHotkey.Text = reader.GetValueAsString("Auto3DPlugin", "3DMenuKey", "CTRL + D");
+
+		if (textBoxMenuHotkey.Text.StartsWith("MCE")) // reject old configs
+			textBoxMenuHotkey.Text = "";
 
         checkBoxEventGhost.Checked = reader.GetValueAsBool("Auto3DPlugin", "EventGhostEvents", false);
 
@@ -150,7 +172,19 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         checkBoxPreRendered.Checked = reader.GetValueAsBool("Auto3DPlugin", "StretchSubtitles", false);
 
         checkBoxTurnOffDevice.Checked = reader.GetValueAsBool("Auto3DPlugin", "TurnDeviceOff", false);
-        comboBoxTurnOffDevice.SelectedIndex = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOffWhen", 0);
+		radioButtonIpOff.Checked = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOffVia", 0) == 1;
+		radioButtonIrOff.Checked = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOffVia", 0) == 2;
+
+        comboBoxTurnOffDevice.SelectedIndex = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOffWhen", 0);		
+
+		checkBoxTurnOnDevice.Checked = reader.GetValueAsBool("Auto3DPlugin", "TurnDeviceOn", false);
+		radioButtonIpOn.Checked = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOnVia", 0) == 1;
+		radioButtonIrOn.Checked = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOnVia", 0) == 2;
+
+		comboBoxTurnOnDevice.SelectedIndex = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOnWhen", 0);
+
+        checkBoxConvertTo3D.Checked = reader.GetValueAsBool("Auto3DPlugin", "ConvertTo3D", false);
+        trackBarSkewFactor.Value = reader.GetValueAsInt("Auto3DPlugin", "SkewFactor", 10);
       }
 
       foreach (IAuto3D item in comboBoxModel.Items)
@@ -197,8 +231,28 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         if (checkBoxTurnOffDevice.Enabled)
         {
             writer.SetValueAsBool("Auto3DPlugin", "TurnDeviceOff", checkBoxTurnOffDevice.Checked);
+
+			if (radioButtonIpOff.Checked)
+				writer.SetValue("Auto3DPlugin", "TurnDeviceOffVia", 1);
+
+			if (radioButtonIrOff.Checked)
+				writer.SetValue("Auto3DPlugin", "TurnDeviceOffVia", 2);
+
             writer.SetValue("Auto3DPlugin", "TurnDeviceOffWhen", comboBoxTurnOffDevice.SelectedIndex);
         }
+
+		writer.SetValueAsBool("Auto3DPlugin", "TurnDeviceOn", checkBoxTurnOnDevice.Checked);
+
+		if (radioButtonIpOn.Checked)
+			writer.SetValue("Auto3DPlugin", "TurnDeviceOnVia", 1);
+
+		if (radioButtonIrOn.Checked)
+			writer.SetValue("Auto3DPlugin", "TurnDeviceOnVia", 2);
+
+		writer.SetValue("Auto3DPlugin", "TurnDeviceOnWhen", comboBoxTurnOnDevice.SelectedIndex);
+
+		writer.SetValueAsBool("Auto3DPlugin", "ConvertTo3D", checkBoxConvertTo3D.Checked);
+		writer.SetValue("Auto3DPlugin", "SkewFactor", trackBarSkewFactor.Value);
       }
 
       foreach (IAuto3D item in comboBoxModel.Items)
@@ -235,18 +289,112 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
       IAuto3DSetup setup = (IAuto3DSetup)((IAuto3D)comboBoxModel.SelectedItem).GetSetupControl();
       setup.BringToFront();
-      setup.GetDevice().Start();
+      setup.GetDevice().Start();	  
 
       if (setup.GetDevice() is Auto3DUPnPBaseDevice)
         Auto3DUPnP.StartSSDP();
 
       buttonConfig.Visible = (setup.GetDevice().GetRemoteControl() != null);
       
-      checkBoxTurnOffDevice.Enabled = setup.GetDevice().CanTurnOff();
-      buttonTurnOffDevice.Enabled = setup.GetDevice().CanTurnOff();
+      Auto3DBaseDevice baseDevice = (Auto3DBaseDevice)setup.GetDevice();
 
-      if (!setup.GetDevice().CanTurnOff())
-        checkBoxTurnOffDevice.Checked = false;      
+	  if (baseDevice.GetTurnOffInterfaces() == DeviceInterface.None)
+	  {
+		  checkBoxTurnOffDevice.Enabled = false;
+		  comboBoxTurnOffDevice.Enabled = false;
+		  buttonTurnOffDevice.Enabled = false;
+		  radioButtonIpOff.Enabled = false;
+		  radioButtonIrOff.Enabled = false;
+	  }
+	  else
+	  {
+		  checkBoxTurnOffDevice.Enabled = true;
+		  comboBoxTurnOffDevice.Enabled = true;
+		  buttonTurnOffDevice.Enabled = true;
+
+	     if ((baseDevice.GetTurnOffInterfaces() & DeviceInterface.IR) == DeviceInterface.IR)
+		 {
+			 using (Settings reader = new MPSettings())
+			 {
+				 radioButtonIrOff.Enabled = true;
+				 radioButtonIrOff.Checked = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOffVia", 0) == 2;
+			 }
+		 }
+		 else
+		 {
+			 using (Settings reader = new MPSettings())
+			 {
+				 radioButtonIrOff.Enabled = false;
+				 radioButtonIrOff.Checked = false;
+			 }
+		 }
+
+		 if ((baseDevice.GetTurnOffInterfaces() & DeviceInterface.Network) == DeviceInterface.Network)
+		 {
+			 using (Settings reader = new MPSettings())
+			 {
+				 radioButtonIpOff.Enabled = true;
+				 radioButtonIpOff.Checked = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOffVia", 0) == 1;
+			 }
+		 }
+		 else
+		 {
+			 using (Settings reader = new MPSettings())
+			 {
+				 radioButtonIpOff.Enabled = false;
+				 radioButtonIpOff.Checked = false;
+			 }
+		 }
+	  }
+
+	  if (baseDevice.GetTurnOnInterfaces() == DeviceInterface.None)
+	  {
+		  checkBoxTurnOnDevice.Enabled = false;
+		  comboBoxTurnOnDevice.Enabled = false;
+		  buttonTurnOnDevice.Enabled = false;
+		  radioButtonIpOn.Enabled = false;
+		  radioButtonIrOn.Enabled = false;
+	  }
+	  else
+	  {
+		  checkBoxTurnOnDevice.Enabled = true;
+		  comboBoxTurnOnDevice.Enabled = true;
+		  buttonTurnOnDevice.Enabled = true;
+
+		  if ((baseDevice.GetTurnOnInterfaces() & DeviceInterface.IR) == DeviceInterface.IR)
+		  {
+			  using (Settings reader = new MPSettings())
+			  {
+				  radioButtonIrOn.Enabled = true;
+				  radioButtonIrOn.Checked = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOnVia", 0) == 2;
+			  }
+		  }
+		  else
+		  {
+			  using (Settings reader = new MPSettings())
+			  {
+				  radioButtonIrOn.Enabled = false;
+				  radioButtonIrOn.Checked = false;
+			  }
+		  }
+
+		  if ((baseDevice.GetTurnOnInterfaces() & DeviceInterface.Network) == DeviceInterface.Network)
+		  {
+			  using (Settings reader = new MPSettings())
+			  {
+				  radioButtonIpOn.Enabled = true;
+				  radioButtonIpOn.Checked = reader.GetValueAsInt("Auto3DPlugin", "TurnDeviceOnVia", 0) == 1;
+			  }
+		  }
+		  else
+		  {
+			  using (Settings reader = new MPSettings())
+			  {
+				  radioButtonIpOn.Enabled = false;
+				  radioButtonIpOn.Checked = false;
+			  }
+		  }
+	  }
     }
 
     private void radioButtonSBS_CheckedChanged(object sender, EventArgs e)
@@ -285,9 +433,28 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       System.Diagnostics.Process.Start("http://forum.team-mediaportal.com/threads/auto3d-plugin-for-mediaportal-1-2-3-and-1-3-0-final.116708/");
     }
 
-    private void buttonTurnOff_Click(object sender, EventArgs e)
+	private void linkLabelGitHubSonyApiLib_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-        ((IAuto3D)comboBoxModel.SelectedItem).TurnOff();
+        linkLabelGitHubSonyApiLib.LinkVisited = true;
+        System.Diagnostics.Process.Start("https://github.com/KHerron/SonyAPILib");
     }
+
+    private void linkVisionBlog_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    {
+        linkLabelGitHubSonyApiLib.LinkVisited = true;
+        System.Diagnostics.Process.Start("http://3dvision-blog.com/1039-2d-to-3d-realtime-video-conversion-with-avisynth-proof-of-concept/");
+    }
+
+	private void buttonTurnOnDevice_Click(object sender, EventArgs e)
+	{
+		DeviceInterface useDevice = radioButtonIpOn.Checked ? DeviceInterface.Network : DeviceInterface.IR;
+		((IAuto3D)comboBoxModel.SelectedItem).TurnOn(useDevice);
+	}
+
+	private void buttonTurnOffDevice_Click(object sender, EventArgs e)
+	{
+		DeviceInterface useDevice = radioButtonIpOff.Checked ? DeviceInterface.Network : DeviceInterface.IR;
+		((IAuto3D)comboBoxModel.SelectedItem).TurnOff(useDevice);
+	}
   }
 }

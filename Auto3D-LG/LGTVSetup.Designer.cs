@@ -71,20 +71,20 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.pictureBox.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox.BackgroundImage")));
-            this.pictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.pictureBox.InitialImage = null;
-            this.pictureBox.Location = new System.Drawing.Point(293, 215);
+            this.pictureBox.Location = new System.Drawing.Point(290, 158);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(228, 150);
+            this.pictureBox.Size = new System.Drawing.Size(232, 208);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox.TabIndex = 23;
             this.pictureBox.TabStop = false;
             // 
             // buttonShowKey
             // 
-            this.buttonShowKey.Location = new System.Drawing.Point(13, 70);
+            this.buttonShowKey.Location = new System.Drawing.Point(13, 58);
             this.buttonShowKey.Name = "buttonShowKey";
-            this.buttonShowKey.Size = new System.Drawing.Size(200, 23);
+            this.buttonShowKey.Size = new System.Drawing.Size(203, 23);
             this.buttonShowKey.TabIndex = 28;
             this.buttonShowKey.Text = "Show key on TV";
             this.buttonShowKey.UseVisualStyleBackColor = true;
@@ -95,16 +95,16 @@
             this.listBoxCompatibleModels.BackColor = System.Drawing.SystemColors.Window;
             this.listBoxCompatibleModels.FormattingEnabled = true;
             this.listBoxCompatibleModels.IntegralHeight = false;
-            this.listBoxCompatibleModels.Location = new System.Drawing.Point(0, 119);
+            this.listBoxCompatibleModels.Location = new System.Drawing.Point(0, 114);
             this.listBoxCompatibleModels.Name = "listBoxCompatibleModels";
             this.listBoxCompatibleModels.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.listBoxCompatibleModels.Size = new System.Drawing.Size(280, 249);
+            this.listBoxCompatibleModels.Size = new System.Drawing.Size(280, 254);
             this.listBoxCompatibleModels.TabIndex = 32;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(-2, 102);
+            this.label1.Location = new System.Drawing.Point(-2, 98);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(99, 13);
             this.label1.TabIndex = 31;
@@ -112,14 +112,15 @@
             // 
             // textBoxPairingKey
             // 
-            this.textBoxPairingKey.Location = new System.Drawing.Point(12, 112);
+            this.textBoxPairingKey.Location = new System.Drawing.Point(12, 93);
             this.textBoxPairingKey.Name = "textBoxPairingKey";
-            this.textBoxPairingKey.Size = new System.Drawing.Size(201, 20);
+            this.textBoxPairingKey.Size = new System.Drawing.Size(204, 20);
             this.textBoxPairingKey.TabIndex = 33;
+            this.textBoxPairingKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // buttonSendKey
             // 
-            this.buttonSendKey.Location = new System.Drawing.Point(134, 138);
+            this.buttonSendKey.Location = new System.Drawing.Point(137, 120);
             this.buttonSendKey.Name = "buttonSendKey";
             this.buttonSendKey.Size = new System.Drawing.Size(79, 23);
             this.buttonSendKey.TabIndex = 35;
@@ -130,7 +131,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(-3, 51);
+            this.label2.Location = new System.Drawing.Point(-4, 49);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(197, 13);
             this.label2.TabIndex = 37;
@@ -140,7 +141,7 @@
             // 
             this.comboBoxTV.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTV.FormattingEnabled = true;
-            this.comboBoxTV.Location = new System.Drawing.Point(0, 68);
+            this.comboBoxTV.Location = new System.Drawing.Point(0, 65);
             this.comboBoxTV.Name = "comboBoxTV";
             this.comboBoxTV.Size = new System.Drawing.Size(280, 21);
             this.comboBoxTV.TabIndex = 38;
@@ -148,13 +149,14 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.groupBox1.Controls.Add(this.labelRegister);
             this.groupBox1.Controls.Add(this.buttonShowKey);
             this.groupBox1.Controls.Add(this.textBoxPairingKey);
             this.groupBox1.Controls.Add(this.buttonSendKey);
-            this.groupBox1.Location = new System.Drawing.Point(293, 7);
+            this.groupBox1.Location = new System.Drawing.Point(290, 7);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(231, 177);
+            this.groupBox1.Size = new System.Drawing.Size(234, 151);
             this.groupBox1.TabIndex = 39;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = " Pairing ";
@@ -163,7 +165,7 @@
             // 
             this.labelRegister.Location = new System.Drawing.Point(10, 21);
             this.labelRegister.Name = "labelRegister";
-            this.labelRegister.Size = new System.Drawing.Size(189, 41);
+            this.labelRegister.Size = new System.Drawing.Size(218, 34);
             this.labelRegister.TabIndex = 40;
             this.labelRegister.Text = "Every client has to be paired once with the TV before sending commands to the TV." +
     "";
@@ -172,6 +174,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.comboBoxTV);
             this.Controls.Add(this.label2);

@@ -25,7 +25,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public void UpdateState()
     {
-      button3D.Visible = _device.ConnectionMethod == eConnectionMethod.DirectFB;
+        button3D.Visible = _device.ConnectionMethod == eConnectionMethod.DirectFB || _device.ConnectionMethod == eConnectionMethod.jointSpaceV5;
     }
   }
 }

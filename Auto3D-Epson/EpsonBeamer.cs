@@ -39,32 +39,50 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       set;
     }
 
+    private void StartSerial()
+    {
+        if (_serialPort != null && _serialPort.IsOpen)
+            _serialPort.Close();
+
+        _serialPort = new SerialPort(PortName, 9600, Parity.None, 8, StopBits.One);
+        _serialPort.NewLine = "\r";
+        _serialPort.DataReceived += _serialPort_DataReceived;
+
+        try
+        {
+            if (_serialPort.PortName != "None")
+            {
+                _serialPort.Open();
+            }
+        }
+        catch (Exception ex)
+        {
+            Auto3DHelpers.ShowAuto3DMessage("Opening serial port failed: " + ex.Message, false, 0);
+            Log.Info("Auto3D: " + ex.Message);
+        }
+ 
+    }
+
     public override void Start()
     {
-      if (_serialPort != null && _serialPort.IsOpen)
-        _serialPort.Close();
-
-      _serialPort = new SerialPort(PortName, 9600, Parity.None, 8, StopBits.One);
-      _serialPort.NewLine = "\r";
-      _serialPort.DataReceived += _serialPort_DataReceived;
-
-      try
-      {
-        if (_serialPort.PortName != "None")
-        {
-          _serialPort.Open();
-        }
-      }
-      catch (Exception ex)
-      {
-        Auto3DHelpers.ShowAuto3DMessage("Opening serial port failed: " + ex.Message, false, 0);         
-        Log.Info("Auto3D: " + ex.Message);
-      }
+	  base.Start();
+      StartSerial();
     }
 
     public override void Stop()
     {
+	  base.Stop();
       _serialPort.Close();
+    }
+
+    public override void Suspend()
+    {
+        _serialPort.Close();
+    }
+
+    public override void Resume()
+    {
+        StartSerial();
     }
 
     public override void LoadSettings()
@@ -104,9 +122,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       }
     }
 
-    public override bool SendCommand(String command)
+    public override bool SendCommand(RemoteCommand rc)
     {
-      switch (command)
+      switch (rc.Command)
       {
         case "3DDisplayOn":
 
@@ -156,6 +174,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
             return false;
           break;
 
+		case "On":
+
+		  if (!InternalSendCommand("PWR ON"))
+			  return false;
+			break;
+
         case "Off":
 
           if (!InternalSendCommand("PWR OFF"))
@@ -191,9 +215,76 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       Log.Info("Auto3D: Command answer: \"" + data + "\"");
     }
 
-    public override bool CanTurnOff()
+    public override DeviceInterface GetTurnOffInterfaces()
     {
-        return true;
+		DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
+		return irDevice;
+
     }
+
+	public override void TurnOff(DeviceInterface type)
+	{
+		switch (type)
+		{
+			case DeviceInterface.IR:
+
+				RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+
+				try
+				{
+					IrToy.Send(rc.IrCode);
+				}
+				catch (Exception ex)
+				{
+					Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+				}
+				break;
+
+			case DeviceInterface.Network:
+
+				SendCommand(new RemoteCommand("Off", 0, null));
+				break;
+
+			default:
+
+				break;
+		}
+	}
+
+	public override DeviceInterface GetTurnOnInterfaces()
+	{
+		DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
+		return irDevice;
+	}
+
+	public override void TurnOn(DeviceInterface type)
+	{
+		switch (type)
+		{
+			case Devices.DeviceInterface.IR:
+
+				RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+
+				try
+				{
+					IrToy.Send(rc.IrCode);
+				}
+				catch (Exception ex)
+				{
+					Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+				}
+				break;
+
+			case DeviceInterface.Network:
+
+				SendCommand(new RemoteCommand("On", 0, null));
+				break;
+
+			default:
+
+				// error
+				break;
+		}
+	}
   }
 }

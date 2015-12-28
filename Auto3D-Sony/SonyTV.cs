@@ -18,8 +18,11 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
   public class SonyTV : Auto3DUPnPBaseDevice
   {
+    SonyAPI_Lib.SonyDevice sonyDevice;
+
     public SonyTV()
     {
+        sonyDevice = new SonyAPI_Lib.SonyDevice();
     }
 
     public override String CompanyName
@@ -48,6 +51,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       set;
     }
 
+	public String MAC
+	{
+		get;
+		set;
+	}
+
     public String PairingKey
     {
       get;
@@ -56,10 +65,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public override void Start()
     {
+	  base.Start();
     }
 
     public override void Stop()
     {
+	  base.Stop();
     }
 
     public override void LoadSettings()
@@ -69,6 +80,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         DeviceModelName = reader.GetValueAsString("Auto3DPlugin", "SonyModel", "BRAVIA");
         UDN = reader.GetValueAsString("Auto3DPlugin", "SonyAddress", "");
         //PairingKey = reader.GetValueAsString("Auto3DPlugin", "SonyPairingKey", "");
+		MAC = reader.GetValueAsString("Auto3DPlugin", "SonyMAC", "00-00-00-00-00-00");
       }
     }
 
@@ -79,6 +91,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         writer.SetValue("Auto3DPlugin", "SonyModel", SelectedDeviceModel.Name);
         writer.SetValue("Auto3DPlugin", "SonyAddress", UDN);
         //writer.SetValue("Auto3DPlugin", "SonyPairingKey", PairingKey);
+		writer.SetValue("Auto3DPlugin", "SonyMAC", MAC);
       }
     }
 
@@ -90,8 +103,59 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
       if (service.ParentDevice.UDN == UDN)
       {
+		MAC = Auto3DHelpers.RequestMACAddress(service.ParentDevice.WebAddress.Host);
         Log.Info("Auto3D: Sony service connected");
       }
+
+      try
+      {
+          sonyDevice.initialize(service);
+      }
+      catch (Exception ex)
+      {
+          Log.Error("Auto3D: Initialize failed: " + ex.Message);        
+      }
+
+      // show on GUI that device is not registered!)
+      
+      if (!sonyDevice.Registered)
+      {
+        Log.Error("Auto3D: Device " + service.ParentDevice.FriendlyName + " is not registered");        
+      }
+      else
+      {
+         String CmdList = sonyDevice.get_remote_command_list();
+         Log.Debug("Auto3D: Device " + service.ParentDevice.FriendlyName + " CmdList = " + CmdList);
+      }
+
+      ((SonyTVSetup)GetSetupControl()).SetRegisterButtonState(!sonyDevice.Registered);
+    }
+
+    public bool Register()
+    {
+        sonyDevice.register();
+
+        if (sonyDevice.Registered)
+        {
+            String CmdList = sonyDevice.get_remote_command_list();
+            Log.Debug("Auto3D: Device " + UPnPService.ParentDevice.FriendlyName + " CmdList = " + CmdList);
+        }
+
+        return sonyDevice.Registered;
+    }
+
+    public void SendPairingKey(String key)
+    {
+        if (sonyDevice.Generation == 3)
+        {
+            // Send PIN code to TV to create Authorization cookie            
+           
+            if (!sonyDevice.sendAuth(key))
+            {                
+                Log.Error("Auto3D: Device registration for " + UPnPService.ParentDevice.FriendlyName + " failed");
+                MessageBox.Show("See log file for more information", "Device registration failed!");
+            }
+        }
     }
 
     public override void ServiceRemoved(UPnPService service)
@@ -100,9 +164,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
         base.ServiceRemoved(service);
     }
 
-    public override bool SendCommand(String command)
+    public override bool SendCommand(RemoteCommand rc)
     {
-      switch (command)
+      switch (rc.Command)
       {
         case "Mode3D":
 
@@ -150,7 +214,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
           if (!InternalSendCommand("AAAAAQAAAAEAAAAvAw=="))
             return false;
-          break;
+          break;	
 
         case "Delay":
 
@@ -159,7 +223,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
         default:
 
-          Log.Info("Auto3D: Unknown command - " + command);
+          Log.Info("Auto3D: Unknown command - " + rc.Command);
           break;
       }
 
@@ -168,191 +232,109 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     private bool InternalSendCommand(String command)
     {
-      UPnPService.InvokeAction("X_SendIRCC", "IRCCCode", command);
-      return true;
-    }
-
-    public override bool CanTurnOff()
-    {
-        return true;
-    }
-
-    /*public void RegisterClient(String ip)
-    {
-      String registrationUrl = "http://" + ip + "/cers/api/register?name=DeviceName&registrationType=initial&deviceId=MediaRemote";
-
-      Log.Info("Auto3D: Register Sony client");
-      Log.Info("Auto3D: " + registrationUrl);
-
-      HttpWebRequest request = null;
-
-      try
-      {
-        request = (HttpWebRequest)WebRequest.Create(registrationUrl);
-
-        request.Headers.Add("X-CERS-DEVICE-INFO", "MediaPortal");
-        request.KeepAlive = false;
-        request.Proxy = null;
-        request.Timeout = 30000;    // There is a 30 second countdown running on the TV side if client is registering for the first time.            
-        // User needs to click OK and confirm before remote commands are accepted.
-      }
-      catch (System.Exception ex)
-      {
-        Log.Info("Auto3D: Register Sony client failed! Error: " + ex.Message);
-        ShowMessageBoxFromNonUIThread("Registration at Sony TV failed!\nError: " + ex.Message);
-        return;
-      }
-
-      try
-      {
-        using (WebResponse response = (HttpWebResponse)request.GetResponse()) { }
-      }
-      catch (Exception ex) // TV will respond with 40X code if registering fails
-      {
-        Log.Info("Auto3D: Register Sony client failed! Error: " + ex.Message);
-        MessageBox.Show("Registration at Sony TV failed!\nError: " + ex.Message, "Auto3D");
-        return;
-      }
-
-      ShowMessageBoxFromNonUIThread("Registration at Sony TV succeeded!");
-    }*/
-
-    public void RequestPin(String ip)
-    {
-      string hostname = System.Windows.Forms.SystemInformation.ComputerName;
-      string jsontosend = "{\"id\":13,\"method\":\"actRegister\",\"version\":\"1.0\",\"params\":[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"nickname\":\"" + hostname + "_Auto3D\"},[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"value\":\"yes\",\"nickname\":\"" + hostname + "_Auto3D\",\"function\":\"WOL\"}]]}";
-
-      PostRequest("http://" + ip + "/sony/accessControl", jsontosend, null, null);
-    }
-
-    public void RegisterClient2(String ip, String pinCode)
-    {
-      string hostname = System.Windows.Forms.SystemInformation.ComputerName;
-      string jsontosend = "{\"id\":13,\"method\":\"actRegister\",\"version\":\"1.0\",\"params\":[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"nickname\":\"" + hostname + "_Auto3D\"},[{\"clientid\":\"" + hostname + ":11c43119-af3d-40e7-b1b2-743311375322c\",\"value\":\"yes\",\"nickname\":\"" + hostname + "_Auto3D\",\"function\":\"WOL\"}]]}";
-
-      PostRequest("http://" + ip + "/sony/accessControl", jsontosend, pinCode, null);
-    }
-
-    public bool PostRequest(String url, String jsonString, String pinCode, CookieContainer cc)
-    {
-      try
-      {
-        Log.Debug("Auto3D: PostRequest to URL = \"" + url + "\"");
-
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-
-        request.Timeout = 3000;
-        request.ContentType = "application/json";
-        request.Method = "POST";
-        request.AllowAutoRedirect = true;
-
-        if (cc != null)
-          request.CookieContainer = cc;
-
-        if (pinCode != null)
-        {
-          string authInfo = "" + ":" + pinCode;
-          authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
-          request.Headers["Authorization"] = "Basic " + authInfo;
-        }
-
-        Log.Debug("Auto3D: JSON-String = \"" + jsonString + "\"");
-
-        using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-        {
-          streamWriter.Write(jsonString);
-          streamWriter.Flush();
-          streamWriter.Close();
-        }
-
-        Application.DoEvents();
-        Thread.Sleep(50);
-
-        HttpWebResponse httpResponse = (HttpWebResponse)request.GetResponse();
-
-        // serialize cookies of httpresponse
-         
-        using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-        {
-          var result = streamReader.ReadToEnd();
-          Log.Debug(result);
-        }
-
-        httpResponse.Close();
-
-        Application.DoEvents();
-      }
-      catch (Exception ex)
-      {
-        Log.Error("Auto3D: PostRequest: " + ex.Message);
-        Auto3DHelpers.ShowAuto3DMessage("Command could not be sent. The error message is: " + ex.Message, false, 0);
-        return false;
-      }
-
-      return true;
-    }
-
-    /*private string Envelope(string command)
-    {
-        StringBuilder msg = new StringBuilder();
-        msg.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-        msg.AppendLine("<s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">");
-        msg.AppendLine("<s:Body>");
-        msg.AppendLine("<u:X_SendIRCC xmlns:u=\"urn:schemas-sony-com:service:IRCC:1\">");
-        msg.AppendFormat("<IRCCCode>{0}</IRCCCode>", command);
-        msg.AppendLine();
-        msg.AppendLine("</u:X_SendIRCC>");
-        msg.AppendLine("</s:Body>");
-        msg.AppendLine("</s:Envelope>");
-
-        return msg.ToString();
-    }
-
-    public bool SendCommand2(String command)
-    {
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + UPnPService.IP + ":80/IRCC");
-
-        request.Method = "POST";            
-
-        request.Headers.Add("X-CERS-DEVICE-INFO", "MediaPortal");
-        request.Headers.Add("X-CERS-DEVICE-ID", "MediaRemote");
-
-        request.Headers.Add("SOAPAction", "urn:schemas-sony-com:service:IRCC:1#X_SendIRCC");
-        request.ContentType = "text/xml; charset=UTF-8";
-        request.KeepAlive = false;
-        request.Proxy = null;
-        request.Timeout = 5000;
-
-        byte[] byteArray = Encoding.UTF8.GetBytes(Envelope(command));
-
-        request.ContentLength = byteArray.Length;
-
-        Stream dataStream = request.GetRequestStream();
-        dataStream.Write(byteArray, 0, byteArray.Length);
-        dataStream.Close();
-
-        string result;
+      // we must use special send command instead of UPnPLib.Invoke
+      // 
 
         try
         {
-            using (WebResponse response = (HttpWebResponse)request.GetResponse())
-            {
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    using (StreamReader sr = new StreamReader(responseStream))
-                    {
-                        result = sr.ReadToEnd();
-                    }
-                }
-            }
+            sonyDevice.send_ircc(command);
         }
         catch (Exception ex)
         {
-            Log.Info("Auto3D: Sending UPnP command failed! Error: " + ex.Message);
-            return false;
+            Log.Info("Auto3D: InternalSendCommand - " + ex.Message);
         }
 
         return true;
-    }*/
+    }
+
+	public override DeviceInterface GetTurnOffInterfaces()
+	{
+		DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
+		return irDevice | DeviceInterface.Network;
+	}
+
+	public override void TurnOff(DeviceInterface type)
+	{
+		if (IsOn())
+		{
+			switch (type)
+			{
+				case DeviceInterface.IR:
+
+					RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+
+					try
+					{
+						IrToy.Send(rc.IrCode);
+					}
+					catch (Exception ex)
+					{
+						Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+					}
+					break;
+
+				case DeviceInterface.Network:
+
+					SendCommand(new RemoteCommand("Off", 0, null));
+					break;
+
+				default:
+
+					break;
+			}
+		}
+		else
+			Log.Debug("Auto3D: TV is already off");
+	}
+
+	public override DeviceInterface GetTurnOnInterfaces()
+	{
+		DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
+		return irDevice | DeviceInterface.Network;
+	}
+
+	public override void TurnOn(DeviceInterface type)
+	{
+		if (!IsOn())
+		{
+			switch (type)
+			{
+				case DeviceInterface.IR:
+
+					RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+
+					try
+					{
+						IrToy.Send(rc.IrCode);
+					}
+					catch (Exception ex)
+					{
+						Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+					}
+					break;
+
+				case DeviceInterface.Network:
+
+					Auto3DHelpers.WakeOnLan(MAC);
+					break;
+
+				default:
+
+					break;
+			}
+		}
+		else
+			Log.Debug("Auto3D: TV is already off");
+	}
+	
+	public override bool IsOn()
+	{
+		return Auto3DHelpers.Ping(UPnPService.ParentDevice.WebAddress.Host);		
+	}
+
+	public override String GetMacAddress()
+	{
+		return MAC;
+	}
   }
 }

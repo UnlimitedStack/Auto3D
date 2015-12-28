@@ -1,32 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Device>
   <Commands>
+	<CommandItem>
+      <Command>Power (IR)</Command>
+      <IrCode></IrCode>
+      <Delay>500</Delay>
+    </CommandItem>
     <CommandItem>
       <Command>Delay</Command>
+	  <IrCode></IrCode>
       <Delay>500</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3DFormatAuto</Command>
+	  <IrCode></IrCode>
       <Delay>3200</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3DFormat3D</Command>
+	  <IrCode></IrCode>
       <Delay>3200</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3DFormat2D</Command>
+	  <IrCode></IrCode>
       <Delay>3200</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3DFormatSBS</Command>
+	  <IrCode></IrCode>
       <Delay>3200</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3DFormatTAB</Command>
+	  <IrCode></IrCode>
       <Delay>3200</Delay>
     </CommandItem>
     <CommandItem>
       <Command>3DDisplaySimulated</Command>
+	  <IrCode></IrCode>
       <Delay>3200</Delay>
     </CommandItem>
   </Commands>

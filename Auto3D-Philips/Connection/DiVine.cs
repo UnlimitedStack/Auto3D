@@ -273,24 +273,23 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       get { return _connected; }
     }
 
-    private static bool Ping(String ipAddress)
-    {
-      Ping pingSender = new Ping();
-      PingOptions options = new PingOptions();
-
-      options.DontFragment = true;
-      string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-      byte[] buffer = Encoding.ASCII.GetBytes(data);
-      int timeout = 120;
-
-      PingReply reply = pingSender.Send(ipAddress, timeout, buffer, options);
-
-      return reply.Status == IPStatus.Success;
-    }
-
     public static bool Init(String ipAddress)
     {
-      if (Ping(ipAddress))
+      int repeat = 0;
+
+      // wait up to 5 seconds for TV
+
+      while (!Auto3DHelpers.Ping(ipAddress))
+      {
+          Thread.Sleep(1000);
+
+          repeat++;
+
+          if (repeat == 5)
+              return false;
+      }
+        
+      if (Auto3DHelpers.Ping(ipAddress))
       {
         unsafe
         {

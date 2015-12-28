@@ -120,15 +120,15 @@
     <None Include="LGTV.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaPortal-1-master\Common-MP-TVE3\Common.Utils\Common.Utils.csproj">
+    <ProjectReference Include="..\..\MediaPortal-1\Common-MP-TVE3\Common.Utils\Common.Utils.csproj">
       <Project>{f6eda1f3-3dcd-43f4-8a90-e32da70c8227}</Project>
       <Name>Common.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MediaPortal-1-master\mediaportal\Core\Core.csproj">
+    <ProjectReference Include="..\..\MediaPortal-1\mediaportal\Core\Core.csproj">
       <Project>{02fffc1f-2555-4b99-8b01-3432d0673855}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MediaPortal-1-master\mediaportal\Utils\Utils.csproj">
+    <ProjectReference Include="..\..\MediaPortal-1\mediaportal\Utils\Utils.csproj">
       <Project>{6da0e4df-6230-4642-98b5-e690bb6942bb}</Project>
       <Name>Utils</Name>
     </ProjectReference>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -14,6 +15,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.UPnP
       Confirmed = true;
       Services = new List<UPnPService>();
       WebAddress = webAddr;
+      DeviceXML = device;
 
       DeviceType = device.Elements().First(e => e.Name.LocalName == "deviceType").Value;
       FriendlyName = device.Elements().First(e => e.Name.LocalName == "friendlyName").Value;
@@ -97,6 +99,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D.UPnP
     }
 
     public String UDN
+    {
+      get;
+      private set;
+    }
+
+    public XElement DeviceXML
     {
       get;
       private set;

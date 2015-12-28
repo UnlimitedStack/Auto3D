@@ -67,37 +67,26 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     private void comboBoxInterface_SelectedIndexChanged(object sender, EventArgs e)
     {
-      if (comboBoxInterface.SelectedIndex == 0)
-      {
-        btnCheckConnection.Visible = false;
-        _device.ConnectionMethod = eConnectionMethod.jointSpace;
-      }
-      else
-      {
-        btnCheckConnection.Visible = true;
-        _device.ConnectionMethod = eConnectionMethod.DirectFB;
-      }
-
+	   _device.ConnectionMethod = (eConnectionMethod)comboBoxInterface.SelectedIndex;
       ((IAuto3DKeypad)_device.GetRemoteControl()).UpdateState();
     }
 
     private void btnCheckConnection_Click(object sender, EventArgs e)
     {
-      if (comboBoxInterface.SelectedIndex == 1)
-      {
-        if (DiVine.IsConnected)
-          DiVine.Exit();
-
-        if (DiVine.Init(_device.IPAddress))
-          MessageBox.Show("Connection successful!");
-        else
-          MessageBox.Show("Connection failed!");
-      }
+	  _device.Stop();
+	  
+	  var system = _device.Test();
+	  this._tvModel.Text = system != null ? string.Format("TV model: {0}, Country: {1}", system.name, system.country) : "TV model: TV is off"; 
     }
 
     private void textBoxIP_TextChanged(object sender, EventArgs e)
     {
       _device.IPAddress = textBoxIP.Text;
+
+	  String mac = Auto3DHelpers.RequestMACAddress(textBoxIP.Text);
+
+	  if (!mac.StartsWith("00-00-00"))
+		  _device.MAC = mac;
     }
   }
 }

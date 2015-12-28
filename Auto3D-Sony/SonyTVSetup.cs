@@ -111,16 +111,27 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       _device.SelectedDeviceModel = (Auto3DDeviceModel)comboBoxModel.SelectedItem;
     }
 
-    private void buttonShowKey_Click(object sender, EventArgs e)
+    private void buttonRegister_Click(object sender, EventArgs e)
     {
-        UPnPService service = (UPnPService)comboBoxTV.SelectedItem;
-        _device.RequestPin(service.ParentDevice.WebAddress.Host);      
+        if (!_device.Register())
+        {
+            SonyTVSetupPin pinDialog = new SonyTVSetupPin();
+
+            if (pinDialog.ShowDialog() == DialogResult.OK)
+            {
+                _device.SendPairingKey(pinDialog.GetPIN());
+            }
+        }
     }
 
-    private void buttonSendKey_Click(object sender, EventArgs e)
+    public void SetRegisterButtonState(bool enabled)
     {
-        UPnPService service = (UPnPService)comboBoxTV.SelectedItem;
-        _device.RegisterClient2(service.ParentDevice.WebAddress.Host, textBoxPairingKey.Text);
+        buttonRegister.Enabled = enabled;
+
+        if (Auto3DHelpers.IsInSettings())
+        {
+            MessageBox.Show("If the PC was not paired with the TV yet,\nplease press the Register button.", "Initialize failed");
+        }
     }
   }
 }
