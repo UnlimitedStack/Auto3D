@@ -782,77 +782,77 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
             if (bCheckNameFull)
             {
-              foreach (String keyword in _keywordsSBSR)
+              var matchedKeywords = new Dictionary<string, VideoFormat>();
+              foreach (var keyword in _keywordsSBSR)
               {
                 Log.Debug("Auto3D: Check if name contains \"" + keyword + "\"");
 
-                if (_currentName.Contains(keyword))
+                if (_currentName.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                  Log.Info("Auto3D: Name contains \"" + keyword + "\"");
-
-                  if (_activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt3DSBS))
-                  {
-                    GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.SideBySide;
-                    GUIGraphicsContext.Switch3DSides = true;
-                    _currentMode = VideoFormat.Fmt3DSBS;
-                    UpdateSubtitleRenderFormat();
-                    return;
-                  }
+                  matchedKeywords.Add(keyword, VideoFormat.Fmt3DSBS);
                 }
               }
 
-              foreach (String keyword in _keywordsSBS)
+              foreach (var keyword in _keywordsSBS)
               {
                 Log.Debug("Auto3D: Check if name contains \"" + keyword + "\"");
 
-                if (_currentName.Contains(keyword))
+                if (_currentName.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                  Log.Info("Auto3D: Name contains \"" + keyword + "\"");
-
-                  if (_activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt3DSBS))
-                  {
-                    GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.SideBySide;
-                    _currentMode = VideoFormat.Fmt3DSBS;
-                    UpdateSubtitleRenderFormat();
-                    return;
-                  }
+                  matchedKeywords.Add(keyword, VideoFormat.Fmt3DSBS);
                 }
               }
 
-              foreach (String keyword in _keywordsTABR)
+              foreach (var keyword in _keywordsTABR)
               {
                 Log.Debug("Auto3D: Check if name contains \"" + keyword + "\"");
 
-                if (_currentName.Contains(keyword))
+                if (_currentName.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                  Log.Info("Auto3D: Name contains \"" + keyword + "\"");
-
-                  if (_activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt3DTAB))
-                  {
-                    GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.TopAndBottom;
-                    GUIGraphicsContext.Switch3DSides = true;
-                    _currentMode = VideoFormat.Fmt3DTAB;
-                    UpdateSubtitleRenderFormat();
-                    return;
-                  }
+                    matchedKeywords.Add(keyword, VideoFormat.Fmt3DTAB);
                 }
               }
 
-              foreach (String keyword in _keywordsTAB)
+              foreach (var keyword in _keywordsTAB)
               {
                 Log.Debug("Auto3D: Check if name contains \"" + keyword + "\"");
 
-                if (_currentName.Contains(keyword))
+                if (_currentName.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                  Log.Info("Auto3D: Name contains \"" + keyword + "\"");
+                    matchedKeywords.Add(keyword, VideoFormat.Fmt3DTAB);
+                }
+              }
 
-                  if (_activeDevice.SwitchFormat(_currentMode, VideoFormat.Fmt3DTAB))
-                  {
-                    GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.TopAndBottom;
-                    _currentMode = VideoFormat.Fmt3DTAB;
-                    UpdateSubtitleRenderFormat();
-                    return;
-                  }
+              if (matchedKeywords.Any())
+              {
+                Log.Info("Auto3D: Name contains \"{0}\"", string.Join("\", \"", matchedKeywords.Keys));
+
+                var keyword = matchedKeywords.Keys.OrderByDescending(x => x).FirstOrDefault();
+                var format = VideoFormat.Fmt2D;
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    if (!matchedKeywords.TryGetValue(keyword, out format))
+                    {
+                        Log.Info("Auto3D: not matched key for keyword \"{0}\" and 3D format is going to default {1}", keyword, format);
+                        format = VideoFormat.Fmt2D;
+                    }
+                    else
+                    {
+                        Log.Info("Auto3D: most matched is \"{0}\" and 3D format is {1}", keyword, format);
+                    }
+                }
+                else
+                {
+                    Log.Info("Auto3D: key is empty and 3D format is going to default {0}", format);
+                }
+
+                if (_activeDevice.SwitchFormat(_currentMode, format))
+                {
+                  GUIGraphicsContext.Render3DMode = format == VideoFormat.Fmt3DSBS ? GUIGraphicsContext.eRender3DMode.SideBySide : GUIGraphicsContext.eRender3DMode.TopAndBottom;
+                  GUIGraphicsContext.Switch3DSides = true;
+                  _currentMode = format;
+                  UpdateSubtitleRenderFormat();
+                  return;
                 }
               }
             }
