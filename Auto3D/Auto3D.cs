@@ -24,6 +24,18 @@ namespace MediaPortal.ProcessPlugins.Auto3D
   {
     enum eSubTitle { None, TextBased, ImageBased };
 
+    [Flags]
+    private enum MatchingVideoFormat
+    {
+        Simple2D = 0,
+        SydeBySide3D = 1, 
+        TopBottom3D = 2, 
+        Convert2DTo3D = 4,
+        Reverse = 8,
+        SydeBySide3DReverse = SydeBySide3D | Reverse,
+        TopBottom3DReverse = TopBottom3D | Reverse
+    }
+
     bool _run = false;
     bool _bPlaying = false;
 
@@ -742,6 +754,25 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       }
     }
 
+      private static VideoFormat ConvertMatchingFormatToVideoFormat(MatchingVideoFormat source)
+      {
+        switch (source)
+        {
+          case MatchingVideoFormat.Simple2D:
+            return VideoFormat.Fmt2D;
+          case MatchingVideoFormat.SydeBySide3D:
+          case MatchingVideoFormat.SydeBySide3DReverse:
+            return VideoFormat.Fmt3DSBS;
+          case MatchingVideoFormat.TopBottom3D:
+          case MatchingVideoFormat.TopBottom3DReverse:
+            return VideoFormat.Fmt3DTAB;
+          case MatchingVideoFormat.Convert2DTo3D:
+            return VideoFormat.Fmt2D3D;
+        }
+
+        return VideoFormat.Fmt2D;
+      }
+
     private void RunVideoStarted(object stateInfo)
     {
       g_Player.MediaType type = (g_Player.MediaType)stateInfo;
@@ -782,14 +813,14 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
             if (bCheckNameFull)
             {
-              var matchedKeywords = new Dictionary<string, VideoFormat>();
+              var matchedKeywords = new Dictionary<string, MatchingVideoFormat>();
               foreach (var keyword in _keywordsSBSR)
               {
                 Log.Debug("Auto3D: Check if name contains \"" + keyword + "\"");
 
                 if (_currentName.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                  matchedKeywords.Add(keyword, VideoFormat.Fmt3DSBS);
+                  matchedKeywords.Add(keyword, MatchingVideoFormat.SydeBySide3DReverse);
                 }
               }
 
@@ -799,7 +830,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
                 if (_currentName.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                  matchedKeywords.Add(keyword, VideoFormat.Fmt3DSBS);
+                  matchedKeywords.Add(keyword, MatchingVideoFormat.SydeBySide3D);
                 }
               }
 
@@ -809,7 +840,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
                 if (_currentName.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                    matchedKeywords.Add(keyword, VideoFormat.Fmt3DTAB);
+                  matchedKeywords.Add(keyword, MatchingVideoFormat.TopBottom3DReverse);
                 }
               }
 
@@ -819,7 +850,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
                 if (_currentName.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                    matchedKeywords.Add(keyword, VideoFormat.Fmt3DTAB);
+                  matchedKeywords.Add(keyword, MatchingVideoFormat.TopBottom3D);
                 }
               }
 
@@ -828,28 +859,29 @@ namespace MediaPortal.ProcessPlugins.Auto3D
                 Log.Info("Auto3D: Name contains \"{0}\"", string.Join("\", \"", matchedKeywords.Keys));
 
                 var keyword = matchedKeywords.Keys.OrderByDescending(x => x).FirstOrDefault();
-                var format = VideoFormat.Fmt2D;
+                var detectedFormat = MatchingVideoFormat.Simple2D;
                 if (!string.IsNullOrEmpty(keyword))
                 {
-                    if (!matchedKeywords.TryGetValue(keyword, out format))
+                    if (!matchedKeywords.TryGetValue(keyword, out detectedFormat))
                     {
-                        Log.Info("Auto3D: not matched key for keyword \"{0}\" and 3D format is going to default {1}", keyword, format);
-                        format = VideoFormat.Fmt2D;
+                        Log.Info("Auto3D: not matched key for keyword \"{0}\" and 3D format is going to default {1}", keyword, detectedFormat);
+                        detectedFormat = MatchingVideoFormat.Simple2D;
                     }
                     else
                     {
-                        Log.Info("Auto3D: most matched is \"{0}\" and 3D format is {1}", keyword, format);
+                        Log.Info("Auto3D: most matched is \"{0}\" and 3D format is {1}", keyword, detectedFormat);
                     }
                 }
                 else
                 {
-                    Log.Info("Auto3D: key is empty and 3D format is going to default {0}", format);
+                    Log.Info("Auto3D: key is empty and 3D format is going to default {0}", detectedFormat);
                 }
 
+                var format = ConvertMatchingFormatToVideoFormat(detectedFormat);
                 if (_activeDevice.SwitchFormat(_currentMode, format))
                 {
                   GUIGraphicsContext.Render3DMode = format == VideoFormat.Fmt3DSBS ? GUIGraphicsContext.eRender3DMode.SideBySide : GUIGraphicsContext.eRender3DMode.TopAndBottom;
-                  GUIGraphicsContext.Switch3DSides = true;
+                  GUIGraphicsContext.Switch3DSides = detectedFormat.HasFlag(MatchingVideoFormat.Reverse);
                   _currentMode = format;
                   UpdateSubtitleRenderFormat();
                   return;
