@@ -495,7 +495,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
 	static void internalStartGenericDevice()
 	{
-		if (IrPortName != "None" && !IsIrConnected())
+		if (!string.IsNullOrEmpty(IrPortName) && IrPortName != "None" && !IsIrConnected())
 		{
 			try
 			{
