@@ -1043,6 +1043,18 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       }
     }
 
+    public static bool IsNetworkVideo(string strPath)
+    {
+      if (string.IsNullOrEmpty(strPath)) return false;
+      return strPath.StartsWith("rtsp:", StringComparison.OrdinalIgnoreCase) ||
+        (strPath.StartsWith("mms:", StringComparison.OrdinalIgnoreCase) && strPath.EndsWith(".ymvp", StringComparison.OrdinalIgnoreCase)) ||
+        strPath.StartsWith("http:", StringComparison.OrdinalIgnoreCase) ||
+        strPath.StartsWith("https:", StringComparison.OrdinalIgnoreCase) ||
+        strPath.StartsWith("udp:", StringComparison.OrdinalIgnoreCase) ||
+        strPath.StartsWith("rtmp:", StringComparison.OrdinalIgnoreCase);
+    }
+
+
     /// <summary>
     /// Handles the g_Player.PlayBackEnded event
     /// </summary>
@@ -1051,7 +1063,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     public void OnVideoEnded(g_Player.MediaType type, string s)
     {
       // do not handle e.g. visualization window, last.fm player, etc
-      if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV)
+      if ((type == g_Player.MediaType.Video || type == g_Player.MediaType.TV) && !IsNetworkVideo(s))
       {
         subTitleType = eSubTitle.None;
         ThreadPool.QueueUserWorkItem(new WaitCallback(RunVideoEnded), type);
@@ -1067,7 +1079,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     public void OnVideoStopped(g_Player.MediaType type, int i, string s)
     {
       // do not handle e.g. visualization window, last.fm player, etc
-      if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV)
+      if ((type == g_Player.MediaType.Video || type == g_Player.MediaType.TV) && !IsNetworkVideo(s))
       {
         subTitleType = eSubTitle.None;
         ThreadPool.QueueUserWorkItem(new WaitCallback(RunVideoStopped), type);
@@ -1080,7 +1092,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     public void OnVideoStarted(g_Player.MediaType type, string s)
     {
       // do not handle e.g. visualization window, last.fm player, etc
-      if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV)
+      if ((type == g_Player.MediaType.Video || type == g_Player.MediaType.TV) && !IsNetworkVideo(s))
       {
         _currentName = s;
 
