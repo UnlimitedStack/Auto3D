@@ -14,6 +14,8 @@ using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
+
 using Microsoft.Win32;
 using MediaPortal.ProcessPlugins.Auto3D.UPnP;
  
@@ -36,8 +38,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         TopBottom3DReverse = TopBottom3D | Reverse
     }
 
-    bool _run = false;
-    bool _bPlaying = false;
+    private volatile bool _run;
+    private volatile bool _bPlaying;
 
     VideoFormat _currentMode = VideoFormat.Fmt2D; // default
     VideoFormat _nameFormat = VideoFormat.Fmt3DSBS; // default
@@ -714,30 +716,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       thread.Start();
     }
 
-    private void RunVideoEnded(object stateInfo)
+    private void ProcessingVideoStop(g_Player.MediaType type)
     {
-      g_Player.MediaType type = (g_Player.MediaType)stateInfo;
-
-      lock (this)
-      {
-        _bPlaying = false;
-
-        // wait for ending worker thread
-
-        if (_workerThread != null && _workerThread.IsAlive)
-          Thread.Sleep(20);
-
-        // is 3d mode is active switch back to normal mode
-
-        if (_currentMode != VideoFormat.Fmt2D)
-          SwitchBack();
-      }
-    }
-
-    private void RunVideoStopped(object stateInfo)
-    {
-      g_Player.MediaType type = (g_Player.MediaType)stateInfo;
-
       lock (this)
       {
         _bPlaying = false;
@@ -773,10 +753,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         return VideoFormat.Fmt2D;
       }
 
-    private void RunVideoStarted(object stateInfo)
+    private void Analyze3DFormatVideo(g_Player.MediaType type)
     {
-      g_Player.MediaType type = (g_Player.MediaType)stateInfo;
-
       lock (this)
       {
         if (type == g_Player.MediaType.TV)
@@ -1063,10 +1041,10 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     public void OnVideoEnded(g_Player.MediaType type, string s)
     {
       // do not handle e.g. visualization window, last.fm player, etc
-      if ((type == g_Player.MediaType.Video || type == g_Player.MediaType.TV) && !IsNetworkVideo(s))
+      if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV)
       {
         subTitleType = eSubTitle.None;
-        ThreadPool.QueueUserWorkItem(new WaitCallback(RunVideoEnded), type);
+        Task.Factory.StartNew(() => ProcessingVideoStop(type));
       }
     }
 
@@ -1079,10 +1057,10 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     public void OnVideoStopped(g_Player.MediaType type, int i, string s)
     {
       // do not handle e.g. visualization window, last.fm player, etc
-      if ((type == g_Player.MediaType.Video || type == g_Player.MediaType.TV) && !IsNetworkVideo(s))
+      if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV)
       {
         subTitleType = eSubTitle.None;
-        ThreadPool.QueueUserWorkItem(new WaitCallback(RunVideoStopped), type);
+        Task.Factory.StartNew(() => ProcessingVideoStop(type));
       }
     }
 
@@ -1092,15 +1070,21 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     public void OnVideoStarted(g_Player.MediaType type, string s)
     {
       // do not handle e.g. visualization window, last.fm player, etc
-      if ((type == g_Player.MediaType.Video || type == g_Player.MediaType.TV) && !IsNetworkVideo(s))
+      if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV)
       {
         _currentName = s;
+        subTitleType = IsNetworkVideo(s) ? eSubTitle.None : DetectSubtitleType(s);
+        Task.Factory.StartNew(() => Analyze3DFormatVideo(type));
+      }
+    }
 
-        String baseName = Path.Combine(Path.GetDirectoryName(s), Path.GetFileNameWithoutExtension(s));
+    private static eSubTitle DetectSubtitleType(string s)
+    {
+      var baseName = Path.Combine(Path.GetDirectoryName(s), Path.GetFileNameWithoutExtension(s));
 
-        // text based subtitles
+      // text based subtitles
 
-        String [] textSubtitleFormatsFileAndEmbedded = 
+      string[] textSubtitleFormatsFileAndEmbedded = 
         {
             "aqt",
             "srt",
@@ -1130,7 +1114,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
             "s2k"
         };
 
-        String [] imageSubtitleFormatsFile = 
+      string[] imageSubtitleFormatsFile = 
         {        
             "idx",
             "sub",
@@ -1138,7 +1122,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
             "son"
         };
 
-        String[] imageSubtitleFormatsEmbedded = 
+      string[] imageSubtitleFormatsEmbedded = 
         {        
             "vobsub",
             "dvb subtitle",
@@ -1147,66 +1131,53 @@ namespace MediaPortal.ProcessPlugins.Auto3D
             "xsub",
         };
 
-        subTitleType = eSubTitle.None;
+      // check for file based subtitles
 
-        // check for file based subtitles
-
-        foreach (String subFormat in textSubtitleFormatsFileAndEmbedded)
-        {
-            if (File.Exists(baseName + "." + subFormat))
-            {
-                subTitleType = eSubTitle.TextBased;
-                ThreadPool.QueueUserWorkItem(new WaitCallback(RunVideoStarted), type);
-                return;
-            }
-        }
-
-        foreach (String subFormat in imageSubtitleFormatsFile)
-        {
-            if (File.Exists(baseName + "." + subFormat))
-            {
-                subTitleType = eSubTitle.ImageBased;
-                ThreadPool.QueueUserWorkItem(new WaitCallback(RunVideoStarted), type);
-                return;
-            }
-        }
-
-        // check for embedded subtitles
-
-        MediaInfo mi = new MediaInfo();
-
-        mi.Open(s);
-
-        int sct = mi.Count_Get(StreamKind.Text);
-
-        for (int i = 0; i < sct; i++)
-        {
-            String format = mi.Get(StreamKind.Text, i, "Format").ToLowerInvariant();
-
-            if (textSubtitleFormatsFileAndEmbedded.Contains(format))
-            {
-                subTitleType = eSubTitle.TextBased;
-                break;
-            }
-
-            if (imageSubtitleFormatsEmbedded.Contains(format))
-            {
-                subTitleType = eSubTitle.ImageBased;
-                break;
-            }    
-        }
-
-        mi.Close();
-        
-        ThreadPool.QueueUserWorkItem(new WaitCallback(RunVideoStarted), type);
+      if (textSubtitleFormatsFileAndEmbedded.Any(subFormat => File.Exists(baseName + "." + subFormat)))
+      {
+        return eSubTitle.TextBased;
       }
+
+      if (imageSubtitleFormatsFile.Any(subFormat => File.Exists(baseName + "." + subFormat)))
+      {
+        return eSubTitle.ImageBased;
+      }
+
+      // check for embedded subtitles
+
+      var result = eSubTitle.None;
+      var mi = new MediaInfo();
+
+      mi.Open(s);
+
+      var sct = mi.Count_Get(StreamKind.Text);
+
+      for (var i = 0; i < sct; ++i)
+      {
+        var format = mi.Get(StreamKind.Text, i, "Format").ToLowerInvariant();
+
+        if (textSubtitleFormatsFileAndEmbedded.Contains(format))
+        {
+          result = eSubTitle.TextBased;
+          break;
+        }
+
+        if (imageSubtitleFormatsEmbedded.Contains(format))
+        {
+          result = eSubTitle.ImageBased;
+          break;
+        }
+      }
+ 
+      mi.Close();
+      return result;
     }
 
     void OnTVChannelChanged()
     {
       g_Player.MediaType type = g_Player.MediaType.TV;
       subTitleType = eSubTitle.None;
-      ThreadPool.QueueUserWorkItem(new WaitCallback(RunVideoStarted), type);
+      Task.Factory.StartNew(() => Analyze3DFormatVideo(type));
     }
   }
 }
