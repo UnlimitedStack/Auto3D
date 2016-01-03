@@ -38,9 +38,13 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 			return false;
 		}
 
-		public override SystemBase Connect(string host)
+		public override void Connect(string host)
 		{
-			base.Connect(host);
+			base.Connect(host);			
+		}
+
+		public override SystemBase TestConnection(string host)
+		{
 			return JsonConvert.DeserializeObject<JointSpaceV5System>(GetRequest(SystemUri, string.Empty));
 		}
 

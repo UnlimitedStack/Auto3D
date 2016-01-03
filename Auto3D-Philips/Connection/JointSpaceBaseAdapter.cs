@@ -20,9 +20,13 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 			return PostRequest(KeyUri, new JointSpaceKey { key = command });
 		}
 
-		public virtual SystemBase Connect(string host)
+		public virtual void Connect(string host)
 		{
 			Host = host;
+		}
+
+		public virtual SystemBase TestConnection(string host)
+		{
 			return null;
 		}
 
@@ -62,7 +66,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 				var jsonString = JsonConvert.SerializeObject(key, Formatting.Indented);
 				Log.Debug("Auto3D: JSON-String = \"" + jsonString + "\"");
 
-				using (var streamWriter = new StreamWriter(request.GetRequestStream(), Encoding.UTF8))
+				using (var streamWriter = new StreamWriter(request.GetRequestStream()))
 				{
 					streamWriter.Write(jsonString);
 					streamWriter.Flush();
@@ -95,7 +99,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
 		protected string GetRequest(string url, string jsonString)
 		{
-			string result = string.Empty;
+			string result = string.Empty;			
+			
 			try
 			{
 				Log.Debug("Auto3D: GetRequest to URL = \"" + url + "\"");

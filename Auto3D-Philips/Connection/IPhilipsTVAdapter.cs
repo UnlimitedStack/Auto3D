@@ -9,7 +9,8 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 	{
 		bool SendCommand(string command);
 
-		SystemBase Connect(string host);
+		void Connect(string host);
+		SystemBase TestConnection(string host);
 
 		void Disconnect();
 

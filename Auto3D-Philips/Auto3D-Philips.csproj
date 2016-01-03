@@ -125,18 +125,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Auto3D-BaseDevice\Auto3D-Base.csproj">
-      <Project>{6b4550e5-a499-4037-98b7-dea95949c6b2}</Project>
-      <Name>Auto3D-Base</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Philips.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Auto3D-BaseDevice\Auto3D-Base.csproj">
+      <Project>{6b4550e5-a499-4037-98b7-dea95949c6b2}</Project>
+      <Name>Auto3D-Base</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -53,12 +53,10 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 	  // as we are not in context of MediaPortal, we need our on raw input filter	
 	  HIDInput.HandleOwnDevices = true;
 	  HIDInput.getInstance().HidEvent += Auto3DSetup_HidEvent;
-	  
+
 	  CenterToParent();
 
-	  tabControl3D.Selected += tabControl3D_Selected;
-	  
-	  //tabControl3D.TabPages.Remove(tabPageConversion);
+	  tabControl3D.Selected += tabControl3D_Selected;	  
     }
 
 	void tabControl3D_Selected(object sender, TabControlEventArgs e)

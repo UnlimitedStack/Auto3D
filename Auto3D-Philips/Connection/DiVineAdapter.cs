@@ -37,14 +37,17 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 			return false;
 		}
 
-		public SystemBase Connect(string host)
+		public void Connect(string host)
 		{
 			IPAddress address;
 			if (IPAddress.TryParse(host, out address) && !address.Equals(IPAddress.Any) && !address.Equals(IPAddress.Broadcast))
 			{
 				DiVine.Init(host);
 			}
+		}
 
+		public SystemBase TestConnection(string host)
+		{
 			return new DiVineSystem
 			{
 				country = string.Empty,
@@ -57,7 +60,6 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 			if (DiVine.IsConnected)
 				DiVine.Exit();
 		}
-
 
 		public bool IsConnected
 		{

@@ -26,6 +26,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public PhilipsTV()
     {
+		_currentAdapter = _jointSpaceV1Adapter;
     }
 
     public override String CompanyName
@@ -56,7 +57,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 		{
 			try
 			{
-				return _currentAdapter.Connect(IPAddress);
+				return _currentAdapter.TestConnection(IPAddress);
 			}
 			catch (Exception)
 			{

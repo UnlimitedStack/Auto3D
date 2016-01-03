@@ -31,6 +31,13 @@
               <ZipFileName>Installer{CopyFile}\{2d139ace-bad5-458a-9f06-f442da539382}-SharpLibHid.dll</ZipFileName>
               <DestinationFilename>%Plugins%\Process\SharpLibHid.dll</DestinationFilename>
             </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\LegacyInput\bin\x86\Release\LegacyInput.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{684ac268-1ff6-4bfd-84ed-395687f5c01e}-LegacyInput.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\Process\LegacyInput.dll</DestinationFilename>
+            </FileItem>
           </Items>
         </Files>
       </GroupItem>
@@ -473,7 +480,7 @@ Click Next to continue or Cancel to exit Setup.</Value>
       <Major>1</Major>
       <Minor>3</Minor>
       <Build>0</Build>
-      <Revision>5</Revision>
+      <Revision>7</Revision>
     </Version>
     <ExtensionDescription />
     <VersionDescription />
@@ -536,6 +543,13 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <LocalFileName>..\Externals\SharpLibHid.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{2d139ace-bad5-458a-9f06-f442da539382}-SharpLibHid.dll</ZipFileName>
         <DestinationFilename>%Plugins%\Process\SharpLibHid.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\LegacyInput\bin\x86\Release\LegacyInput.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{684ac268-1ff6-4bfd-84ed-395687f5c01e}-LegacyInput.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\Process\LegacyInput.dll</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
@@ -737,7 +751,7 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\Auto3D\Auto3d-Icon2.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{0612dc7d-c248-4605-ad36-aabb1f7bc5b3}-Auto3d-Icon2.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{8ed15096-f556-4ae5-b0f8-7e31df578b0a}-Auto3d-Icon2.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>

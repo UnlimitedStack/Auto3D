@@ -1,6 +1,7 @@
 ﻿using MediaPortal.GUI.Library;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
@@ -37,9 +38,13 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 			return false;
 		}
 
-		public override SystemBase Connect(string host)
+		public override void Connect(string host)
 		{
-			base.Connect(host);
+			base.Connect(host);			
+		}
+
+		public override SystemBase TestConnection(string host)
+		{
 			return JsonConvert.DeserializeObject<JointSpaceV1System>(GetRequest(SystemUri, string.Empty));
 		}
 

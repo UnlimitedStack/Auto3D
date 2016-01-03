@@ -108,16 +108,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Auto3D-BaseDevice\Auto3D-Base.csproj">
-      <Project>{6b4550e5-a499-4037-98b7-dea95949c6b2}</Project>
-      <Name>Auto3D-Base</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="GenericDevice.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Auto3D-BaseDevice\Auto3D-Base.csproj">
+      <Project>{6b4550e5-a499-4037-98b7-dea95949c6b2}</Project>
+      <Name>Auto3D-Base</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

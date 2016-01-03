@@ -95,7 +95,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     {
       Auto3DUPnP.Init();
 
-      // add new instances of all existing devices here...
+	  // add new instances of all existing devices here...
 
       _listDevices.Add(new NoDevice());
 
@@ -456,8 +456,10 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       _run = false;
       _activeDevice.Stop();
 
-      if (bMenuMCERemote)
+	  if (bMenuMCERemote)
+	  {
 		  HIDInput.getInstance().HidEvent -= Auto3DSetup_HidEvent;
+	  }
 
       if (!bSuppressSwitchBackTo2D)
         GUIGraphicsContext.Render3DMode = GUIGraphicsContext.eRender3DMode.None;
