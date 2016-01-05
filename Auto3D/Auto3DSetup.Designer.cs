@@ -142,6 +142,7 @@
 			this.labelInfo = new System.Windows.Forms.Label();
 			this.linkLabelAuto3D = new System.Windows.Forms.LinkLabel();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+                        this.checkBoxAnalyzeNetworkStream = new System.Windows.Forms.CheckBox();
 			this.panel3D.SuspendLayout();
 			this.panel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trackBarDepth3D)).BeginInit();
@@ -201,6 +202,7 @@
 			// 
 			// panel3D
 			// 
+                        this.panel3D.Controls.Add(this.checkBoxAnalyzeNetworkStream);
 			this.panel3D.Controls.Add(this.textBoxTABR);
 			this.panel3D.Controls.Add(this.label13);
 			this.panel3D.Controls.Add(this.label14);
@@ -299,7 +301,7 @@
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(358, 269);
+                        this.label1.Location = new System.Drawing.Point(358, 291);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(57, 19);
 			this.label1.TabIndex = 69;
@@ -310,7 +312,7 @@
 			this.textBoxMenuHotkey.BackColor = System.Drawing.SystemColors.Info;
 			this.textBoxMenuHotkey.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
 			this.textBoxMenuHotkey.Cursor = System.Windows.Forms.Cursors.Arrow;
-			this.textBoxMenuHotkey.Location = new System.Drawing.Point(155, 267);
+			this.textBoxMenuHotkey.Location = new System.Drawing.Point(155, 289);
 			this.textBoxMenuHotkey.Name = "textBoxMenuHotkey";
 			this.textBoxMenuHotkey.ReadOnly = true;
 			this.textBoxMenuHotkey.Size = new System.Drawing.Size(194, 20);
@@ -321,7 +323,7 @@
 			// checkBoxSelectionOnKey
 			// 
 			this.checkBoxSelectionOnKey.AutoSize = true;
-			this.checkBoxSelectionOnKey.Location = new System.Drawing.Point(14, 268);
+			this.checkBoxSelectionOnKey.Location = new System.Drawing.Point(14, 290);
 			this.checkBoxSelectionOnKey.Name = "checkBoxSelectionOnKey";
 			this.checkBoxSelectionOnKey.Size = new System.Drawing.Size(135, 17);
 			this.checkBoxSelectionOnKey.TabIndex = 67;
@@ -1372,6 +1374,16 @@
 			this.pictureBox1.TabIndex = 78;
 			this.pictureBox1.TabStop = false;
 			// 
+                        // checkBoxAnalyzeNetworkStream
+                        // 
+                        this.checkBoxAnalyzeNetworkStream.AutoSize = true;
+                        this.checkBoxAnalyzeNetworkStream.Location = new System.Drawing.Point(14, 266);
+                        this.checkBoxAnalyzeNetworkStream.Name = "checkBoxAnalyzeNetworkStream";
+                        this.checkBoxAnalyzeNetworkStream.Size = new System.Drawing.Size(173, 17);
+                        this.checkBoxAnalyzeNetworkStream.TabIndex = 78;
+                        this.checkBoxAnalyzeNetworkStream.Text = "Video analysis network streams";
+                        this.checkBoxAnalyzeNetworkStream.UseVisualStyleBackColor = true;
+                        // 
 			// Auto3DSetup
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1553,5 +1565,6 @@
 		private System.Windows.Forms.ComboBox comboBoxTurnOnDevice;
 		private System.Windows.Forms.Label label45;
 		private System.Windows.Forms.Label labelMAC;
+                private System.Windows.Forms.CheckBox checkBoxAnalyzeNetworkStream;
     }
 }

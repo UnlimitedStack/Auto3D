@@ -145,6 +145,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         checkBoxSBS.Checked = reader.GetValueAsBool("Auto3DPlugin", "SideBySide", true);
         checkBoxTopDown.Checked = reader.GetValueAsBool("Auto3DPlugin", "TopAndBottom", false);
+        checkBoxAnalyzeNetworkStream.Checked = reader.GetValueAsBool("Auto3DPlugin", "AnalyzeNetworkStream", true);
 
         checkBoxSelectionOnKey.Checked = reader.GetValueAsBool("Auto3DPlugin", "3DMenuOnKey", false);
         textBoxMenuHotkey.Text = reader.GetValueAsString("Auto3DPlugin", "3DMenuKey", "CTRL + D");
@@ -206,6 +207,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
         writer.SetValueAsBool("Auto3DPlugin", "CheckNameFormatSBS", radioButtonSBS.Checked);
         writer.SetValueAsBool("Auto3DPlugin", "SideBySide", checkBoxSBS.Checked);
         writer.SetValueAsBool("Auto3DPlugin", "TopAndBottom", checkBoxTopDown.Checked);
+        writer.SetValueAsBool("Auto3DPlugin", "AnalyzeNetworkStream", checkBoxAnalyzeNetworkStream.Checked);
         writer.SetValueAsBool("Auto3DPlugin", "3DMenuOnKey", checkBoxSelectionOnKey.Checked);
         writer.SetValue("Auto3DPlugin", "3DMenuKey", textBoxMenuHotkey.Text);
 

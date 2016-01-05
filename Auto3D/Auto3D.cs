@@ -55,6 +55,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
     bool bCheckNameFull = false;
     bool bCheckSideBySide = false;
     bool bCheckTopAndBottom = false;
+    bool bAnalyzeNetworkStream;
     bool bTV = false;
     bool bVideo = false;
 
@@ -253,6 +254,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D
 
         bCheckSideBySide = reader.GetValueAsBool("Auto3DPlugin", "SideBySide", true);
         bCheckTopAndBottom = reader.GetValueAsBool("Auto3DPlugin", "TopAndBottom", false);
+        bAnalyzeNetworkStream = reader.GetValueAsBool("Auto3DPlugin", "AnalyzeNetworkStream", true);
 
         String activeDeviceName = reader.GetValueAsString("Auto3DPlugin", "ActiveDevice", "");
 
@@ -1075,8 +1077,12 @@ namespace MediaPortal.ProcessPlugins.Auto3D
       if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV)
       {
         _currentName = s;
-        subTitleType = IsNetworkVideo(s) ? eSubTitle.None : DetectSubtitleType(s);
-        Task.Factory.StartNew(() => Analyze3DFormatVideo(type));
+        var isNetwork = IsNetworkVideo(s);
+        subTitleType = isNetwork ? eSubTitle.None : DetectSubtitleType(s);
+        if (!isNetwork || bAnalyzeNetworkStream)
+        {
+          Task.Factory.StartNew(() => Analyze3DFormatVideo(type));
+        }
       }
     }
 
