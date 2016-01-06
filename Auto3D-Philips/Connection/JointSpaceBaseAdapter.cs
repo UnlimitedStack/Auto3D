@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using MediaPortal.GUI.Library;
@@ -13,7 +12,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 	{
 		protected string Host { get; set; }
 
-		private const string ContentType = "application/json; charset=UTF-8"; 
+		private const string ContentType = "application/json"; 
 
 		public virtual bool SendCommand(string command)
 		{
@@ -27,6 +26,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
 		public virtual SystemBase TestConnection(string host)
 		{
+                        Host = host;
 			return null;
 		}
 
@@ -63,7 +63,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 				request.ContentType = ContentType;
 				request.Method = "POST";
 
-				var jsonString = JsonConvert.SerializeObject(key, Formatting.Indented);
+				var jsonString = JsonConvert.SerializeObject(key, Formatting.None);
 				Log.Debug("Auto3D: JSON-String = \"" + jsonString + "\"");
 
 				using (var streamWriter = new StreamWriter(request.GetRequestStream()))
@@ -99,7 +99,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
 		protected string GetRequest(string url, string jsonString)
 		{
-			string result = string.Empty;			
+			string result;			
 			
 			try
 			{

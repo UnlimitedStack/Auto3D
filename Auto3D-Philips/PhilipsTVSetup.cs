@@ -8,13 +8,19 @@ using System.Windows.Forms;
 using MediaPortal.Profile;
 using System.IO;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+
 using MediaPortal.Configuration;
+using MediaPortal.ProcessPlugins.Auto3D.Devices.Properties;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
   public partial class PhilipsTVSetup : UserControl, IAuto3DSetup
   {
-    PhilipsTV _device;
+    private PhilipsTV _device;
+
+    private delegate void SystemBaseAsyncShow(SystemBase task);
 
     public PhilipsTVSetup(IAuto3D device)
     {
@@ -42,7 +48,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
       comboBoxModel.SelectedItem = _device.SelectedDeviceModel;
 
-      textBoxIP.Text = _device.IPAddress;
+      textBoxIP.Text = _device.IpAddress;
 
       listBoxCompatibleModels.Items.Clear();
 
@@ -56,7 +62,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
     public void SaveSettings()
     {
-      _device.IPAddress = textBoxIP.Text;
+      _device.IpAddress = textBoxIP.Text;
       _device.SaveSettings();
     }
 
@@ -74,19 +80,27 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
     private void btnCheckConnection_Click(object sender, EventArgs e)
     {
 	  _device.Stop();
-	  
-	  var system = _device.Test();
-	  this._tvModel.Text = system != null ? string.Format("TV model: {0}, Country: {1}", system.name, system.country) : "TV model: TV is off"; 
+      _tvModel.Text = "Testing TV...";
+      Task.Factory
+        .StartNew(() => _device.Test())
+        .ContinueWith(t =>
+          {
+            _tvModel.BeginInvoke(new SystemBaseAsyncShow(
+              system =>
+                {
+                  _tvModel.Text = system != null ? string.Format("TV model: {0}, Country: {1}", system.name, system.country) : "TV model: TV is off";
+                }), t.Exception == null ? t.Result : null);
+          });
     }
 
     private void textBoxIP_TextChanged(object sender, EventArgs e)
     {
-      _device.IPAddress = textBoxIP.Text;
+      _device.IpAddress = textBoxIP.Text;
 
 	  String mac = Auto3DHelpers.RequestMACAddress(textBoxIP.Text);
 
 	  if (!mac.StartsWith("00-00-00"))
-		  _device.MAC = mac;
+		  _device.Mac = mac;
     }
   }
 }

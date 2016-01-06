@@ -18,15 +18,18 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 
   public class PhilipsTV : Auto3DBaseDevice
   {
-    eConnectionMethod _connectionMethod = eConnectionMethod.jointSpaceV1;
-	private IPhilipsTVAdapter _currentAdapter;
-	private static readonly IPhilipsTVAdapter _divineAdapter = new DiVineAdapter();
-	private static readonly IPhilipsTVAdapter _jointSpaceV1Adapter = new JointSpaceV1Adapter();
-	private static readonly IPhilipsTVAdapter _jointSpaceV5Adapter = new JointSpaceV5Adapter();
+    private eConnectionMethod _connectionMethod = eConnectionMethod.jointSpaceV1;
+    private IPhilipsTVAdapter _currentAdapter;
+    private static readonly IPhilipsTVAdapter _divineAdapter = new DiVineAdapter();
+    private static readonly IPhilipsTVAdapter _jointSpaceV1Adapter = new JointSpaceV1Adapter();
+    private static readonly IPhilipsTVAdapter _jointSpaceV5Adapter = new JointSpaceV5Adapter();
 
     public PhilipsTV()
     {
-		_currentAdapter = _jointSpaceV1Adapter;
+      if (_currentAdapter == null)
+      {
+        _currentAdapter = _jointSpaceV1Adapter;
+      }
     }
 
     public override String CompanyName
@@ -39,49 +42,49 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       get { return "Philips TV"; }
     }
 
-	public String IPAddress
-	{
-		get;
-		set;
-	}
+    public string IpAddress
+    {
+      get;
+      set;
+    }
 
-	public String MAC
-	{
-		get;
-		internal set;
-	}
+    public string Mac
+    {
+      get;
+      internal set;
+    }
 
-	public SystemBase Test()
+    public SystemBase Test()
+    {
+      if (_currentAdapter != null)
+      {
+	try
 	{
-		if (_currentAdapter != null)
-		{
-			try
-			{
-				return _currentAdapter.TestConnection(IPAddress);
-			}
-			catch (Exception)
-			{
-				return null;
-			}
-		}
-
-		return null;
+	  return _currentAdapter.TestConnection(IpAddress);
 	}
+	catch (Exception)
+	{
+	  return null;
+	}
+      }
+
+      return null;
+    }
 
     private void Connect()
     {
-		if (_currentAdapter != null) 
-        {
-			_currentAdapter.Connect(IPAddress); 
-        }
+      if (_currentAdapter != null) 
+      {
+	_currentAdapter.Connect(IpAddress); 
+      }
     }
 
     private void Disconnect()
     {
-		if (_currentAdapter != null) 
-        {
-			_currentAdapter.Disconnect(); 
-        }
+      if (_currentAdapter != null) 
+      {
+	_currentAdapter.Disconnect(); 
+      }
     }
 
     public override void Start()
@@ -113,20 +116,20 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       {
         if (value != _connectionMethod)
         {
-			Disconnect();
+	  Disconnect();
 
-			switch (value)
-			{
-				case eConnectionMethod.DirectFB:
-					_currentAdapter = _divineAdapter;
-					break;
-				case eConnectionMethod.jointSpaceV1:
-					_currentAdapter = _jointSpaceV1Adapter;
-					break;
-				case eConnectionMethod.jointSpaceV5:
-					_currentAdapter = _jointSpaceV5Adapter;
-					break;
-			}
+	  switch (value)
+	  {
+	  case eConnectionMethod.DirectFB:
+	    _currentAdapter = _divineAdapter;
+	    break;
+	  case eConnectionMethod.jointSpaceV1:
+	    _currentAdapter = _jointSpaceV1Adapter;
+	    break;
+	  case eConnectionMethod.jointSpaceV5:
+	    _currentAdapter = _jointSpaceV5Adapter;
+	    break;
+	  }
 
           _connectionMethod = value;
         }
@@ -138,9 +141,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       using (Settings reader = new MPSettings())
       {
         DeviceModelName = reader.GetValueAsString("Auto3DPlugin", CompanyName + "Model", "55PFL7606K-02");
-        IPAddress = reader.GetValueAsString("Auto3DPlugin", "PhilipsAddress", "0.0.0.0");
-		MAC = reader.GetValueAsString("Auto3DPlugin", "PhilipsMAC", "00-00-00-00-00-00");
-		ConnectionMethod = (eConnectionMethod)reader.GetValueAsInt("Auto3DPlugin", "PhilipsConnectionMethod", (int)eConnectionMethod.jointSpaceV1);
+        IpAddress = reader.GetValueAsString("Auto3DPlugin", "PhilipsAddress", "0.0.0.0");
+	Mac = reader.GetValueAsString("Auto3DPlugin", "PhilipsMAC", "00-00-00-00-00-00");
+	ConnectionMethod = (eConnectionMethod)reader.GetValueAsInt("Auto3DPlugin", "PhilipsConnectionMethod", (int)eConnectionMethod.jointSpaceV1);
       }
     }
 
@@ -149,127 +152,119 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
       using (Settings writer = new MPSettings())
       {
         writer.SetValue("Auto3DPlugin", "PhilipsModel", SelectedDeviceModel.Name);
-        writer.SetValue("Auto3DPlugin", "PhilipsAddress", IPAddress);
+        writer.SetValue("Auto3DPlugin", "PhilipsAddress", IpAddress);
         writer.SetValue("Auto3DPlugin", "PhilipsConnectionMethod", (int)_connectionMethod);
-		writer.SetValue("Auto3DPlugin", "PhilipsMAC", MAC);
+	writer.SetValue("Auto3DPlugin", "PhilipsMAC", Mac);
       }
     }
 
     public override bool SendCommand(RemoteCommand rc)
     {
-		switch (rc.Command)
-		{
-			case "Power (IR)":
+      switch (rc.Command)
+      {
+      case "Power (IR)":
 
-				base.SendCommand(rc);
-				break;
+	base.SendCommand(rc);
+	break;
 
-			case "On":
+      case "On":
 
-				if (!IsOn())
-					Auto3DHelpers.WakeOnLan(Auto3DHelpers.RequestMACAddress(IPAddress));
-				break;
+	if (!IsOn())
+	  Auto3DHelpers.WakeOnLan(Auto3DHelpers.RequestMACAddress(IpAddress));
+	break;
 
-			default:
+      default:
 
-				if (_currentAdapter != null)
-				{
-					return _currentAdapter.SendCommand(rc.Command);
-				}
-				break;
-		}
+	if (_currentAdapter != null)
+	{
+	  return _currentAdapter.SendCommand(rc.Command);
+	}
+	break;
+      }
 
       return false;
     }
 
-	public override DeviceInterface GetTurnOffInterfaces()
+    public override DeviceInterface GetTurnOffInterfaces()
+    {
+      DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
+      return irDevice | DeviceInterface.Network;
+    }
+
+    public override void TurnOff(DeviceInterface type)
+    {
+      if (IsOn())
+      {
+	switch (type)
 	{
-		DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
-		return irDevice | DeviceInterface.Network;
-	}
+	case DeviceInterface.IR:
 
-	public override void TurnOff(DeviceInterface type)
+	  RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+
+	  try
+	  {
+	    IrToy.Send(rc.IrCode);
+	  }
+	  catch (Exception ex)
+	  {
+	    Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+	  }
+	  break;
+
+	case DeviceInterface.Network:
+
+	  SendCommand(new RemoteCommand("Off", 0, null));
+	  break;
+	}
+      }
+      else
+	Log.Debug("Auto3D: TV is already off");
+    }
+
+    public override DeviceInterface GetTurnOnInterfaces()
+    {
+      DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
+      return irDevice | DeviceInterface.Network;
+    }
+
+    public override void TurnOn(DeviceInterface type)
+    {
+      if (!IsOn())
+      {
+	switch (type)
 	{
-		if (IsOn())
-		{
-			switch (type)
-			{
-				case DeviceInterface.IR:
+	case DeviceInterface.IR:
 
-					RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
+	  RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
 
-					try
-					{
-						IrToy.Send(rc.IrCode);
-					}
-					catch (Exception ex)
-					{
-						Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
-					}
-					break;
+	  try
+	  {
+	    IrToy.Send(rc.IrCode);
+	  }
+	  catch (Exception ex)
+	  {
+	    Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
+	  }
+	  break;
 
-				case DeviceInterface.Network:
+	case DeviceInterface.Network:
 
-					SendCommand(new RemoteCommand("Off", 0, null));
-					break;
-
-				default:
-
-					break;
-			}
-		}
-		else
-			Log.Debug("Auto3D: TV is already off");
+	  Auto3DHelpers.WakeOnLan(Mac);
+	  break;
 	}
+      }
+      else
+	Log.Debug("Auto3D: TV is already on");
+    }
 
-	public override DeviceInterface GetTurnOnInterfaces()
-	{
-		DeviceInterface irDevice = (AllowIrCommandsForAllDevices && Auto3DBaseDevice.IsIrConnected()) ? DeviceInterface.IR : DeviceInterface.None;
-		return irDevice | DeviceInterface.Network;
-	}
+    public override bool IsOn()
+    {
+      return Auto3DHelpers.Ping(IpAddress);		
+    }
 
-	public override void TurnOn(DeviceInterface type)
-	{
-		if (!IsOn())
-		{
-			switch (type)
-			{
-				case DeviceInterface.IR:
-
-					RemoteCommand rc = GetRemoteCommandFromString("Power (IR)");
-
-					try
-					{
-						IrToy.Send(rc.IrCode);
-					}
-					catch (Exception ex)
-					{
-						Log.Error("Auto3D: IR Toy Send failed: " + ex.Message);
-					}
-					break;
-
-				case DeviceInterface.Network:
-
-					Auto3DHelpers.WakeOnLan(MAC);
-					break;
-
-				default:
-
-					break;
-			}
-		}
-		else
-			Log.Debug("Auto3D: TV is already on");
-	}
-
-	public override bool IsOn()
-	{
-		return Auto3DHelpers.Ping(IPAddress);		
-	}
-
-	public override String GetMacAddress()
-	{
-		return MAC;
-	}
+    public override String GetMacAddress()
+    {
+      return Mac;
+    }
   }
 }
