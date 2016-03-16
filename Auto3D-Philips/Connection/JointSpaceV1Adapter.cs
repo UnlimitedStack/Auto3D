@@ -1,13 +1,12 @@
 ﻿using MediaPortal.GUI.Library;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 {
 	public class JointSpaceV1Adapter : JointSpaceBaseAdapter
 	{
-		private static readonly Dictionary<string, string> _keys = new Dictionary<string, string>
+		private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>
                                                                        {
                                                                            { "Home", "Home" },
                                                                            { "Adjust", "Adjust" },
@@ -26,7 +25,7 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 		{
 			string key;
 			
-			if (_keys.TryGetValue(command, out key))
+			if (Keys.TryGetValue(command, out key))
 			{
 				return base.SendCommand(key);
 			}
@@ -38,13 +37,9 @@ namespace MediaPortal.ProcessPlugins.Auto3D.Devices
 			return false;
 		}
 
-		public override void Connect(string host)
-		{
-			base.Connect(host);			
-		}
-
 		public override SystemBase TestConnection(string host)
 		{
+		        base.TestConnection(host);
 			return JsonConvert.DeserializeObject<JointSpaceV1System>(GetRequest(SystemUri, string.Empty));
 		}
 
